@@ -1,0 +1,31 @@
+{
+  "name": "grocery-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "init-db": "node init-db.js",
+    "build-css": "tailwindcss -i ./public/css/styles.css -o ./public/css/output.css",
+    "watch-css": "tailwindcss -i ./public/css/styles.css -o ./public/css/output.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "pg": "^8.15.6"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "nodemon": "^3.1.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.5"
+  }
+}

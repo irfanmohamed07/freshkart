@@ -1,0 +1,155 @@
+<%- include('../partials/header') %>
+
+<div class="container max-w-screen-xl mx-auto px-4 py-6">
+    <!-- Page title and filters -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 mb-1">Grocery Shops Near You</h1>
+            <p class="text-gray-600">Find the best grocery shops in your area</p>
+        </div>
+        <div class="mt-4 md:mt-0 flex space-x-2">
+            <div class="relative">
+                <select class="appearance-none border border-gray-300 rounded-md py-2 px-4 pr-8 bg-white text-gray-700 cursor-pointer">
+                    <option>Sort By</option>
+                    <option>Popularity</option>
+                    <option>Price Low to High</option>
+                    <option>Price High to Low</option>
+                    <option>Rating</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </div>
+            </div>
+            <div class="relative">
+                <select class="appearance-none border border-gray-300 rounded-md py-2 px-4 pr-8 bg-white text-gray-700 cursor-pointer">
+                    <option>Filter By</option>
+                    <option>Open Now</option>
+                    <option>Free Delivery</option>
+                    <option>Offers</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Shop categories chips (optional) -->
+    <div class="flex flex-wrap gap-2 mb-6">
+        <a href="#" class="zomato-tag hover:bg-gray-200">All Shops</a>
+        <a href="#" class="zomato-tag hover:bg-gray-200">Supermarket</a>
+        <a href="#" class="zomato-tag hover:bg-gray-200">Local Market</a>
+        <a href="#" class="zomato-tag hover:bg-gray-200">Organic</a>
+        <a href="#" class="zomato-tag hover:bg-gray-200">Wholesale</a>
+        <a href="#" class="zomato-tag hover:bg-gray-200">Specialty</a>
+    </div>
+    
+    <!-- Shops List -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% shops.forEach(shop => { %>
+            <a href="/shops/<%= shop.id %>" class="zomato-card group">
+                <div class="relative h-48 overflow-hidden">
+                    <% if (shop.logo) { %>
+                        <img src="<%= shop.logo %>" alt="<%= shop.name %>" class="w-full h-full object-cover">
+                    <% } else { %>
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span class="text-5xl text-gray-400 font-bold"><%= shop.name.charAt(0) %></span>
+                        </div>
+                    <% } %>
+                    <!-- Shop badge -->
+                    <span class="zomato-badge"><i class="fas fa-shopping-basket mr-1"></i> Grocery</span>
+                    <!-- Offers overlay (example) -->
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                        <div class="zomato-discount">20% OFF up to ₹100</div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="text-lg font-semibold line-clamp-1"><%= shop.name %></h3>
+                        <div class="zomato-rating">
+                            <span>4.2</span>
+                            <i class="fas fa-star ml-1 text-xs"></i>
+                        </div>
+                    </div>
+                    <div class="text-gray-500 text-sm mb-2 flex items-center line-clamp-1">
+                        <i class="fas fa-map-marker-alt mr-1"></i>
+                        <%= shop.address %>
+                    </div>
+                    <div class="flex items-center text-sm mb-3">
+                        <% if (shop.contact) { %>
+                            <span class="text-gray-600 flex items-center">
+                                <i class="fas fa-phone-alt mr-1"></i>
+                                <%= shop.contact %>
+                            </span>
+                        <% } else { %>
+                            <span class="text-gray-500">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                No contact information
+                            </span>
+                        <% } %>
+                    </div>
+                    <div class="zomato-divider"></div>
+                    <div class="flex justify-between items-center">
+                        <span class="zomato-pill">Free Delivery</span>
+                        <span class="text-sm text-gray-600">20-30 min</span>
+                    </div>
+                </div>
+            </a>
+        <% }) %>
+    </div>
+    
+    <% if (shops.length === 0) { %>
+        <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200 mt-8 text-center">
+            <img src="https://b.zmtcdn.com/web/assets/276b62881039c7b0f671ccc42f3efcd51620103037.png" alt="No shops found" class="w-64 h-auto mx-auto mb-4">
+            <h2 class="text-xl font-semibold mb-2 text-gray-800">No shops found in your area</h2>
+            <p class="text-gray-600 mb-4">We couldn't find any shops. Please try again later or change your search criteria.</p>
+            <button class="zomato-btn">
+                <i class="fas fa-redo mr-2"></i> Try Again
+            </button>
+        </div>
+    <% } %>
+    
+    <% if (pagination.totalPages > 1) { %>
+        <div class="mt-12 flex justify-center">
+            <nav class="inline-flex rounded-md shadow-sm">
+                <% if (pagination.page > 1) { %>
+                    <a href="/shops?page=<%= pagination.page - 1 %>" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-l-md">
+                        <i class="fas fa-chevron-left mr-1"></i> Previous
+                    </a>
+                <% } else { %>
+                    <span class="px-4 py-2 border border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed rounded-l-md">
+                        <i class="fas fa-chevron-left mr-1"></i> Previous
+                    </span>
+                <% } %>
+                
+                <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+                    <% if (i === pagination.page) { %>
+                        <span class="px-4 py-2 border border-red-500 bg-red-500 text-white font-medium">
+                            <%= i %>
+                        </span>
+                    <% } else if (i === 1 || i === pagination.totalPages || (i >= pagination.page - 1 && i <= pagination.page + 1)) { %>
+                        <a href="/shops?page=<%= i %>" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                            <%= i %>
+                        </a>
+                    <% } else if (i === pagination.page - 2 || i === pagination.page + 2) { %>
+                        <span class="px-4 py-2 border border-gray-300 bg-white text-gray-700">
+                            ...
+                        </span>
+                    <% } %>
+                <% } %>
+                
+                <% if (pagination.page < pagination.totalPages) { %>
+                    <a href="/shops?page=<%= pagination.page + 1 %>" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-r-md">
+                        Next <i class="fas fa-chevron-right ml-1"></i>
+                    </a>
+                <% } else { %>
+                    <span class="px-4 py-2 border border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed rounded-r-md">
+                        Next <i class="fas fa-chevron-right ml-1"></i>
+                    </span>
+                <% } %>
+            </nav>
+        </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %> 

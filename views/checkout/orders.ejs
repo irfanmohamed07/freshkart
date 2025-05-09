@@ -1,0 +1,103 @@
+<%- include('../partials/header') %>
+
+<div class="container max-w-screen-xl mx-auto px-4 py-6">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold mb-2">My Orders</h1>
+        <div class="flex items-center text-sm text-gray-500">
+            <a href="/" class="hover:text-gray-700">Home</a>
+            <span class="mx-2">›</span>
+            <span>My Orders</span>
+        </div>
+    </div>
+    
+    <% if (orders && orders.length > 0) { %>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+            <div class="border-b border-gray-200 p-4">
+                <h2 class="text-lg font-semibold">Order History</h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-50 text-left">
+                            <th class="px-4 py-3 text-sm font-medium text-gray-600">Order ID</th>
+                            <th class="px-4 py-3 text-sm font-medium text-gray-600">Date</th>
+                            <th class="px-4 py-3 text-sm font-medium text-gray-600">Total</th>
+                            <th class="px-4 py-3 text-sm font-medium text-gray-600">Status</th>
+                            <th class="px-4 py-3 text-sm font-medium text-gray-600">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orders.forEach(order => { %>
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="px-4 py-3 text-sm">#<%= order.id %></td>
+                                <td class="px-4 py-3 text-sm">
+                                    <%= new Date(order.created_at).toLocaleDateString('en-US', { 
+                                        year: 'numeric', 
+                                        month: 'short', 
+                                        day: 'numeric',
+                                    }) %>
+                                </td>
+                                <td class="px-4 py-3 text-sm font-medium">₹<%= order.total_amount.toFixed(2) %></td>
+                                <td class="px-4 py-3">
+                                    <% 
+                                    let statusClass = '';
+                                    let statusIcon = '';
+                                    
+                                    if (order.current_status === 'pending') {
+                                        statusClass = 'bg-yellow-100 text-yellow-800';
+                                        statusIcon = 'clock';
+                                    } else if (order.current_status === 'confirmed') {
+                                        statusClass = 'bg-blue-100 text-blue-800';
+                                        statusIcon = 'check-circle';
+                                    } else if (order.current_status === 'preparing') {
+                                        statusClass = 'bg-blue-100 text-blue-800';
+                                        statusIcon = 'box';
+                                    } else if (order.current_status === 'out_for_delivery') {
+                                        statusClass = 'bg-indigo-100 text-indigo-800';
+                                        statusIcon = 'truck';
+                                    } else if (order.current_status === 'delivered') {
+                                        statusClass = 'bg-green-100 text-green-800';
+                                        statusIcon = 'check-double';
+                                    } else if (order.current_status === 'cancelled') {
+                                        statusClass = 'bg-red-100 text-red-800';
+                                        statusIcon = 'times-circle';
+                                    }
+                                    %>
+                                    <span class="text-xs px-2 py-1 rounded-full <%= statusClass %> flex items-center w-fit">
+                                        <i class="fas fa-<%= statusIcon %> mr-1"></i>
+                                        <%= order.current_status.charAt(0).toUpperCase() + order.current_status.slice(1).replace('_', ' ') %>
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-sm">
+                                    <a href="/checkout/confirmation/<%= order.id %>" class="text-green-600 hover:text-green-800 mr-3">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <% if (['pending', 'confirmed'].includes(order.current_status)) { %>
+                                        <a href="#" class="text-red-600 hover:text-red-800">
+                                            <i class="fas fa-times"></i> Cancel
+                                        </a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="bg-white rounded-lg shadow-md p-10 text-center">
+            <div class="w-32 h-32 mx-auto bg-gray-200 rounded-full flex items-center justify-center mb-6">
+                <i class="fas fa-box-open text-5xl text-gray-400"></i>
+            </div>
+            <h2 class="text-2xl font-semibold mb-2 text-gray-800">No Orders Yet</h2>
+            <p class="text-gray-600 mb-6">You haven't placed any orders yet. Start shopping to place your first order!</p>
+            <a href="/shops" class="zomato-btn py-2 px-4 inline-block">
+                <i class="fas fa-shopping-bag mr-2"></i>
+                <span>Start Shopping</span>
+            </a>
+        </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %> 

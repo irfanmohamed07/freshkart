@@ -1,0 +1,55 @@
+<%- include('partials/header') %>
+
+<main class="container mx-auto p-4 mt-8 flex-1">
+    <div class="bg-white p-8 rounded-lg shadow-md">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold">Admin Dashboard</h2>
+            <div>
+                <span class="text-gray-600 mr-2">Logged in as:</span>
+                <span class="font-medium"><%= user.name %></span>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                <h3 class="text-lg font-medium mb-3 text-blue-700">Shops</h3>
+                <p class="text-gray-600 mb-4">Manage all shops and their information</p>
+                <a href="/admin/shops" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Manage Shops &rarr;
+                </a>
+            </div>
+            
+            <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                <h3 class="text-lg font-medium mb-3 text-green-700">Products</h3>
+                <p class="text-gray-600 mb-4">Manage products, prices, and inventory</p>
+                <a href="/admin/products" class="text-green-600 hover:text-green-800 font-medium">
+                    Manage Products &rarr;
+                </a>
+            </div>
+            
+            <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
+                <h3 class="text-lg font-medium mb-3 text-purple-700">Orders</h3>
+                <p class="text-gray-600 mb-4">View and manage customer orders</p>
+                <a href="/admin/orders" class="text-purple-600 hover:text-purple-800 font-medium">
+                    Manage Orders &rarr;
+                </a>
+            </div>
+        </div>
+        
+        <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200 mb-6">
+            <h3 class="text-lg font-medium mb-3 text-yellow-700">Users</h3>
+            <p class="text-gray-600 mb-4">Manage user accounts and permissions</p>
+            <a href="/admin/users" class="text-yellow-600 hover:text-yellow-800 font-medium">
+                Manage Users &rarr;
+            </a>
+        </div>
+        
+        <div class="flex justify-end">
+            <a href="/" class="text-gray-600 hover:text-gray-800">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</main>
+
+<%- include('partials/footer') %> 

@@ -1,0 +1,384 @@
+<%- include('../partials/header') %>
+
+<div class="container max-w-screen-xl mx-auto px-4 py-6">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold mb-2">Checkout</h1>
+        <div class="flex items-center text-sm text-gray-500">
+            <a href="/" class="hover:text-gray-700">Home</a>
+            <span class="mx-2">›</span>
+            <a href="/cart" class="hover:text-gray-700">Cart</a>
+            <span class="mx-2">›</span>
+            <span>Checkout</span>
+        </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Checkout Form -->
+        <div class="lg:w-8/12">
+            <div class="bg-white rounded-lg shadow-md mb-6">
+                <div class="border-b border-gray-200 p-4">
+                    <h2 class="text-lg font-semibold">Delivery Address</h2>
+                </div>
+                <div class="p-6">
+                    <form id="checkoutForm" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <input 
+                                    type="text" 
+                                    id="name" 
+                                    name="name" 
+                                    value="<%= locals.user.name %>" 
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    readonly
+                                >
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    name="email" 
+                                    value="<%= locals.user.email %>" 
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    readonly
+                                >
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                placeholder="Enter your phone number" 
+                                class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                required
+                            >
+                        </div>
+                        
+                        <div>
+                            <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Delivery Address *</label>
+                            <textarea 
+                                id="address" 
+                                name="address" 
+                                rows="3" 
+                                placeholder="Enter your full address with apartment/house number, street, landmark" 
+                                class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                required
+                            ></textarea>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                                <input 
+                                    type="text" 
+                                    id="city" 
+                                    name="city" 
+                                    placeholder="City" 
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    required
+                                >
+                            </div>
+                            <div>
+                                <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State *</label>
+                                <input 
+                                    type="text" 
+                                    id="state" 
+                                    name="state" 
+                                    placeholder="State" 
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    required
+                                >
+                            </div>
+                            <div>
+                                <label for="pincode" class="block text-sm font-medium text-gray-700 mb-1">Pincode *</label>
+                                <input 
+                                    type="text" 
+                                    id="pincode" 
+                                    name="pincode" 
+                                    placeholder="Pincode" 
+                                    class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    required
+                                >
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Delivery Instructions (Optional)</label>
+                            <textarea 
+                                id="notes" 
+                                name="notes" 
+                                rows="2" 
+                                placeholder="Any specific instructions for delivery" 
+                                class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                            ></textarea>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <input 
+                                type="checkbox" 
+                                id="save_address" 
+                                name="save_address" 
+                                class="mt-1 mr-2"
+                            >
+                            <label for="save_address" class="text-sm text-gray-600">
+                                Save this address for future orders
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md mb-6">
+                <div class="border-b border-gray-200 p-4">
+                    <h2 class="text-lg font-semibold">Payment Method</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center border border-gray-200 rounded-md p-3 bg-red-50">
+                            <input 
+                                type="radio" 
+                                id="payment_razorpay" 
+                                name="payment_method" 
+                                value="razorpay" 
+                                checked 
+                                class="mr-3"
+                            >
+                            <label for="payment_razorpay" class="flex flex-1 items-center">
+                                <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" class="h-8 mr-3">
+                                <div>
+                                    <p class="font-medium">Razorpay</p>
+                                    <p class="text-sm text-gray-500">Credit/Debit Card, UPI, Wallets, NetBanking</p>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <div class="flex items-center border border-gray-200 rounded-md p-3">
+                            <input 
+                                type="radio" 
+                                id="payment_cod" 
+                                name="payment_method" 
+                                value="cod" 
+                                class="mr-3"
+                            >
+                            <label for="payment_cod" class="flex flex-1 items-center">
+                                <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-money-bill-wave text-gray-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Cash on Delivery</p>
+                                    <p class="text-sm text-gray-500">Pay when your order arrives</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="lg:w-4/12">
+            <div class="bg-white rounded-lg shadow-md sticky top-24">
+                <div class="border-b border-gray-200 p-4">
+                    <h2 class="text-lg font-semibold">Order Summary</h2>
+                </div>
+                <div class="p-4">
+                    <div class="max-h-64 overflow-y-auto mb-4">
+                        <% cartItems.forEach(item => { %>
+                            <div class="flex items-center py-2 border-b border-gray-100">
+                                <div class="w-16 h-16 flex-shrink-0 mr-4">
+                                    <% if (item.image_url) { %>
+                                        <img src="<%= item.image_url %>" alt="<%= item.product_name %>" class="w-full h-full object-cover rounded">
+                                    <% } else { %>
+                                        <div class="w-full h-full bg-gray-200 rounded flex items-center justify-center">
+                                            <i class="fas fa-shopping-basket text-gray-400"></i>
+                                        </div>
+                                    <% } %>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-sm font-medium line-clamp-1"><%= item.product_name %></h3>
+                                    <p class="text-xs text-gray-500"><%= item.shop_name %></p>
+                                    <div class="flex items-center justify-between mt-1">
+                                        <span class="text-xs">₹<%= parseFloat(item.price).toFixed(2) %> × <%= item.quantity %></span>
+                                        <span class="font-medium">₹<%= (parseFloat(item.price) * item.quantity).toFixed(2) %></span>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                    
+                    <div class="space-y-2 py-2 border-b border-gray-200">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Subtotal</span>
+                            <span>₹<%= parseFloat(cartTotal).toFixed(2) %></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Delivery Fee</span>
+                            <span class="text-green-600">Free</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Taxes</span>
+                            <span>Included</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between py-4 font-bold">
+                        <span>Total</span>
+                        <span>₹<%= parseFloat(cartTotal).toFixed(2) %></span>
+                    </div>
+                    
+                    <button 
+                        id="placeOrderBtn" 
+                        class="w-full zomato-btn py-3 font-semibold flex items-center justify-center"
+                    >
+                        <span>Place Order</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                    
+                    <p class="text-xs text-center text-gray-500 mt-3">
+                        By placing your order, you agree to our <a href="#" class="text-red-500">Terms of Service</a> and <a href="#" class="text-red-500">Privacy Policy</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const placeOrderBtn = document.getElementById('placeOrderBtn');
+    const checkoutForm = document.getElementById('checkoutForm');
+    
+    placeOrderBtn.addEventListener('click', async function() {
+        // Form validation
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        const city = document.getElementById('city').value;
+        const state = document.getElementById('state').value;
+        const pincode = document.getElementById('pincode').value;
+        const notes = document.getElementById('notes').value;
+        
+        if (!phone || !address || !city || !state || !pincode) {
+            alert('Please fill all required fields');
+            return;
+        }
+        
+        // Prepare address data
+        const fullAddress = `${address}, ${city}, ${state} - ${pincode} ${notes ? '(' + notes + ')' : ''}`;
+        
+        try {
+            // Create order
+            const response = await fetch('/checkout/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    address: fullAddress,
+                    phone
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.message || 'Failed to create order');
+            }
+            
+            // Choose payment method
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            
+            if (paymentMethod === 'razorpay') {
+                // For development mode
+                if (data.dev_mode) {
+                    // Simulate payment completion
+                    await handlePaymentSuccess({
+                        dev_mode: true,
+                        order_id: data.order.id
+                    });
+                    return;
+                }
+                
+                // Initialize Razorpay
+                const options = {
+                    key: data.key_id,
+                    amount: data.order.amount * 100,
+                    currency: data.order.currency,
+                    name: 'Grocery App',
+                    description: 'Purchase from Grocery App',
+                    order_id: data.order.id,
+                    prefill: {
+                        name: data.user.name,
+                        email: data.user.email,
+                        contact: data.user.phone
+                    },
+                    theme: {
+                        color: '#e23744'
+                    },
+                    handler: function(response) {
+                        // Handle payment success
+                        handlePaymentSuccess({
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_signature: response.razorpay_signature,
+                            order_id: data.order.id
+                        });
+                    }
+                };
+                
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } else if (paymentMethod === 'cod') {
+                // Handle COD order
+                await handlePaymentSuccess({
+                    dev_mode: true,
+                    order_id: data.order.id
+                });
+            }
+        } catch (error) {
+            console.error('Error during checkout:', error);
+            alert(error.message || 'An error occurred during checkout');
+        }
+    });
+    
+    // Handle payment verification and redirect to confirmation
+    async function handlePaymentSuccess(paymentData) {
+        try {
+            const response = await fetch('/checkout/verify-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(paymentData)
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Redirect to order confirmation page
+                window.location.href = `/checkout/confirmation/${data.order_id}`;
+            } else {
+                throw new Error(data.message || 'Payment verification failed');
+            }
+        } catch (error) {
+            console.error('Error verifying payment:', error);
+            alert(error.message || 'An error occurred during payment verification');
+        }
+    }
+});
+</script>
+
+<!-- Add a direct test link for debugging - this should be removed in production -->
+<div class="fixed bottom-4 right-4 z-50">
+    <a href="/checkout/confirmation/2" class="bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg text-sm">
+        <i class="fas fa-bug mr-2"></i> Test Order Confirmation
+    </a>
+</div>
+
+<%- include('../partials/footer') %> 

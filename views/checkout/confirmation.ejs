@@ -1,0 +1,248 @@
+<%- include('../partials/header') %>
+
+<div class="container max-w-screen-xl mx-auto px-4 py-6">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold mb-2">Order Confirmation</h1>
+        <div class="flex items-center text-sm text-gray-500">
+            <a href="/" class="hover:text-gray-700">Home</a>
+            <span class="mx-2">›</span>
+            <a href="/cart" class="hover:text-gray-700">Cart</a>
+            <span class="mx-2">›</span>
+            <span>Order #<%= order.id %></span>
+        </div>
+    </div>
+    
+    <!-- Success Animation -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 text-center">
+        <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-check text-3xl text-green-500"></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-2 text-gray-800">Order Placed Successfully!</h2>
+        <p class="text-gray-600 mb-6">Thank you for your order. Your order has been placed and is being processed.</p>
+        <div class="inline-block bg-gray-100 px-4 py-2 rounded-lg border border-gray-200 mb-4">
+            <h3 class="text-lg font-semibold">Order #<%= order.id %></h3>
+            <p class="text-sm text-gray-500">Placed on <%= new Date(order.created_at).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) %></p>
+        </div>
+        <div class="flex justify-center space-x-4 mt-4">
+            <a href="/shops" class="flex items-center justify-center py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
+                <i class="fas fa-shopping-bag mr-2"></i>
+                <span>Continue Shopping</span>
+            </a>
+            <a href="/orders" class="zepto-btn flex items-center justify-center py-2 px-4">
+                <i class="fas fa-box mr-2"></i>
+                <span>View My Orders</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Order Details -->
+        <div class="lg:w-8/12">
+            <!-- Order Items -->
+            <div class="bg-white rounded-lg shadow-md mb-6">
+                <div class="border-b border-gray-200 p-4">
+                    <h2 class="text-lg font-semibold">Order Items</h2>
+                </div>
+                <div class="p-4">
+                    <% order.items.forEach(item => { %>
+                        <div class="flex items-center py-4 border-b border-gray-100 last:border-0">
+                            <div class="w-16 h-16 flex-shrink-0 mr-4">
+                                <% if (item.image_url) { %>
+                                    <img src="<%= item.image_url %>" alt="<%= item.product_name %>" class="w-full h-full object-cover rounded">
+                                <% } else { %>
+                                    <div class="w-full h-full bg-gray-200 rounded flex items-center justify-center">
+                                        <i class="fas fa-shopping-basket text-gray-400"></i>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex flex-col md:flex-row md:justify-between md:items-start">
+                                    <div>
+                                        <h3 class="font-medium"><%= item.product_name %></h3>
+                                        <p class="text-sm text-gray-500">From <%= item.shop_name %></p>
+                                        <p class="text-sm">Qty: <%= item.quantity %></p>
+                                    </div>
+                                    <div class="mt-2 md:mt-0 text-right">
+                                        <p class="font-medium">₹<%= (parseFloat(item.price) * item.quantity).toFixed(2) %></p>
+                                        <p class="text-sm text-gray-500">₹<%= parseFloat(item.price).toFixed(2) %> each</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                    
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Subtotal</span>
+                            <span>₹<%= parseFloat(order.total_amount).toFixed(2) %></span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Delivery</span>
+                            <span class="text-green-600">Free</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
+                            <span>Total</span>
+                            <span>₹<%= parseFloat(order.total_amount).toFixed(2) %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Tracking -->
+            <div class="bg-white rounded-lg shadow-md mb-6">
+                <div class="border-b border-gray-200 p-4">
+                    <h2 class="text-lg font-semibold">Order Status</h2>
+                </div>
+                <div class="p-4">
+                    <div class="relative pb-6">
+                        <div class="absolute top-0 bottom-0 left-4 w-px bg-green-500"></div>
+                        
+                        <% 
+                        // Define all possible statuses in order
+                        const statuses = ['pending', 'confirmed', 'preparing', 'out_for_delivery', 'delivered'];
+                        
+                        // Find the current status
+                        const currentStatus = order.tracking[0].status;
+                        const currentStatusIndex = statuses.indexOf(currentStatus);
+                        
+                        statuses.forEach((status, index) => {
+                            const isCompleted = index <= currentStatusIndex;
+                            const isActive = index === currentStatusIndex;
+                        %>
+                            <div class="relative flex items-start mb-6 last:mb-0">
+                                <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mr-3 <%= isCompleted ? 'bg-green-500' : 'bg-gray-200' %>">
+                                    <% if (isCompleted) { %>
+                                        <i class="fas fa-check text-white"></i>
+                                    <% } else { %>
+                                        <i class="fas fa-circle text-gray-300 text-xs"></i>
+                                    <% } %>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-medium <%= isActive ? 'text-green-600' : '' %>">
+                                        <% if (status === 'pending') { %>
+                                            Order Placed
+                                        <% } else if (status === 'confirmed') { %>
+                                            Order Confirmed
+                                        <% } else if (status === 'preparing') { %>
+                                            Preparing
+                                        <% } else if (status === 'out_for_delivery') { %>
+                                            Out for Delivery
+                                        <% } else if (status === 'delivered') { %>
+                                            Delivered
+                                        <% } %>
+                                    </h3>
+                                    <p class="text-sm text-gray-500">
+                                        <% if (status === 'pending') { %>
+                                            We've received your order
+                                        <% } else if (status === 'confirmed') { %>
+                                            Your payment has been confirmed
+                                        <% } else if (status === 'preparing') { %>
+                                            Your order is being prepared by the shop
+                                        <% } else if (status === 'out_for_delivery') { %>
+                                            Your order is on the way
+                                        <% } else if (status === 'delivered') { %>
+                                            Your order has been delivered
+                                        <% } %>
+                                    </p>
+                                    <% if (isActive) { %>
+                                        <p class="text-xs text-gray-400 mt-1">
+                                            <%= new Date(order.tracking[0].updated_at).toLocaleDateString('en-US', { 
+                                                year: 'numeric', 
+                                                month: 'short', 
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            }) %>
+                                        </p>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="lg:w-4/12">
+            <div class="bg-white rounded-lg shadow-md mb-6">
+                <div class="border-b border-gray-200 p-4">
+                    <h2 class="text-lg font-semibold">Order Summary</h2>
+                </div>
+                <div class="p-4">
+                    <div class="mb-4">
+                        <h3 class="font-medium mb-2">Delivery Information</h3>
+                        <div class="text-sm">
+                            <p class="font-medium"><%= order.user_name %></p>
+                            <p class="text-gray-600 mb-1"><%= order.phone %></p>
+                            <p class="text-gray-600"><%= order.shipping_address %></p>
+                        </div>
+                    </div>
+                    <div class="mb-4 pt-4 border-t border-gray-200">
+                        <h3 class="font-medium mb-2">Payment Information</h3>
+                        <div class="text-sm">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-600">Payment Method</span>
+                                <span><%= order.payment_status === 'pending' ? 'Cash on Delivery' : 'Razorpay' %></span>
+                            </div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-600">Payment Status</span>
+                                <span class="<%= order.payment_status === 'paid' ? 'text-green-600' : 'text-yellow-600' %>">
+                                    <%= order.payment_status === 'paid' ? 'Paid' : 'Pending' %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4 pt-4 border-t border-gray-200">
+                        <h3 class="font-medium mb-2">Expected Delivery</h3>
+                        <div class="text-sm">
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-gray-400 mr-2"></i>
+                                <span>
+                                    <%= new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { 
+                                        weekday: 'short',
+                                        month: 'short', 
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    }) %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-gray-200">
+                        <a href="/orders" class="w-full zepto-btn py-2 text-center block">
+                            View All Orders
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="font-medium mb-3">Need Help?</h3>
+                <div class="space-y-3">
+                    <a href="#" class="flex items-center text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-comment-alt mr-2 text-gray-400"></i>
+                        <span>Send us a message</span>
+                    </a>
+                    <a href="#" class="flex items-center text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-phone-alt mr-2 text-gray-400"></i>
+                        <span>Call support</span>
+                    </a>
+                    <a href="#" class="flex items-center text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-question-circle mr-2 text-gray-400"></i>
+                        <span>FAQs & Help</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 
