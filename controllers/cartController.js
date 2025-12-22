@@ -1,6 +1,7 @@
 const Cart = require('../models/cart');
 const Product = require('../models/product');
 const Shop = require('../models/shop');
+const mlService = require('../utils/mlService');
 
 /**
  * Cart controller
@@ -49,11 +50,26 @@ const CartController = {
         0
       );
       
+      // Get ML recommendations
+      let mlComplementaryItems = [];
+      let mlBestDeals = [];
+      
+      try {
+        const cartProductIds = cartItems.map(item => item.product_id);
+        mlComplementaryItems = await mlService.getComplementaryItems(cartProductIds, 5);
+        mlBestDeals = await mlService.getBestDeals(cartProductIds, 3);
+      } catch (error) {
+        console.error('Error fetching ML cart recommendations:', error);
+        // Continue without ML recommendations if they fail
+      }
+      
       res.render('cart/index', {
         title: 'Your Cart',
         cartItems: cartItemsWithComparisons,
         cartTotal,
-        totalPotentialSavings
+        totalPotentialSavings,
+        mlComplementaryItems: mlComplementaryItems.length > 0 ? mlComplementaryItems : null,
+        mlBestDeals: mlBestDeals.length > 0 ? mlBestDeals : null
       });
     } catch (error) {
       console.error('Error in CartController.viewCart:', error);

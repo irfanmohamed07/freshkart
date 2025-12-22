@@ -1,293 +1,620 @@
 <%- include('../partials/header') %>
 
-<div class="container max-w-screen-xl mx-auto px-4 py-6">
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold mb-2">Your Shopping Cart</h1>
-        <div class="flex items-center text-sm text-gray-500">
-            <a href="/" class="hover:text-gray-700">Home</a>
-            <span class="mx-2">›</span>
-            <a href="/shops" class="hover:text-gray-700">Shops</a>
-            <span class="mx-2">›</span>
-            <span>Cart</span>
-        </div>
-    </div>
+<style>
+    .cart-container {
+        background: linear-gradient(to bottom, #f7fafc 0%, #ffffff 100%);
+        min-height: calc(100vh - 200px);
+    }
     
-    <% if (cartItems && cartItems.length > 0) { %>
-        <div class="flex flex-col lg:flex-row gap-6">
-            <!-- Cart Items -->
-            <div class="lg:w-8/12">
-                <div class="bg-white rounded-lg shadow-md mb-6">
-                    <div class="border-b border-gray-200 p-4">
-                        <h2 class="text-lg font-semibold">Cart Items (<%= cartItems.length %>)</h2>
-                    </div>
-                    
-                    <div class="p-4">
-                        <% cartItems.forEach(item => { %>
-                            <div class="flex flex-col md:flex-row gap-6 py-6 border-b border-gray-100 last:border-0" data-item-id="<%= item.id %>">
-                                <!-- Product Image -->
-                                <div class="w-28 h-28 md:w-36 md:h-36 flex-shrink-0 mx-auto md:mx-0">
-                                    <% if (item.image_url) { %>
-                                        <img src="<%= item.image_url %>" alt="<%= item.product_name %>" class="w-full h-full object-contain rounded-md">
-                                    <% } else { %>
-                                        <div class="w-full h-full bg-gray-200 rounded-md flex items-center justify-center">
-                                            <i class="fas fa-shopping-basket text-gray-400 text-2xl"></i>
+    .cart-item-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .cart-item-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+    
+    .product-image-container {
+        background: linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%);
+        border-radius: 10px;
+        padding: 8px;
+        border: 2px solid #e8f5e9;
+    }
+    
+    .quantity-control {
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+    }
+    
+    .quantity-btn {
+        transition: all 0.2s ease;
+        font-weight: 600;
+    }
+    
+    .quantity-btn:hover {
+        background: #4CAF50;
+        color: white;
+    }
+    
+    .quantity-input {
+        font-weight: 600;
+        color: #1f2937;
+    }
+    
+    .price-badge {
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+    
+    .savings-badge {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .order-summary-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+    }
+    
+    .checkout-btn {
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        color: white;
+        padding: 16px 24px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .checkout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+    }
+    
+    .empty-cart-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 60px 40px;
+    }
+    
+    .empty-cart-icon {
+        background: linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%);
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+    }
+    
+    .shop-switch-card {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border: 2px solid #86efac;
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 12px;
+    }
+    
+    .breadcrumb-link {
+        color: #4CAF50;
+        transition: color 0.2s;
+    }
+    
+    .breadcrumb-link:hover {
+        color: #45a049;
+    }
+    
+    .remove-btn {
+        color: #ef4444;
+        transition: all 0.2s;
+        padding: 8px 12px;
+        border-radius: 6px;
+    }
+    
+    .remove-btn:hover {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+    
+    .continue-shopping-btn {
+        background: white;
+        border: 2px solid #4CAF50;
+        color: #4CAF50;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+    
+    .continue-shopping-btn:hover {
+        background: #4CAF50;
+        color: white;
+    }
+    
+    .clear-cart-btn {
+        background: white;
+        border: 2px solid #ef4444;
+        color: #ef4444;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+    
+    .clear-cart-btn:hover {
+        background: #ef4444;
+        color: white;
+    }
+    
+    .summary-row {
+        padding: 12px 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .summary-row:last-child {
+        border-bottom: none;
+    }
+    
+    .total-row {
+        background: linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%);
+        padding: 20px;
+        border-radius: 12px;
+        margin: 16px 0;
+    }
+    
+    .shop-name-badge {
+        background: #e8f5e9;
+        color: #2d5016;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+</style>
+
+<div class="cart-container">
+    <div class="container max-w-screen-xl mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-3 text-gray-900">Shopping Cart</h1>
+            <div class="flex items-center text-sm text-gray-600">
+                <a href="/" class="breadcrumb-link">Home</a>
+                <span class="mx-2 text-gray-400">›</span>
+                <a href="/shops" class="breadcrumb-link">Shops</a>
+                <span class="mx-2 text-gray-400">›</span>
+                <span class="text-gray-800 font-medium">Cart</span>
+            </div>
+        </div>
+        
+        <% if (cartItems && cartItems.length > 0) { %>
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- Cart Items Section -->
+                <div class="lg:w-8/12">
+                    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm mb-6 overflow-hidden">
+                        <div class="bg-gradient-to-r from-green-50 to-green-100 border-b border-gray-200 px-6 py-4">
+                            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                <i class="fas fa-shopping-cart text-green-600"></i>
+                                <span>Cart Items (<%= cartItems.length %>)</span>
+                            </h2>
+                        </div>
+                        
+                        <div class="p-6 space-y-4">
+                            <% cartItems.forEach(item => { %>
+                                <div class="cart-item-card p-6" data-item-id="<%= item.id %>">
+                                    <div class="flex flex-col md:flex-row gap-6">
+                                        <!-- Product Image -->
+                                        <div class="flex-shrink-0">
+                                            <div class="product-image-container w-32 h-32 md:w-36 md:h-36">
+                                                <% if (item.image_url) { %>
+                                                    <img src="<%= item.image_url %>" alt="<%= item.product_name %>" class="w-full h-full object-contain rounded-lg">
+                                                <% } else { %>
+                                                    <div class="w-full h-full bg-white rounded-lg flex items-center justify-center">
+                                                        <i class="fas fa-shopping-basket text-green-400 text-3xl"></i>
+                                                    </div>
+                                                <% } %>
+                                            </div>
                                         </div>
-                                    <% } %>
-                                </div>
-                                
-                                <!-- Product Details -->
-                                <div class="flex-1 mt-4 md:mt-0">
-                                    <div class="flex flex-col md:flex-row md:justify-between">
-                                        <div>
-                                            <h3 class="font-medium"><%= item.product_name %></h3>
-                                            <div class="flex items-center mt-1 text-sm text-gray-500">
-                                                <span>From <%= item.shop_name %></span>
-                                                
-                                                <% if (item.alternatives && item.alternatives.length > 0) { %>
-                                                    <div class="relative group ml-1">
-                                                        <button class="text-xs text-green-600 hover:text-green-800 flex items-center">
-                                                            <span>Compare</span>
-                                                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                                                        </button>
-                                                        <div class="hidden group-hover:block absolute left-0 z-10 mt-1 bg-white rounded-md shadow-lg p-3 w-60">
-                                                            <p class="text-xs font-semibold mb-2 text-gray-500 pb-1 border-b">Available at other shops:</p>
-                                                            <% item.alternatives.forEach(alt => { %>
-                                                                <div class="py-1.5 flex justify-between items-center">
-                                                                    <div>
-                                                                        <div class="text-sm"><%= alt.shop_name %></div>
-                                                                        <div class="text-xs text-gray-500">₹<%= (parseFloat(alt.price)).toFixed(2) %></div>
+                                        
+                                        <!-- Product Details -->
+                                        <div class="flex-1">
+                                            <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+                                                <div class="flex-1">
+                                                    <h3 class="text-lg font-bold text-gray-900 mb-2"><%= item.product_name %></h3>
+                                                    <div class="flex items-center gap-2 mb-3">
+                                                        <span class="shop-name-badge">
+                                                            <i class="fas fa-store text-xs"></i>
+                                                            <%= item.shop_name %>
+                                                        </span>
+                                                        
+                                                        <% if (item.alternatives && item.alternatives.length > 0) { %>
+                                                            <div class="relative group">
+                                                                <button class="text-xs text-green-600 hover:text-green-700 font-medium flex items-center gap-1 px-2 py-1 rounded bg-green-50 hover:bg-green-100 transition-colors">
+                                                                    <i class="fas fa-balance-scale"></i>
+                                                                    <span>Compare Prices</span>
+                                                                    <i class="fas fa-chevron-down text-xs"></i>
+                                                                </button>
+                                                                <div class="hidden group-hover:block absolute left-0 z-10 mt-2 bg-white rounded-lg shadow-xl p-4 w-72 border border-gray-200">
+                                                                    <p class="text-xs font-semibold mb-3 text-gray-700 pb-2 border-b">Available at other shops:</p>
+                                                                    <div class="space-y-2 max-h-48 overflow-y-auto">
+                                                                        <% item.alternatives.forEach(alt => { %>
+                                                                            <div class="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                                                                <div>
+                                                                                    <div class="text-sm font-medium text-gray-900"><%= alt.shop_name %></div>
+                                                                                    <div class="text-xs text-gray-500">₹<%= (parseFloat(alt.price)).toFixed(2) %></div>
+                                                                                </div>
+                                                                                <% if (parseFloat(alt.price) < parseFloat(item.price)) { %>
+                                                                                    <span class="savings-badge">
+                                                                                        Save ₹<%= (parseFloat(item.price) - parseFloat(alt.price)).toFixed(2) %>
+                                                                                    </span>
+                                                                                <% } %>
+                                                                                <button 
+                                                                                    class="shop-switch-btn ml-2 text-xs bg-green-600 text-white hover:bg-green-700 px-3 py-1.5 rounded-md font-medium transition-colors"
+                                                                                    data-item-id="<%= item.id %>"
+                                                                                    data-shop-id="<%= alt.shop_id %>"
+                                                                                    data-product-id="<%= alt.id %>"
+                                                                                >
+                                                                                    Switch
+                                                                                </button>
+                                                                            </div>
+                                                                        <% }) %>
                                                                     </div>
-                                                                    <% if (parseFloat(alt.price) < parseFloat(item.price)) { %>
-                                                                        <div class="text-xs text-green-600 font-medium">
-                                                                            Save ₹<%= (parseFloat(item.price) - parseFloat(alt.price)).toFixed(2) %>
-                                                                        </div>
-                                                                    <% } %>
+                                                                </div>
+                                                            </div>
+                                                        <% } %>
+                                                    </div>
+                                                    
+                                                    <% if (item.cheapestAlternative && item.cheapestAlternative.price < item.price) { %>
+                                                        <div class="text-sm text-green-700 mt-2 flex items-center gap-2">
+                                                            <i class="fas fa-tags text-green-600"></i>
+                                                            <span>Cheaper at <strong><%= item.cheapestAlternative.shop_name %></strong>: ₹<%= (parseFloat(item.cheapestAlternative.price)).toFixed(2) %></span>
+                                                        </div>
+                                                    <% } %>
+                                                </div>
+                                                
+                                                <!-- Price and Quantity -->
+                                                <div class="flex flex-col items-end gap-4">
+                                                    <div class="price-badge">
+                                                        ₹<%= (parseFloat(item.price)).toFixed(2) %>
+                                                    </div>
+                                                    
+                                                    <div class="flex items-center gap-4">
+                                                        <div class="quantity-control">
+                                                            <button 
+                                                                class="quantity-btn decrease px-4 py-2 text-gray-700 hover:bg-green-50"
+                                                                data-action="decrease"
+                                                                data-item-id="<%= item.id %>"
+                                                            >−</button>
+                                                            <input 
+                                                                type="number" 
+                                                                value="<%= item.quantity %>" 
+                                                                min="1" 
+                                                                class="quantity-input w-16 text-center py-2 border-x border-gray-200" 
+                                                                data-item-id="<%= item.id %>"
+                                                                data-price="<%= item.price %>"
+                                                            >
+                                                            <button 
+                                                                class="quantity-btn increase px-4 py-2 text-gray-700 hover:bg-green-50"
+                                                                data-action="increase"
+                                                                data-item-id="<%= item.id %>"
+                                                            >+</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Subtotal and Actions -->
+                                            <div class="flex justify-between items-center mt-6 pt-4 border-t border-gray-100">
+                                                <div class="subtotal font-bold text-lg text-gray-900">
+                                                    Subtotal: <span class="text-green-600">₹<%= (parseFloat(item.price) * item.quantity).toFixed(2) %></span>
+                                                </div>
+                                                <button 
+                                                    class="remove-btn flex items-center gap-2 font-medium"
+                                                    data-item-id="<%= item.id %>"
+                                                >
+                                                    <i class="fas fa-trash-alt"></i>
+                                                    <span>Remove</span>
+                                                </button>
+                                            </div>
+                                            
+                                            <!-- Savings Alert -->
+                                            <% if (item.potentialSavings > 0) { %>
+                                                <div class="shop-switch-card mt-4">
+                                                    <div class="flex items-start gap-4">
+                                                        <div class="flex-shrink-0 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
+                                                            <i class="fas fa-piggy-bank text-xl"></i>
+                                                        </div>
+                                                        <div class="flex-1">
+                                                            <h4 class="font-bold text-green-900 mb-1">Save ₹<%= (parseFloat(item.potentialSavings)).toFixed(2) %> on this item!</h4>
+                                                            <p class="text-sm text-green-800 mb-3">
+                                                                Same product available for <span class="font-bold">₹<%= (parseFloat(item.cheapestAlternative.price)).toFixed(2) %></span> at <strong><%= item.cheapestAlternative.shop_name %></strong>
+                                                            </p>
+                                                            <div class="flex flex-wrap gap-2">
+                                                                <button 
+                                                                    class="shop-switch-btn bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors"
+                                                                    data-item-id="<%= item.id %>"
+                                                                    data-shop-id="<%= item.cheapestAlternative.shop_id %>"
+                                                                    data-product-id="<%= item.cheapestAlternative.id %>"
+                                                                >
+                                                                    <i class="fas fa-exchange-alt"></i>
+                                                                    <span>Switch to <%= item.cheapestAlternative.shop_name %></span>
+                                                                </button>
+                                                                <button class="keep-shop-btn bg-white border-2 border-green-200 hover:bg-green-50 text-green-700 text-sm px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors">
+                                                                    <i class="fas fa-store"></i>
+                                                                    <span>Keep Current Shop</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <% } else if (item.alternatives && item.alternatives.length > 0) { %>
+                                                <div class="mt-4 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                                    <details class="cursor-pointer">
+                                                        <summary class="font-medium text-gray-700 flex items-center gap-2">
+                                                            <i class="fas fa-store-alt text-green-600"></i>
+                                                            <span>Available at <%= item.alternatives.length %> other shops</span>
+                                                            <i class="fas fa-chevron-down ml-auto text-xs"></i>
+                                                        </summary>
+                                                        <div class="mt-3 space-y-2">
+                                                            <% item.alternatives.forEach(alt => { %>
+                                                                <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-gray-100">
+                                                                    <div>
+                                                                        <div class="font-medium text-gray-900"><%= alt.shop_name %></div>
+                                                                        <div class="text-sm text-gray-500">₹<%= (parseFloat(alt.price)).toFixed(2) %></div>
+                                                                    </div>
                                                                     <button 
-                                                                        class="shop-switch-btn ml-2 text-xs bg-green-100 text-green-800 hover:bg-green-200 px-2 py-1 rounded"
+                                                                        class="shop-switch-btn text-sm bg-gray-100 hover:bg-green-600 hover:text-white text-gray-800 px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-2"
                                                                         data-item-id="<%= item.id %>"
                                                                         data-shop-id="<%= alt.shop_id %>"
                                                                         data-product-id="<%= alt.id %>"
                                                                     >
-                                                                        Switch
+                                                                        <i class="fas fa-exchange-alt"></i>
+                                                                        <span>Switch</span>
                                                                     </button>
                                                                 </div>
                                                             <% }) %>
                                                         </div>
-                                                    </div>
-                                                <% } %>
-                                            </div>
-                                            
-                                            <% if (item.cheapestAlternative && item.cheapestAlternative.price < item.price) { %>
-                                                <div class="text-xs text-green-600 mt-1 flex items-center">
-                                                    <i class="fas fa-tags mr-1"></i>
-                                                    <span>Cheaper at <%= item.cheapestAlternative.shop_name %>: ₹<%= (parseFloat(item.cheapestAlternative.price)).toFixed(2) %></span>
+                                                    </details>
                                                 </div>
                                             <% } %>
                                         </div>
-                                        
-                                        <div class="mt-3 md:mt-0 text-right">
-                                            <div class="font-medium">₹<%= (parseFloat(item.price)).toFixed(2) %></div>
-                                            <div class="flex items-center justify-end mt-2">
-                                                <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                                                    <button 
-                                                        class="quantity-btn decrease bg-gray-100 px-3 py-1 hover:bg-gray-200"
-                                                        data-action="decrease"
-                                                        data-item-id="<%= item.id %>"
-                                                    >−</button>
-                                                    <input 
-                                                        type="number" 
-                                                        value="<%= item.quantity %>" 
-                                                        min="1" 
-                                                        class="quantity-input w-12 text-center border-l border-r border-gray-300 py-1" 
-                                                        data-item-id="<%= item.id %>"
-                                                        data-price="<%= item.price %>"
-                                                    >
-                                                    <button 
-                                                        class="quantity-btn increase bg-gray-100 px-3 py-1 hover:bg-gray-200"
-                                                        data-action="increase"
-                                                        data-item-id="<%= item.id %>"
-                                                    >+</button>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
-                                    
-                                    <div class="flex justify-between items-center mt-4">
-                                        <div class="subtotal font-medium">
-                                            Subtotal: ₹<%= (parseFloat(item.price) * item.quantity).toFixed(2) %>
-                                        </div>
-                                        <button 
-                                            class="remove-item text-red-500 hover:text-red-700 text-sm flex items-center"
-                                            data-item-id="<%= item.id %>"
-                                        >
-                                            <i class="fas fa-trash-alt mr-1"></i>
-                                            <span>Remove</span>
-                                        </button>
-                                    </div>
-                                    
-                                    <% if (item.potentialSavings > 0) { %>
-                                        <div class="mt-2 px-4 py-3 bg-green-50 border border-green-100 rounded-md">
-                                            <div class="flex items-start">
-                                                <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-500 mr-3">
-                                                    <i class="fas fa-tags"></i>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h4 class="font-medium text-green-800">Save ₹<%= (parseFloat(item.potentialSavings)).toFixed(2) %> on this item!</h4>
-                                                    <p class="text-sm text-green-700 mt-1">
-                                                        Same product is available for <span class="font-medium">₹<%= (parseFloat(item.cheapestAlternative.price)).toFixed(2) %></span> at <%= item.cheapestAlternative.shop_name %>
-                                                    </p>
-                                                    <div class="mt-2 flex flex-wrap gap-2">
-                                                        <button 
-                                                            class="shop-switch-btn bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1.5 rounded-md flex items-center transition-colors"
-                                                            data-item-id="<%= item.id %>"
-                                                            data-shop-id="<%= item.cheapestAlternative.shop_id %>"
-                                                            data-product-id="<%= item.cheapestAlternative.id %>"
-                                                        >
-                                                            <i class="fas fa-exchange-alt mr-1.5"></i>
-                                                            <span>Switch to <%= item.cheapestAlternative.shop_name %></span>
-                                                        </button>
-                                                        <button class="bg-white border border-green-200 hover:bg-green-50 text-green-700 text-sm px-3 py-1.5 rounded-md flex items-center keep-shop-btn transition-colors">
-                                                            <i class="fas fa-store mr-1.5"></i>
-                                                            <span>Keep current shop</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <% } else if (item.alternatives && item.alternatives.length > 0) { %>
-                                        <div class="mt-2 px-4 py-3 bg-gray-50 border border-gray-100 rounded-md">
-                                            <div class="text-sm text-gray-700">
-                                                <details>
-                                                    <summary class="cursor-pointer font-medium flex items-center">
-                                                        <i class="fas fa-store-alt mr-1.5"></i>
-                                                        <span>Available at <%= item.alternatives.length %> other shops</span>
-                                                        <i class="fas fa-chevron-down ml-1.5 text-xs"></i>
-                                                    </summary>
-                                                    <div class="mt-2 space-y-2">
-                                                        <% item.alternatives.forEach(alt => { %>
-                                                            <div class="flex justify-between items-center py-1.5 px-2 bg-white rounded border border-gray-100">
-                                                                <div>
-                                                                    <div class="font-medium"><%= alt.shop_name %></div>
-                                                                    <div class="text-sm text-gray-500">₹<%= (parseFloat(alt.price)).toFixed(2) %></div>
-                                                                </div>
-                                                                <button 
-                                                                    class="shop-switch-btn text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 px-2.5 py-1.5 rounded flex items-center"
-                                                                    data-item-id="<%= item.id %>"
-                                                                    data-shop-id="<%= alt.shop_id %>"
-                                                                    data-product-id="<%= alt.id %>"
-                                                                >
-                                                                    <i class="fas fa-exchange-alt mr-1"></i>
-                                                                    <span>Switch</span>
-                                                                </button>
-                                                            </div>
-                                                        <% }) %>
-                                                    </div>
-                                                </details>
-                                            </div>
-                                        </div>
-                                    <% } %>
                                 </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <a href="/shops" class="continue-shopping-btn flex items-center gap-2">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Continue Shopping</span>
+                        </a>
+                        
+                        <form action="/cart/clear" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to clear your cart?');">
+                            <button type="submit" class="clear-cart-btn flex items-center gap-2">
+                                <i class="fas fa-times"></i>
+                                <span>Clear Cart</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Order Summary -->
+                <div class="lg:w-4/12">
+                    <div class="order-summary-card sticky top-24">
+                        <div class="bg-gradient-to-r from-green-50 to-green-100 border-b border-gray-200 px-6 py-4">
+                            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                <i class="fas fa-receipt text-green-600"></i>
+                                <span>Order Summary</span>
+                            </h2>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-3 mb-4">
+                                <div class="summary-row flex justify-between text-sm">
+                                    <span class="text-gray-600">Items (<%= cartItems.length %>)</span>
+                                    <span class="font-semibold text-gray-900">₹<%= (parseFloat(cartTotal)).toFixed(2) %></span>
+                                </div>
+                                <div class="summary-row flex justify-between text-sm">
+                                    <span class="text-gray-600">Delivery Fee</span>
+                                    <span class="text-green-600 font-semibold">Free</span>
+                                </div>
+                                <div class="summary-row flex justify-between text-sm">
+                                    <span class="text-gray-600">Taxes</span>
+                                    <span class="text-gray-600">Included</span>
+                                </div>
+                            </div>
+                            
+                            <div class="total-row">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg font-bold text-gray-900">Total</span>
+                                    <span class="cart-total text-2xl font-bold text-green-600">₹<%= (parseFloat(cartTotal)).toFixed(2) %></span>
+                                </div>
+                            </div>
+                            
+                            <% if (totalPotentialSavings > 0) { %>
+                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-4 mb-4">
+                                    <div class="flex items-start gap-3">
+                                        <div class="flex-shrink-0 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
+                                            <i class="fas fa-piggy-bank text-xl"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="text-sm font-semibold text-green-800 mb-1">
+                                                Potential Cart Savings
+                                            </div>
+                                            <div class="text-2xl font-bold text-green-700 mb-2">
+                                                ₹<%= (parseFloat(totalPotentialSavings)).toFixed(2) %>
+                                            </div>
+                                            <p class="text-xs text-green-700">
+                                                Switch to shops with better prices to save <strong><%= Math.round((parseFloat(totalPotentialSavings) / parseFloat(cartTotal)) * 100) %>%</strong> on your order!
+                                            </p>
+                                            <div class="mt-2">
+                                                <span class="text-xs bg-white border border-green-300 text-green-700 px-3 py-1 rounded-full font-medium">
+                                                    💰 Best value for money
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            
+                            <a href="/checkout" class="checkout-btn">
+                                <span>Proceed to Checkout</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                            
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                <div class="flex items-center justify-center gap-2">
+                                    <div class="text-xs text-gray-500">Secure Checkout:</div>
+                                    <img src="https://cdn.razorpay.com/static/assets/merchant-badge/badge-dark.png" alt="Razorpay" class="h-6">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ML Recommendations: Best Deals -->
+            <% if (mlBestDeals && mlBestDeals.length > 0) { %>
+            <div class="mt-8 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 border-b border-gray-200 px-6 py-4">
+                    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                        <i class="fas fa-tag text-yellow-600"></i>
+                        <span>Save More - Better Deals Available</span>
+                    </h2>
+                    <p class="text-sm text-gray-600 mt-1">Find cheaper alternatives for items in your cart</p>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <% mlBestDeals.forEach(deal => { %>
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h3 class="font-semibold text-sm text-gray-900"><%= deal.name %></h3>
+                                </div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <div>
+                                        <span class="text-xs text-gray-500 line-through">₹<%= parseFloat(deal.cart_price).toFixed(2) %></span>
+                                        <span class="text-lg font-bold text-green-600 ml-2">₹<%= parseFloat(deal.alt_price).toFixed(2) %></span>
+                                    </div>
+                                    <span class="savings-badge">
+                                        Save ₹<%= parseFloat(deal.savings).toFixed(2) %>
+                                    </span>
+                                </div>
+                                <div class="text-xs text-gray-600 mb-3">
+                                    <i class="fas fa-store"></i> <%= deal.shop_name %>
+                                </div>
+                                <% if (locals.user) { %>
+                                    <form action="/cart/add" method="POST" class="mt-2">
+                                        <input type="hidden" name="product_id" value="<%= deal.alt_product_id %>">
+                                        <input type="hidden" name="shop_id" value="<%= deal.shop_id %>">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-green-700 transition-colors">
+                                            <i class="fas fa-shopping-cart mr-1"></i>
+                                            Add This Deal
+                                        </button>
+                                    </form>
+                                <% } %>
                             </div>
                         <% }) %>
                     </div>
                 </div>
-                
-                <div class="flex flex-wrap gap-4">
-                    <a href="/shops" class="flex items-center text-gray-700 hover:text-gray-900">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        <span>Continue Shopping</span>
-                    </a>
-                    
-                    <form action="/cart/clear" method="POST" class="inline-block">
-                        <button type="submit" class="flex items-center text-red-500 hover:text-red-700">
-                            <i class="fas fa-times mr-2"></i>
-                            <span>Clear Cart</span>
-                        </button>
-                    </form>
-                </div>
             </div>
-            
-            <!-- Order Summary -->
-            <div class="lg:w-4/12 mt-6 lg:mt-0">
-                <div class="bg-white rounded-lg shadow-md sticky top-24">
-                    <div class="border-b border-gray-200 p-4">
-                        <h2 class="text-lg font-semibold">Order Summary</h2>
-                    </div>
-                    <div class="p-4">
-                        <div class="space-y-3 pt-2 pb-4 border-b border-gray-200">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Items (<%= cartItems.length %>)</span>
-                                <span>₹<%= (parseFloat(cartTotal)).toFixed(2) %></span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Delivery Fee</span>
-                                <span class="text-green-600">Free</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Taxes</span>
-                                <span>Included</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between py-4 text-lg font-bold">
-                            <span>Total</span>
-                            <span class="cart-total">₹<%= (parseFloat(cartTotal)).toFixed(2) %></span>
-                        </div>
-                        
-                        <% if (totalPotentialSavings > 0) { %>
-                            <div class="bg-green-50 border border-green-100 rounded-md p-4 mb-4">
-                                <div class="flex items-start">
-                                    <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-500 mr-3">
-                                        <i class="fas fa-piggy-bank"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-sm font-medium text-green-800">
-                                            Potential Cart Savings
+            <% } %>
+
+            <!-- ML Recommendations: Complementary Items -->
+            <% if (mlComplementaryItems && mlComplementaryItems.length > 0) { %>
+            <div class="mt-8 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                <div class="bg-gradient-to-r from-purple-50 to-purple-100 border-b border-gray-200 px-6 py-4">
+                    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                        <i class="fas fa-magic text-purple-600"></i>
+                        <span>You Might Also Need</span>
+                    </h2>
+                    <p class="text-sm text-gray-600 mt-1">Frequently bought together with items in your cart</p>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <% mlComplementaryItems.forEach(item => { %>
+                            <a href="/products/<%= item.product_id %>" class="udemy-product-card">
+                                <div class="relative">
+                                    <% if (item.image_url) { %>
+                                        <img src="<%= item.image_url %>" alt="<%= item.name %>" class="udemy-product-image">
+                                    <% } else { %>
+                                        <div class="udemy-product-image bg-gray-100 flex items-center justify-center">
+                                            <i class="fas fa-shopping-basket text-4xl text-gray-400"></i>
                                         </div>
-                                        <div class="text-xl font-bold text-green-700 mt-1">
-                                            ₹<%= (parseFloat(totalPotentialSavings)).toFixed(2) %>
-                                        </div>
-                                        <p class="text-xs text-green-600 mt-1">
-                                            Switch to shops with better prices to save <%= Math.round((parseFloat(totalPotentialSavings) / parseFloat(cartTotal)) * 100) %>% on your order!
-                                        </p>
-                                        <div class="mt-2">
-                                            <span class="text-xs bg-white border border-green-200 text-green-700 px-2 py-0.5 rounded-full">
-                                                Best value for money
-                                            </span>
-                                        </div>
+                                    <% } %>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-bold text-sm line-clamp-2 mb-1"><%= item.name %></h3>
+                                    <p class="udemy-instructor-badge line-clamp-1"><%= item.shop_name %></p>
+                                    <div class="mt-2 flex items-center justify-between">
+                                        <span class="udemy-price">₹<%= typeof item.price === 'number' ? item.price.toFixed(2) : parseFloat(item.price).toFixed(2) %></span>
+                                        <% if (locals.user) { %>
+                                            <form action="/cart/add" method="POST" class="inline-block" onclick="event.stopPropagation();">
+                                                <input type="hidden" name="product_id" value="<%= item.product_id %>">
+                                                <input type="hidden" name="shop_id" value="<%= item.shop_id %>">
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button type="submit" class="udemy-btn text-xs py-1 px-3">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </button>
+                                            </form>
+                                        <% } %>
                                     </div>
                                 </div>
-                            </div>
-                        <% } %>
-                        
-                        <a href="/checkout" class="w-full zepto-btn py-3 font-semibold flex items-center justify-center">
-                            <span>Proceed to Checkout</span>
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                        
-                        <div class="mt-4">
-                            <div class="flex items-center justify-center">
-                                <div class="text-xs text-gray-500 mr-1">Secure Checkout:</div>
-                                <img src="https://cdn.razorpay.com/static/assets/merchant-badge/badge-dark.png" alt="Razorpay" class="h-6">
-                            </div>
-                        </div>
+                            </a>
+                        <% }) %>
                     </div>
                 </div>
             </div>
-        </div>
-    <% } else { %>
-        <div class="bg-white rounded-lg shadow-md p-10 text-center">
-            <div class="w-32 h-32 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
-                <i class="fas fa-shopping-cart text-5xl text-gray-300"></i>
+            <% } %>
+        <% } else { %>
+            <!-- Empty Cart State -->
+            <div class="empty-cart-container text-center">
+                <div class="empty-cart-icon">
+                    <i class="fas fa-shopping-cart text-5xl text-green-500"></i>
+                </div>
+                <h2 class="text-3xl font-bold mb-3 text-gray-900">Your cart is empty</h2>
+                <p class="text-gray-600 mb-8 text-lg">Looks like you haven't added any items to your cart yet.</p>
+                <a href="/shops" class="checkout-btn inline-flex w-auto px-8">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Browse Shops</span>
+                </a>
             </div>
-            <h2 class="text-2xl font-semibold mb-2 text-gray-800">Your cart is empty</h2>
-            <p class="text-gray-600 mb-6">Looks like you haven't added any items to your cart yet.</p>
-            <a href="/shops" class="zomato-btn py-2 px-6 inline-block">
-                <i class="fas fa-shopping-bag mr-2"></i>
-                <span>Browse Shops</span>
-            </a>
-        </div>
-    <% } %>
+        <% } %>
+    </div>
 </div>
 
 <script>
@@ -295,7 +622,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle quantity changes
     const quantityButtons = document.querySelectorAll('.quantity-btn');
     const quantityInputs = document.querySelectorAll('.quantity-input');
-    const removeButtons = document.querySelectorAll('.remove-item');
+    const removeButtons = document.querySelectorAll('.remove-btn');
     const shopSwitchButtons = document.querySelectorAll('.shop-switch-btn');
     
     // Update quantity when buttons are clicked
@@ -323,7 +650,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const itemId = this.dataset.itemId;
             let value = parseInt(this.value);
             
-            // Ensure value is at least 1
             if (value < 1) {
                 value = 1;
                 this.value = 1;
@@ -337,17 +663,73 @@ document.addEventListener('DOMContentLoaded', function() {
     removeButtons.forEach(button => {
         button.addEventListener('click', function() {
             const itemId = this.dataset.itemId;
-            removeCartItem(itemId);
+            if (confirm('Are you sure you want to remove this item from your cart?')) {
+                removeCartItem(itemId);
+            }
         });
     });
     
     // Switch shop for an item
     shopSwitchButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', async function() {
             const itemId = this.dataset.itemId;
             const shopId = this.dataset.shopId;
+            const productId = this.dataset.productId;
             
-            updateShop(itemId, shopId);
+            if (!itemId || !shopId || !productId) return;
+            
+            const originalText = this.innerHTML;
+            this.innerHTML = '<div class="flex items-center gap-2"><div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div><span>Switching...</span></div>';
+            this.disabled = true;
+            
+            try {
+                const response = await fetch('/cart/update-shop', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        item_id: itemId,
+                        shop_id: shopId,
+                        product_id: productId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification({
+                        type: 'success',
+                        title: 'Shop Changed',
+                        message: 'Item has been moved to a different shop with a better price!'
+                    });
+                    
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    throw new Error(data.message || 'Failed to switch shop');
+                }
+            } catch (error) {
+                console.error('Error switching shop:', error);
+                this.innerHTML = originalText;
+                this.disabled = false;
+                showNotification({
+                    type: 'error',
+                    title: 'Error',
+                    message: error.message || 'Failed to switch shop'
+                });
+            }
+        });
+    });
+    
+    // Keep shop button
+    document.querySelectorAll('.keep-shop-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const cardElement = this.closest('.shop-switch-card');
+            if (cardElement) {
+                cardElement.style.display = 'none';
+            }
         });
     });
     
@@ -390,18 +772,19 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Remove the item from DOM
                 const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
                 if (itemElement) {
-                    itemElement.remove();
-                }
-                
-                // Reload the page if no items left
-                const remainingItems = document.querySelectorAll('[data-item-id]');
-                if (remainingItems.length === 0) {
-                    window.location.reload();
-                } else {
-                    updateCartUI();
+                    itemElement.style.transition = 'opacity 0.3s';
+                    itemElement.style.opacity = '0';
+                    setTimeout(() => {
+                        itemElement.remove();
+                        const remainingItems = document.querySelectorAll('[data-item-id]');
+                        if (remainingItems.length === 0) {
+                            window.location.reload();
+                        } else {
+                            updateCartUI();
+                        }
+                    }, 300);
                 }
             } else {
                 alert(data.message || 'Failed to remove item');
@@ -412,54 +795,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Update shop for an item
-    function updateShop(itemId, shopId) {
-        fetch('/cart/update-shop', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                item_id: itemId,
-                shop_id: shopId
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Reload the page to reflect changes
-                window.location.reload();
-            } else {
-                alert(data.message || 'Failed to update shop');
-            }
-        })
-        .catch(error => {
-            console.error('Error updating shop:', error);
-        });
-    }
-    
     // Update cart UI
     function updateCartUI() {
-        // Recalculate subtotals and total
         let total = 0;
         
         document.querySelectorAll('[data-item-id]').forEach(item => {
             const itemId = item.dataset.itemId;
             const input = document.querySelector(`.quantity-input[data-item-id="${itemId}"]`);
-            const quantity = parseInt(input.value);
-            const price = parseFloat(input.dataset.price);
-            const subtotal = price * quantity;
-            
-            // Update subtotal display
-            const subtotalElement = item.querySelector('.subtotal');
-            if (subtotalElement) {
-                subtotalElement.textContent = `Subtotal: ₹${subtotal.toFixed(2)}`;
+            if (input) {
+                const quantity = parseInt(input.value);
+                const price = parseFloat(input.dataset.price);
+                const subtotal = price * quantity;
+                
+                const subtotalElement = item.querySelector('.subtotal');
+                if (subtotalElement) {
+                    subtotalElement.innerHTML = `Subtotal: <span class="text-green-600">₹${subtotal.toFixed(2)}</span>`;
+                }
+                
+                total += subtotal;
             }
-            
-            total += subtotal;
         });
         
-        // Update total display
         const totalElement = document.querySelector('.cart-total');
         if (totalElement) {
             totalElement.textContent = `₹${total.toFixed(2)}`;
@@ -467,109 +823,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Shop switching functionality
-const shopSwitchButtons = document.querySelectorAll('.shop-switch-btn');
-const keepShopButtons = document.querySelectorAll('.keep-shop-btn');
-
-// Process shop switch
-shopSwitchButtons.forEach(button => {
-    button.addEventListener('click', async function() {
-        const itemId = this.dataset.itemId;
-        const shopId = this.dataset.shopId;
-        const parentCard = this.closest('[data-item-id]');
-        
-        if (!itemId || !shopId || !parentCard) return;
-        
-        // Disable button and show loading state
-        const originalText = this.innerHTML;
-        this.innerHTML = '<div class="flex items-center justify-center"><div class="animate-spin rounded-full h-3 w-3 border-2 border-current border-t-transparent mr-1.5"></div><span>Switching...</span></div>';
-        this.disabled = true;
-        
-        try {
-            // Send request to update shop
-            const response = await fetch('/cart/update-shop', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    item_id: itemId,
-                    shop_id: shopId
-                })
-            });
-            
-            if (!response.ok) {
-                throw new Error('Failed to switch shop');
-            }
-            
-            const data = await response.json();
-            
-            if (data.success) {
-                // Show success notification
-                showNotification({
-                    type: 'success',
-                    title: 'Shop Changed',
-                    message: 'Item has been moved to a different shop with a better price'
-                });
-                
-                // Reload the page after a brief delay
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
-            } else {
-                throw new Error(data.message || 'Failed to switch shop');
-            }
-        } catch (error) {
-            console.error('Error switching shop:', error);
-            // Reset button
-            this.innerHTML = originalText;
-            this.disabled = false;
-            
-            // Show error notification
-            showNotification({
-                type: 'error',
-                title: 'Error',
-                message: error.message || 'Failed to switch shop'
-            });
-        }
-    });
-});
-
-// Handle keep shop button clicks (just hide the parent card)
-keepShopButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        const cardElement = this.closest('.bg-green-50');
-        if (cardElement) {
-            cardElement.style.display = 'none';
-        }
-    });
-});
-
-// Utility function to show notifications
+// Notification function
 function showNotification({ type = 'info', title, message }) {
-    // Create notification container if it doesn't exist
     let container = document.getElementById('notification-container');
     if (!container) {
         container = document.createElement('div');
         container.id = 'notification-container';
-        container.className = 'fixed top-4 right-4 z-50 w-72';
+        container.className = 'fixed top-4 right-4 z-50 w-80';
         document.body.appendChild(container);
     }
     
-    // Create notification element
     const notification = document.createElement('div');
-    notification.className = `bg-white rounded-lg shadow-lg border overflow-hidden mb-3 transform transition-all duration-300 translate-x-full opacity-0 ${type === 'success' ? 'border-green-200' : type === 'error' ? 'border-red-200' : 'border-blue-200'}`;
-    
-    // Set background color based on type
-    const bgColor = type === 'success' ? 'bg-green-50' : type === 'error' ? 'bg-red-50' : 'bg-blue-50';
+    const bgColor = type === 'success' ? 'bg-green-50 border-green-200' : type === 'error' ? 'bg-red-50 border-red-200' : 'bg-blue-50 border-blue-200';
     const textColor = type === 'success' ? 'text-green-800' : type === 'error' ? 'text-red-800' : 'text-blue-800';
     const iconClass = type === 'success' ? 'fas fa-check-circle text-green-500' : type === 'error' ? 'fas fa-exclamation-circle text-red-500' : 'fas fa-info-circle text-blue-500';
     
-    // Set notification content
+    notification.className = `bg-white rounded-lg shadow-xl border-2 overflow-hidden mb-3 transform transition-all duration-300 translate-x-full ${bgColor}`;
+    
     notification.innerHTML = `
-        <div class="${bgColor} px-4 py-2 border-b ${type === 'success' ? 'border-green-100' : type === 'error' ? 'border-red-100' : 'border-blue-100'} flex justify-between items-center">
-            <div class="font-medium ${textColor} flex items-center">
-                <i class="${iconClass} mr-2"></i>
+        <div class="px-4 py-3 border-b ${type === 'success' ? 'border-green-100' : type === 'error' ? 'border-red-100' : 'border-blue-100'} flex justify-between items-center">
+            <div class="font-semibold ${textColor} flex items-center gap-2">
+                <i class="${iconClass}"></i>
                 <span>${title}</span>
             </div>
             <button class="text-gray-400 hover:text-gray-600">
@@ -581,34 +855,24 @@ function showNotification({ type = 'info', title, message }) {
         </div>
     `;
     
-    // Add to container
     container.appendChild(notification);
     
-    // Add close functionality
     notification.querySelector('button').addEventListener('click', () => {
-        notification.classList.add('translate-x-full', 'opacity-0');
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
+        notification.classList.add('translate-x-full');
+        setTimeout(() => notification.remove(), 300);
     });
     
-    // Show with animation
     setTimeout(() => {
-        notification.classList.remove('translate-x-full', 'opacity-0');
+        notification.classList.remove('translate-x-full');
     }, 10);
     
-    // Auto-hide after 5 seconds
     setTimeout(() => {
         if (notification.parentElement) {
-            notification.classList.add('translate-x-full', 'opacity-0');
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 300);
+            notification.classList.add('translate-x-full');
+            setTimeout(() => notification.remove(), 300);
         }
     }, 5000);
 }
 </script>
 
-<%- include('../partials/footer') %> 
+<%- include('../partials/footer') %>

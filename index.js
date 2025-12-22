@@ -75,8 +75,44 @@ app.use('/cart', cartRoutes);
 app.use('/checkout', checkoutRoutes);
 
 // Root route
-app.get('/', (req, res) => {
-  res.render('home', { title: 'Welcome to Grocery App' });
+app.get('/', async (req, res) => {
+  try {
+    const Shop = require('./models/shop');
+    const Product = require('./models/product');
+    const mlService = require('./utils/mlService');
+    
+    // Get featured shops (limit 8)
+    const featuredShops = await Shop.findAll(8, 0);
+    
+    // Get featured products (limit 8) - fallback
+    const featuredProducts = await Product.findAll(8, 0);
+    
+    // Get ML recommendations for logged-in users
+    let mlRecommendations = [];
+    if (req.session.userId) {
+      try {
+        mlRecommendations = await mlService.getHomeRecommendations(req.session.userId, 8);
+      } catch (error) {
+        console.error('Error fetching ML recommendations:', error);
+        // Continue with featured products if ML fails
+      }
+    }
+    
+    res.render('home', { 
+      title: 'FreshKart - Shop Fresh Groceries Online',
+      featuredShops,
+      featuredProducts,
+      mlRecommendations: mlRecommendations.length > 0 ? mlRecommendations : null
+    });
+  } catch (error) {
+    console.error('Error loading home page:', error);
+    res.render('home', { 
+      title: 'FreshKart - Shop Fresh Groceries Online',
+      featuredShops: [],
+      featuredProducts: [],
+      mlRecommendations: null
+    });
+  }
 });
 
 // 404 handler

@@ -6,45 +6,610 @@
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Grocery Hero Styles */
+        .grocery-hero {
+            min-height: 85vh;
+            position: relative;
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 50%, #2d5016 100%);
+        }
+        
+        .hero-left {
+            padding: 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 85vh;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            color: white;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-headline {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-headline .highlight {
+            color: #fbbf24;
+        }
+        
+        .hero-search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            color: white;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .hero-search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .shop-now-btn {
+            background: #fbbf24;
+            color: #1a202c;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .shop-now-btn:hover {
+            background: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+        }
+        
+        .signup-prompt {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+        
+        .signup-prompt a {
+            color: #fbbf24;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        
+        .customer-reviews {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .customer-avatars {
+            display: flex;
+            margin-left: -0.5rem;
+        }
+        
+        .customer-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            margin-left: -0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .review-text {
+            color: white;
+            font-size: 0.875rem;
+        }
+        
+        .review-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        
+        .app-download {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .app-download-text {
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .app-badges {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .app-badge {
+            height: 2.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .app-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .hero-left {
+                padding: 2rem;
+            }
+            
+            .hero-headline {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .udemy-section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1c1d1f;
+        }
+        
+        .udemy-category-card {
+            background: white;
+            border: 1px solid #d1d7dc;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: #1c1d1f;
+            display: block;
+        }
+        
+        .udemy-category-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        }
+        
+        .udemy-shop-card {
+            background: white;
+            border: 1px solid #d1d7dc;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        
+        .udemy-shop-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        }
+        
+        .udemy-shop-image {
+            width: 100%;
+            height: 8rem;
+            object-fit: cover;
+            background: #f7f9fa;
+        }
+        
+        .udemy-product-card {
+            background: white;
+            border: 1px solid #d1d7dc;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        
+        .udemy-product-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        }
+        
+        .udemy-product-image {
+            width: 100%;
+            height: 8rem;
+            object-fit: cover;
+            background: #f7f9fa;
+        }
+        
+        .udemy-instructor-badge {
+            font-size: 0.75rem;
+            color: #6a6f73;
+            margin-top: 0.25rem;
+        }
+        
+        .udemy-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.25rem;
+        }
+        
+        .udemy-rating-number {
+            font-weight: 700;
+            color: #b4690e;
+            font-size: 0.875rem;
+        }
+        
+        .udemy-price {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1c1d1f;
+        }
+        
+        .udemy-categories-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scrollbar-width: thin;
+        }
+        
+        .udemy-categories-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .udemy-categories-scroll::-webkit-scrollbar-track {
+            background: #f7f9fa;
+        }
+        
+        .udemy-categories-scroll::-webkit-scrollbar-thumb {
+            background: #d1d7dc;
+            border-radius: 4px;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-white min-h-screen">
     <%- include('partials/header') %>
 
-    <main class="container mx-auto p-4 mt-8 flex-1">
-        <section class="bg-white p-6 rounded-lg shadow-md">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold">Welcome to our Grocery E-commerce App</h2>
-                <div class="flex space-x-4">
-                    <a href="/" class="flex items-center text-green-600 hover:text-green-700">
-                        <i class="fas fa-home text-xl"></i>
-                        <span class="ml-1 hidden sm:inline">Home</span>
+    <main class="flex-1">
+        <!-- Hero Section - Split Screen Design -->
+        <section class="grocery-hero">
+            <!-- Left Panel -->
+            <div class="hero-left">
+                <div>
+                    <!-- Badge -->
+                    <div class="hero-badge">
+                        <i class="fas fa-truck"></i>
+                        <span>Food Delivery Service & Restaurant</span>
+                    </div>
+                    
+                    <!-- Headline -->
+                    <h1 class="hero-headline">
+                        Get fresh <span class="highlight">Grocery</span><br>
+                        Enjoy healthy life.
+                    </h1>
+                    
+                    <!-- Search and Shop Now -->
+                    <form action="/shops" method="GET" class="hero-search-container">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            placeholder="Select Category" 
+                            class="hero-search-input"
+                            autocomplete="off"
+                        >
+                        <button type="submit" class="shop-now-btn">
+                            Shop Now
+                        </button>
+                    </form>
+                    
+                    <!-- Sign Up Prompt -->
+                    <% if (!locals.user) { %>
+                    <p class="signup-prompt">
+                        Not yet Member? <a href="/signup">Sign Up Now</a>
+                    </p>
+                    <% } %>
+                    
+                    <!-- Customer Reviews -->
+                    <div class="customer-reviews">
+                        <div class="customer-avatars">
+                            <div class="customer-avatar">A</div>
+                            <div class="customer-avatar">B</div>
+                            <div class="customer-avatar">C</div>
+                        </div>
+                        <div>
+                            <div class="review-text">Our Happy Customer</div>
+                            <div class="review-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.5</span>
+                                <span class="text-white text-sm ml-1">(12.5k reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- App Download -->
+                <div class="app-download">
+                    <div class="app-download-text">Download App</div>
+                    <div class="app-badges">
+                        <a href="#" class="app-badge">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" style="height: 2.5rem;" onerror="this.style.display='none'">
+                        </a>
+                        <a href="#" class="app-badge">
+                            <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1288329600" alt="Download on App Store" style="height: 2.5rem;" onerror="this.style.display='none'">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section (Udemy Style) -->
+        <section class="py-8 bg-white border-b border-gray-200">
+            <div class="container max-w-screen-xl mx-auto px-4">
+                <h2 class="udemy-section-title">Shop by Category</h2>
+                <div class="udemy-categories-scroll">
+                    <a href="/shops?category=fruits" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
+                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-apple-alt text-3xl text-orange-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm">Fruits</h3>
                     </a>
-                    <a href="/cart" class="flex items-center text-green-600 hover:text-green-700 relative">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span class="ml-1 hidden sm:inline">Cart</span>
-                        <% if (locals.user && locals.cartCount) { %>
-                            <span class="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                <%= locals.cartCount %>
-                            </span>
-                        <% } else if (locals.user) { %>
-                            <span class="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                0
-                            </span>
-                        <% } %>
+                    <a href="/shops?category=vegetables" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-carrot text-3xl text-green-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm">Vegetables</h3>
+                    </a>
+                    <a href="/shops?category=dairy" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-cheese text-3xl text-blue-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm">Dairy</h3>
+                    </a>
+                    <a href="/shops?category=bakery" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
+                        <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-bread-slice text-3xl text-amber-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm">Bakery</h3>
+                    </a>
+                    <a href="/shops?category=beverages" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-wine-bottle text-3xl text-red-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm">Beverages</h3>
+                    </a>
+                    <a href="/shops?category=snacks" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-cookie text-3xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm">Snacks</h3>
+                    </a>
+                    <a href="/shops?category=meat" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
+                        <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-drumstick-bite text-3xl text-pink-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm">Meat & Seafood</h3>
+                    </a>
+                    <a href="/shops?category=frozen" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
+                        <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-snowflake text-3xl text-cyan-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-sm">Frozen Foods</h3>
                     </a>
                 </div>
             </div>
-            <% if (locals.user) { %>
-                <p class="mb-4">Hello, <%= user.name %>! Find the best deals on groceries from various shops in your area.</p>
-            <% } else { %>
-                <p class="mb-4">Find the best deals on groceries from various shops in your area.</p>
-            <% } %>
-            <div class="mt-6">
-                <a href="/shops" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Browse Shops</a>
+        </section>
+
+        <!-- Featured Shops Section (Like Udemy's Featured Courses) -->
+        <% if (featuredShops && featuredShops.length > 0) { %>
+        <section class="py-8 bg-white">
+            <div class="container max-w-screen-xl mx-auto px-4">
+                <h2 class="udemy-section-title">Featured Shops</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <% featuredShops.forEach(shop => { %>
+                        <a href="/shops/<%= shop.id %>" class="udemy-shop-card">
+                            <div class="relative">
+                                <% if (shop.logo) { %>
+                                    <img src="<%= shop.logo %>" alt="<%= shop.name %>" class="udemy-shop-image">
+                                <% } else { %>
+                                    <div class="udemy-shop-image bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                                        <span class="text-4xl text-white font-bold"><%= shop.name.charAt(0) %></span>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-sm line-clamp-2 mb-1"><%= shop.name %></h3>
+                                <p class="udemy-instructor-badge line-clamp-1"><%= shop.address %></p>
+                                <div class="udemy-rating">
+                                    <span class="udemy-rating-number">4.2</span>
+                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    <span class="text-xs text-gray-600 ml-1">(500+)</span>
+                                </div>
+                                <div class="mt-2">
+                                    <span class="text-xs text-green-600 font-semibold">Free Delivery</span>
+                                </div>
+                            </div>
+                        </a>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+        <% } %>
+
+        <!-- Featured Products Section -->
+        <% if (featuredProducts && featuredProducts.length > 0) { %>
+        <section class="py-8 bg-gray-50">
+            <div class="container max-w-screen-xl mx-auto px-4">
+                <h2 class="udemy-section-title">Popular Products</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <% featuredProducts.forEach(product => { %>
+                        <a href="/products/<%= product.id %>" class="udemy-product-card">
+                            <div class="relative">
+                                <% if (product.image_url) { %>
+                                    <img src="<%= product.image_url %>" alt="<%= product.name %>" class="udemy-product-image">
+                                <% } else { %>
+                                    <div class="udemy-product-image bg-gray-100 flex items-center justify-center">
+                                        <i class="fas fa-shopping-basket text-4xl text-gray-400"></i>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-sm line-clamp-2 mb-1"><%= product.name %></h3>
+                                <p class="udemy-instructor-badge line-clamp-1"><%= product.shop_name %></p>
+                                <div class="udemy-rating mt-1">
+                                    <span class="udemy-rating-number">4.1</span>
+                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    <span class="text-xs text-gray-600 ml-1">(120)</span>
+                                </div>
+                                <div class="mt-2 flex items-center justify-between">
+                                    <span class="udemy-price">₹<%= typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price).toFixed(2) %></span>
+                                    <% if (locals.user) { %>
+                                        <form action="/cart/add" method="POST" class="inline-block" onclick="event.stopPropagation();">
+                                            <input type="hidden" name="product_id" value="<%= product.id %>">
+                                            <input type="hidden" name="shop_id" value="<%= product.shop_id %>">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="udemy-btn text-xs py-1 px-3">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </a>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+        <% } %>
+
+        <!-- ML Recommendations Section -->
+        <% if (mlRecommendations && mlRecommendations.length > 0) { %>
+        <section class="py-8 bg-white border-t border-gray-200">
+            <div class="container max-w-screen-xl mx-auto px-4">
+                <h2 class="udemy-section-title">
+                    <i class="fas fa-magic mr-2 text-purple-600"></i>
+                    Recommended for You
+                </h2>
+                <p class="text-gray-600 text-sm mb-4">Based on your purchase history</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <% mlRecommendations.forEach(product => { %>
+                        <a href="/products/<%= product.id %>" class="udemy-product-card">
+                            <div class="relative">
+                                <% if (product.image_url) { %>
+                                    <img src="<%= product.image_url %>" alt="<%= product.name %>" class="udemy-product-image">
+                                <% } else { %>
+                                    <div class="udemy-product-image bg-gray-100 flex items-center justify-center">
+                                        <i class="fas fa-shopping-basket text-4xl text-gray-400"></i>
+                                    </div>
+                                <% } %>
+                                <div class="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                                    <i class="fas fa-star"></i> Recommended
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-sm line-clamp-2 mb-1"><%= product.name %></h3>
+                                <p class="udemy-instructor-badge line-clamp-1"><%= product.shop_name %></p>
+                                <div class="mt-2 flex items-center justify-between">
+                                    <span class="udemy-price">₹<%= typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price).toFixed(2) %></span>
+                                    <% if (locals.user) { %>
+                                        <form action="/cart/add" method="POST" class="inline-block" onclick="event.stopPropagation();">
+                                            <input type="hidden" name="product_id" value="<%= product.id %>">
+                                            <input type="hidden" name="shop_id" value="<%= product.shop_id %>">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="udemy-btn text-xs py-1 px-3">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </a>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+        <% } %>
+
+        <!-- Top Categories Section -->
+        <section class="py-8 bg-white border-t border-gray-200">
+            <div class="container max-w-screen-xl mx-auto px-4">
+                <h2 class="udemy-section-title">Top Categories</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <a href="/shops?category=fruits" class="udemy-category-card">
+                        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-apple-alt text-2xl text-orange-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-xs">Fresh Fruits</h3>
+                    </a>
+                    <a href="/shops?category=vegetables" class="udemy-category-card">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-carrot text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-xs">Vegetables</h3>
+                    </a>
+                    <a href="/shops?category=dairy" class="udemy-category-card">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-cheese text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-xs">Dairy Products</h3>
+                    </a>
+                    <a href="/shops?category=bakery" class="udemy-category-card">
+                        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-bread-slice text-2xl text-amber-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-xs">Bakery Items</h3>
+                    </a>
+                    <a href="/shops?category=beverages" class="udemy-category-card">
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-wine-bottle text-2xl text-red-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-xs">Beverages</h3>
+                    </a>
+                    <a href="/shops?category=snacks" class="udemy-category-card">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-cookie text-2xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-xs">Snacks</h3>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
 
     <%- include('partials/footer') %>
 </body>
-</html> 
+</html>

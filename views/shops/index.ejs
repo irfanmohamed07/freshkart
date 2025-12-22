@@ -1,15 +1,15 @@
 <%- include('../partials/header') %>
 
-<div class="container max-w-screen-xl mx-auto px-4 py-6">
+<div class="container max-w-screen-xl mx-auto px-4 py-8">
     <!-- Page title and filters -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 mb-1">Grocery Shops Near You</h1>
+            <h1 class="text-3xl font-bold mb-2">Grocery Shops</h1>
             <p class="text-gray-600">Find the best grocery shops in your area</p>
         </div>
         <div class="mt-4 md:mt-0 flex space-x-2">
             <div class="relative">
-                <select class="appearance-none border border-gray-300 rounded-md py-2 px-4 pr-8 bg-white text-gray-700 cursor-pointer">
+                <select class="appearance-none border border-gray-300 py-2 px-4 pr-8 bg-white text-gray-700 text-sm cursor-pointer">
                     <option>Sort By</option>
                     <option>Popularity</option>
                     <option>Price Low to High</option>
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="relative">
-                <select class="appearance-none border border-gray-300 rounded-md py-2 px-4 pr-8 bg-white text-gray-700 cursor-pointer">
+                <select class="appearance-none border border-gray-300 py-2 px-4 pr-8 bg-white text-gray-700 text-sm cursor-pointer">
                     <option>Filter By</option>
                     <option>Open Now</option>
                     <option>Free Delivery</option>
@@ -34,64 +34,57 @@
         </div>
     </div>
     
-    <!-- Shop categories chips (optional) -->
-    <div class="flex flex-wrap gap-2 mb-6">
-        <a href="#" class="zomato-tag hover:bg-gray-200">All Shops</a>
-        <a href="#" class="zomato-tag hover:bg-gray-200">Supermarket</a>
-        <a href="#" class="zomato-tag hover:bg-gray-200">Local Market</a>
-        <a href="#" class="zomato-tag hover:bg-gray-200">Organic</a>
-        <a href="#" class="zomato-tag hover:bg-gray-200">Wholesale</a>
-        <a href="#" class="zomato-tag hover:bg-gray-200">Specialty</a>
+    <!-- Shop categories chips -->
+    <div class="flex flex-wrap gap-2 mb-8">
+        <a href="#" class="bg-purple-600 text-white px-4 py-2 text-sm font-semibold">All Shops</a>
+        <a href="#" class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Supermarket</a>
+        <a href="#" class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Local Market</a>
+        <a href="#" class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Organic</a>
+        <a href="#" class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Wholesale</a>
+        <a href="#" class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Specialty</a>
     </div>
     
     <!-- Shops List -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <% shops.forEach(shop => { %>
-            <a href="/shops/<%= shop.id %>" class="zomato-card group">
-                <div class="relative h-48 overflow-hidden">
+            <a href="/shops/<%= shop.id %>" class="udemy-card group">
+                <div class="relative h-48 overflow-hidden bg-gray-100">
                     <% if (shop.logo) { %>
-                        <img src="<%= shop.logo %>" alt="<%= shop.name %>" class="w-full h-full object-cover">
+                        <img src="<%= shop.logo %>" alt="<%= shop.name %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <% } else { %>
-                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <span class="text-5xl text-gray-400 font-bold"><%= shop.name.charAt(0) %></span>
+                        <div class="w-full h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                            <span class="text-5xl text-white font-bold"><%= shop.name.charAt(0) %></span>
                         </div>
                     <% } %>
                     <!-- Shop badge -->
-                    <span class="zomato-badge"><i class="fas fa-shopping-basket mr-1"></i> Grocery</span>
-                    <!-- Offers overlay (example) -->
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-                        <div class="zomato-discount">20% OFF up to ₹100</div>
+                    <div class="absolute top-3 left-3">
+                        <span class="bg-white text-purple-600 text-xs font-semibold px-2 py-1">
+                            <i class="fas fa-store mr-1"></i> Grocery
+                        </span>
+                    </div>
+                    <!-- Offers badge -->
+                    <div class="absolute top-3 right-3">
+                        <span class="bg-red-500 text-white text-xs font-semibold px-2 py-1">20% OFF</span>
                     </div>
                 </div>
                 <div class="p-4">
-                    <div class="flex justify-between items-start mb-1">
-                        <h3 class="text-lg font-semibold line-clamp-1"><%= shop.name %></h3>
-                        <div class="zomato-rating">
-                            <span>4.2</span>
-                            <i class="fas fa-star ml-1 text-xs"></i>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-bold line-clamp-1 group-hover:text-purple-600 transition-colors"><%= shop.name %></h3>
+                        <div class="flex items-center text-sm">
+                            <span class="text-yellow-500 font-semibold">4.2</span>
+                            <i class="fas fa-star text-yellow-500 ml-1 text-xs"></i>
                         </div>
                     </div>
-                    <div class="text-gray-500 text-sm mb-2 flex items-center line-clamp-1">
-                        <i class="fas fa-map-marker-alt mr-1"></i>
+                    <div class="text-gray-600 text-sm mb-3 flex items-center line-clamp-1">
+                        <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
                         <%= shop.address %>
                     </div>
-                    <div class="flex items-center text-sm mb-3">
-                        <% if (shop.contact) { %>
-                            <span class="text-gray-600 flex items-center">
-                                <i class="fas fa-phone-alt mr-1"></i>
-                                <%= shop.contact %>
-                            </span>
-                        <% } else { %>
-                            <span class="text-gray-500">
-                                <i class="fas fa-info-circle mr-1"></i>
-                                No contact information
-                            </span>
-                        <% } %>
-                    </div>
-                    <div class="zomato-divider"></div>
-                    <div class="flex justify-between items-center">
-                        <span class="zomato-pill">Free Delivery</span>
-                        <span class="text-sm text-gray-600">20-30 min</span>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">
+                            <i class="fas fa-clock mr-1 text-gray-400"></i>
+                            20-30 min
+                        </span>
+                        <span class="text-green-600 font-semibold">Free Delivery</span>
                     </div>
                 </div>
             </a>
