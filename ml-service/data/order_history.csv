@@ -1,0 +1,9 @@
+user_id,product_id,payment_status,order_id
+2,1,paid,1
+2,4,paid,1
+2,7,paid,2
+2,10,paid,2
+3,13,paid,3
+3,16,paid,3
+3,19,paid,4
+3,1,paid,4

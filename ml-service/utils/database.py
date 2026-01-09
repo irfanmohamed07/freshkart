@@ -27,3 +27,5 @@ def fetch_data(query, params=None):
     finally:
         conn.close()
 
+
+

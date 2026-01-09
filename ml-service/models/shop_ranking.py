@@ -57,3 +57,5 @@ class ShopRanking:
         shops = fetch_data(query)
         return shops.to_dict('records')
 
+
+

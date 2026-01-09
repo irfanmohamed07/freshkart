@@ -66,3 +66,5 @@ class CartSuggestions:
         result = fetch_data(query, params=params)
         return result.to_dict('records')
 
+
+

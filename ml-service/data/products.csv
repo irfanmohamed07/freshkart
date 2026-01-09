@@ -1,0 +1,15 @@
+id,name,description,price,shop_id,shop_name,image_url
+1,Organic Apples,Fresh organic apples,350.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=500
+2,Organic Apples,Fresh organic apples,320.0,2,Organic Store,https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=500
+4,Premium Mangoes,Delicious mangoes,599.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=500
+7,Whole Wheat Bread,Freshly baked bread,45.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500
+10,Bananas,Fresh bananas,150.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1574226516831-e1dff420e8f8?w=500
+13,Carrots,Organic carrots,200.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=500
+16,Tomatoes,Fresh tomatoes,180.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500
+19,Spinach,Fresh spinach leaves,120.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500
+22,Potatoes,Organic potatoes,90.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500
+25,Oranges,Juicy oranges,250.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500
+28,Shampoo,A bottle of shampoo,300.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500
+31,Juice,A pack of fruit juice,150.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500
+34,Lays,A packet of Lays chips,50.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500
+37,Rice,A bag of rice,500.0,1,Fresh Fruits Market,https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500

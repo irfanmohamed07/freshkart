@@ -36,3 +36,5 @@ NODE_PID=$!
 # Wait for both processes
 wait $PYTHON_PID $NODE_PID
 
+
+

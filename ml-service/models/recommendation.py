@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import joblib
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -12,27 +13,40 @@ class HomePageRecommendations:
         self.vectorizer = TfidfVectorizer(max_features=100, stop_words='english')
         self.product_vectors = None
         self.products_df = None
+        self.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.models_dir = os.path.join(self.base_dir, 'data', 'models')
         
     def load_products(self):
-        """Load all products from database"""
-        query = """
-            SELECT p.id, p.name, p.description, p.price, p.shop_id, 
-                   s.name as shop_name, p.image_url
-            FROM products p
-            JOIN shops s ON p.shop_id = s.id
-        """
-        self.products_df = fetch_data(query)
-        
-        # Create content for vectorization
-        self.products_df['content'] = (
-            self.products_df['name'].fillna('') + ' ' + 
-            self.products_df['description'].fillna('')
-        )
-        
-        # Vectorize products
-        self.product_vectors = self.vectorizer.fit_transform(
-            self.products_df['content']
-        )
+        """Load products from saved models or database"""
+        vectorizer_path = os.path.join(self.models_dir, 'tfidf_vectorizer.pkl')
+        vectors_path = os.path.join(self.models_dir, 'product_vectors.pkl')
+        processed_path = os.path.join(self.models_dir, 'products_processed.pkl')
+
+        if os.path.exists(vectorizer_path) and os.path.exists(vectors_path) and os.path.exists(processed_path):
+            print("Loading pre-trained recommendation models...")
+            self.vectorizer = joblib.load(vectorizer_path)
+            self.product_vectors = joblib.load(vectors_path)
+            self.products_df = pd.read_pickle(processed_path)
+        else:
+            print("Saved models not found. Loading from database...")
+            query = """
+                SELECT p.id, p.name, p.description, p.price, p.shop_id, 
+                       s.name as shop_name, p.image_url
+                FROM products p
+                JOIN shops s ON p.shop_id = s.id
+            """
+            self.products_df = fetch_data(query)
+            
+            # Create content for vectorization
+            self.products_df['content'] = (
+                self.products_df['name'].fillna('') + ' ' + 
+                self.products_df['description'].fillna('')
+            )
+            
+            # Vectorize products
+            self.product_vectors = self.vectorizer.fit_transform(
+                self.products_df['content']
+            )
     
     def get_user_purchase_history(self, user_id):
         """Get user's purchase history"""
@@ -117,4 +131,6 @@ class HomePageRecommendations:
         """
         popular = fetch_data(query, params=[limit])
         return popular.to_dict('records')
+
+
 
