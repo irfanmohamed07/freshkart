@@ -24,6 +24,46 @@ const Shop = {
   },
 
   /**
+   * Search shops by name or address
+   * @param {string} query - Search query
+   * @param {number} limit - Optional limit
+   * @param {number} offset - Optional offset
+   * @returns {Promise<Array>} - Array of shop objects
+   */
+  search: async (query, limit = 10, offset = 0) => {
+    try {
+      const searchTerm = `%${query}%`;
+      const result = await db.query(
+        'SELECT * FROM shops WHERE name ILIKE $1 OR address ILIKE $1 ORDER BY name LIMIT $2 OFFSET $3',
+        [searchTerm, limit, offset]
+      );
+      return result.rows;
+    } catch (error) {
+      console.error('Error in Shop.search:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get count of search results
+   * @param {string} query - Search query
+   * @returns {Promise<number>} - Count of shops
+   */
+  getSearchCount: async (query) => {
+    try {
+      const searchTerm = `%${query}%`;
+      const result = await db.query(
+        'SELECT COUNT(*) FROM shops WHERE name ILIKE $1 OR address ILIKE $1',
+        [searchTerm]
+      );
+      return parseInt(result.rows[0].count, 10);
+    } catch (error) {
+      console.error('Error in Shop.getSearchCount:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Find a shop by ID
    * @param {number} id - Shop ID
    * @returns {Promise<Object>} - Shop object

@@ -1,36 +1,174 @@
 <%- include('partials/header') %>
 
-<main class="container mx-auto p-4 mt-8 flex-1">
-    <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
-        <h2 class="text-2xl font-semibold mb-6">My Profile</h2>
-        
-        <div class="mb-6">
-            <h3 class="text-lg font-medium mb-2">Account Information</h3>
-            <div class="border-t border-b border-gray-200 py-3">
-                <div class="grid grid-cols-3 gap-4 mb-2">
-                    <div class="text-gray-600">Name:</div>
-                    <div class="col-span-2 font-medium"><%= user.name %></div>
+    <main class="container max-w-[1280px] mx-auto px-4 md:px-10 py-8 min-h-screen">
+        <div class="mb-8">
+            <h1 class="text-3xl font-black text-[#111318] dark:text-white mb-2">My Garage</h1>
+            <div class="flex items-center text-sm text-gray-500">
+                <a href="/" class="hover:text-primary transition-colors">Home</a>
+                <span class="mx-2">›</span>
+                <span class="font-medium text-gray-900 dark:text-gray-300">Profile</span>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar Navigation -->
+            <div class="lg:w-1/4">
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 overflow-hidden sticky top-24">
+                    <div class="p-6 border-b border-[#dbdfe6] dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/30">
+                                <%= user.name.charAt(0).toUpperCase() %>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h2 class="font-bold text-[#111318] dark:text-white truncate" title="<%= user.name %>">
+                                    <%= user.name %>
+                                </h2>
+                                <p class="text-xs text-gray-500 truncate" title="<%= user.email %>">
+                                    <%= user.email %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nav class="p-4 space-y-1">
+                        <a href="/profile"
+                            class="flex items-center gap-3 px-4 py-3 bg-blue-50 dark:bg-blue-900/20 text-primary font-bold rounded-lg transition-colors">
+                            <span class="material-symbols-outlined">person</span>
+                            Account Details
+                        </a>
+                        <a href="/orders"
+                            class="flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white font-medium rounded-lg transition-colors">
+                            <span class="material-symbols-outlined">shopping_bag</span>
+                            My Orders
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white font-medium rounded-lg transition-colors">
+                            <span class="material-symbols-outlined">directions_car</span>
+                            My Vehicles
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white font-medium rounded-lg transition-colors">
+                            <span class="material-symbols-outlined">location_on</span>
+                            Addresses
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white font-medium rounded-lg transition-colors">
+                            <span class="material-symbols-outlined">favorite</span>
+                            Wishlist
+                        </a>
+
+                        <div class="pt-4 mt-4 border-t border-[#dbdfe6] dark:border-gray-700">
+                            <a href="/logout"
+                                class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 font-medium rounded-lg transition-colors">
+                                <span class="material-symbols-outlined">logout</span>
+                                Log Out
+                            </a>
+                        </div>
+                    </nav>
                 </div>
-                <div class="grid grid-cols-3 gap-4 mb-2">
-                    <div class="text-gray-600">Email:</div>
-                    <div class="col-span-2 font-medium"><%= user.email %></div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="lg:w-3/4">
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 overflow-hidden mb-6">
+                    <div
+                        class="p-6 border-b border-[#dbdfe6] dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
+                        <h3 class="text-lg font-bold text-[#111318] dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">badge</span>
+                            Profile Information
+                        </h3>
+                        <button class="text-sm text-primary font-bold hover:underline flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">edit</span> Edit
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Full Name</label>
+                                <p class="font-medium text-[#111318] dark:text-white text-lg">
+                                    <%= user.name %>
+                                </p>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Email
+                                    Address</label>
+                                <p class="font-medium text-[#111318] dark:text-white text-lg">
+                                    <%= user.email %>
+                                </p>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Phone
+                                    Number</label>
+                                <p class="font-medium text-gray-400 italic">Not added yet</p>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Account
+                                    Type</label>
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="px-2.5 py-0.5 rounded-full text-xs font-bold <%= user.isAdmin ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300' : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' %>">
+                                        <%= user.isAdmin ? 'Administrator' : 'Customer' %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="text-gray-600">Account Type:</div>
-                    <div class="col-span-2 font-medium"><%= user.isAdmin ? 'Administrator' : 'Customer' %></div>
+
+                <!-- Recent Activity / Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 text-primary flex items-center justify-center mb-3">
+                            <span class="material-symbols-outlined">shopping_basket</span>
+                        </div>
+                        <span class="text-2xl font-black text-[#111318] dark:text-white">0</span>
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wide mt-1">Total Orders</span>
+                    </div>
+
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                        <div
+                            class="w-12 h-12 rounded-full bg-orange-50 dark:bg-orange-900/20 text-orange-600 flex items-center justify-center mb-3">
+                            <span class="material-symbols-outlined">directions_car</span>
+                        </div>
+                        <span class="text-2xl font-black text-[#111318] dark:text-white">0</span>
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wide mt-1">Vehicles added</span>
+                    </div>
+
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                        <div
+                            class="w-12 h-12 rounded-full bg-green-50 dark:bg-green-900/20 text-green-600 flex items-center justify-center mb-3">
+                            <span class="material-symbols-outlined">savings</span>
+                        </div>
+                        <span class="text-2xl font-black text-[#111318] dark:text-white">₹0</span>
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wide mt-1">Total Saved</span>
+                    </div>
+                </div>
+
+                <!-- Promotion Banner -->
+                <div
+                    class="bg-gradient-to-r from-primary to-blue-700 rounded-xl shadow-lg p-6 text-white relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold mb-2">Complete your profile</h3>
+                        <p class="text-blue-100 mb-4 max-w-lg">Add your vehicle details to get personalized part
+                            recommendations and service schedules tailored to your car.</p>
+                        <button
+                            class="bg-white text-primary font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-blue-50 transition-colors">
+                            Add Vehicle
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <div class="flex justify-between">
-            <a href="/" class="text-gray-600 hover:text-gray-800">
-                Back to Home
-            </a>
-            <a href="/orders" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                View My Orders
-            </a>
-        </div>
-    </div>
-</main>
+    </main>
 
-<%- include('partials/footer') %> 
+    <%- include('partials/footer') %>

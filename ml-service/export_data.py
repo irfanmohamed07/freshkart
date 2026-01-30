@@ -46,7 +46,7 @@ def export_to_csv():
 
         # 3. Export Shops
         print("Exporting shops...")
-        shops_query = "SELECT id, name, category, rating FROM shops"
+        shops_query = "SELECT id, name, address FROM shops"
         shops_df = pd.read_sql(shops_query, conn)
         shops_df.to_csv(os.path.join(data_dir, 'shops.csv'), index=False)
         print(f"Saved {len(shops_df)} shops to shops.csv")

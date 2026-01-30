@@ -1,279 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/output.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="/js/app.js"></script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        <%= title %>
+    </title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
     <style>
-        /* Grocery Header Styles */
-        :root {
-            --grocery-primary: #48bb78;
-            --grocery-primary-dark: #38a169;
-            --grocery-brown: #8b6914;
-            --grocery-text: #1a202c;
-            --grocery-text-light: #4a5568;
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #fff;
-            color: var(--grocery-text);
-        }
-        
-        .top-bar {
-            background: linear-gradient(135deg, #8b6914 0%, #6b4e0f 100%);
-            height: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.75rem;
-        }
-        
-        .grocery-header {
-            background-color: white;
-            border-bottom: 1px solid #e2e8f0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            height: 4.5rem;
-        }
-        
-        .grocery-logo {
-            font-weight: 800;
-            font-size: 1.75rem;
-            color: var(--grocery-primary);
-            letter-spacing: -0.5px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .grocery-logo-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.25rem;
-        }
-        
-        .grocery-nav-link {
-            color: var(--grocery-text);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            padding: 0.625rem 1rem;
-            text-decoration: none;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            white-space: nowrap;
-        }
-        
-        .grocery-nav-link:hover {
-            color: var(--grocery-primary);
-        }
-        
-        .grocery-cart-link {
-            position: relative;
-        }
-        
-        .grocery-cart-badge {
-            position: absolute;
-            top: -0.5rem;
-            right: -0.5rem;
-            background: var(--grocery-primary);
-            color: white;
-            border-radius: 50%;
-            width: 1.25rem;
-            height: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-            border: 2px solid white;
-        }
-        
-        .grocery-user-menu {
-            position: relative;
-        }
-        
-        .grocery-user-menu:hover .grocery-user-dropdown {
-            display: block;
-        }
-        
-        .grocery-user-dropdown {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 100%;
-            margin-top: 0.5rem;
-            background: white;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 12px rgba(0,0,0,.15);
-            min-width: 12rem;
-            border-radius: 0.5rem;
-            z-index: 1000;
-            overflow: hidden;
-        }
-        
-        .grocery-user-dropdown a {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: var(--grocery-text);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: background-color 0.2s;
-            gap: 0.5rem;
-        }
-        
-        .grocery-user-dropdown a:hover {
-            background-color: #f7fafc;
-        }
-        
-        .grocery-user-dropdown .divider {
-            border-top: 1px solid #e2e8f0;
-            margin: 0.25rem 0;
-        }
-        
-        .grocery-btn-primary {
-            background: var(--grocery-primary);
-            color: white;
-            border: none;
-            padding: 0.625rem 1.25rem;
-            font-weight: 600;
-            font-size: 0.875rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            border-radius: 0.5rem;
-            height: 2.5rem;
-        }
-        
-        .grocery-btn-primary:hover {
-            background: var(--grocery-primary-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(72, 187, 120, 0.3);
-        }
-        
-        .grocery-btn-outline {
-            background: transparent;
-            color: var(--grocery-text);
-            border: 1px solid #cbd5e0;
-            padding: 0.625rem 1.25rem;
-            font-weight: 600;
-            font-size: 0.875rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            border-radius: 0.5rem;
-            height: 2.5rem;
-        }
-        
-        .grocery-btn-outline:hover {
-            border-color: var(--grocery-primary);
-            color: var(--grocery-primary);
+            font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
-<body class="bg-white min-h-screen flex flex-col">
-    <!-- Top Brown Bar -->
-    <div class="top-bar">
-        <span>Free delivery on orders above ₹200 | Special offers available</span>
-    </div>
-    
-    <!-- Main Header -->
-    <header class="grocery-header sticky top-0 z-50">
-        <div class="container max-w-screen-xl mx-auto px-4 h-full">
-            <div class="flex items-center justify-between h-full">
-                <!-- Logo -->
-                <div class="flex items-center flex-shrink-0">
-                    <a href="/" class="grocery-logo">
-                        <div class="grocery-logo-icon">
-                            <i class="fas fa-shopping-basket"></i>
-                        </div>
-                        <span>FreshKart</span>
-                    </a>
-                </div>
 
-                <!-- Right Navigation -->
-                <nav class="flex items-center gap-3 flex-shrink-0">
-                    <!-- Sell on FreshKart -->
-                    <a href="#" class="grocery-nav-link hidden xl:flex">
-                        <i class="fas fa-store"></i>
-                        <span>Sell on FreshKart</span>
-                    </a>
-                    
-                    <!-- Cart -->
-                    <a href="/cart" class="grocery-nav-link grocery-cart-link">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span class="hidden md:inline">Cart</span>
-                        <% if (locals.user && locals.cartCount) { %>
-                            <span class="grocery-cart-badge"><%= locals.cartCount %></span>
-                        <% } else if (locals.user) { %>
-                            <span class="grocery-cart-badge">0</span>
-                        <% } %>
-                    </a>
-                    
-                    <% if (locals.user) { %>
-                        <!-- My Orders -->
-                        <a href="/orders" class="grocery-nav-link hidden md:flex">
-                            <i class="fas fa-box-open"></i>
-                            <span>My Orders</span>
-                        </a>
-                        
-                        <!-- User Profile -->
-                        <div class="grocery-user-menu">
-                            <button class="flex items-center justify-center p-0 hover:bg-gray-100 transition-colors rounded-full">
-                                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                                    <%= locals.user.name.charAt(0).toUpperCase() %>
-                                </div>
-                            </button>
-                            <div class="grocery-user-dropdown">
-                                <a href="/profile">
-                                    <i class="fas fa-user text-green-600"></i>
-                                    <span>Profile</span>
-                                </a>
-                                <a href="/orders">
-                                    <i class="fas fa-box-open text-green-600"></i>
-                                    <span>My Orders</span>
-                                </a>
-                                <div class="divider"></div>
-                                <a href="/logout">
-                                    <i class="fas fa-sign-out-alt text-red-500"></i>
-                                    <span>Log out</span>
-                                </a>
-                            </div>
-                        </div>
-                    <% } else { %>
-                        <!-- Login and Sign up buttons -->
-                        <a href="/login" class="grocery-btn-outline hidden md:flex">
-                            Log in
-                        </a>
-                        <a href="/signup" class="grocery-btn-primary hidden md:flex">
-                            Sign up
-                        </a>
-                    <% } %>
+<body class="bg-background-light dark:bg-background-dark text-[#111318] dark:text-white flex flex-col min-h-screen">
+    <!-- Top Navigation Bar -->
+    <header
+        class="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-solid border-[#dbdfe6] dark:border-gray-800">
+        <div class="max-w-[1280px] mx-auto px-4 md:px-10 py-3 flex items-center justify-between whitespace-nowrap">
+            <div class="flex items-center gap-8">
+                <a href="/" class="flex items-center gap-4 text-primary">
+                    <div class="size-8">
+                        <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-[#111318] dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">
+                        AutoPro</h2>
+                </a>
+                <nav class="hidden lg:flex items-center gap-9">
+                    <a class="text-[#111318] dark:text-gray-300 text-sm font-medium hover:text-primary transition-colors"
+                        href="/shops">Shop Parts</a>
+                    <a class="text-[#111318] dark:text-gray-300 text-sm font-medium hover:text-primary transition-colors"
+                        href="/shops?category=services">Services</a>
+                    <a class="text-[#111318] dark:text-gray-300 text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Deals</a>
+                    <a class="text-[#111318] dark:text-gray-300 text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Find a Store</a>
                 </nav>
+            </div>
+            <div class="flex flex-1 justify-end gap-6">
+                <form action="/shops" method="GET" class="hidden md:flex flex-col min-w-40 h-10 max-w-64">
+                    <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                        <div
+                            class="text-[#616f89] flex border-none bg-[#f0f2f4] dark:bg-gray-800 items-center justify-center pl-4 rounded-l-lg">
+                            <span class="material-symbols-outlined text-[20px]">search</span>
+                        </div>
+                        <input type="text" name="search"
+                            class="form-input flex w-full min-w-0 flex-1 border-none bg-[#f0f2f4] dark:bg-gray-800 text-[#111318] dark:text-white focus:ring-0 h-full placeholder:text-[#616f89] px-4 rounded-r-lg text-sm"
+                            placeholder="Search parts, brands..." value="<%= locals.search || '' %>" />
+                    </div>
+                </form>
+                <div class="flex gap-2">
+                    <% if (locals.user) { %>
+                        <a href="/profile"
+                            class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold gap-2">
+                            <span class="material-symbols-outlined text-[20px]">person</span>
+                            <span>Account</span>
+                        </a>
+                        <% } else { %>
+                            <a href="/login"
+                                class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold">
+                                <span>Log In</span>
+                            </a>
+                            <% } %>
+
+                                <a href="/cart"
+                                    class="flex items-center justify-center rounded-lg h-10 w-10 bg-[#f0f2f4] dark:bg-gray-800 text-[#111318] dark:text-white relative">
+                                    <span class="material-symbols-outlined">shopping_cart</span>
+                                    <% if (locals.user && locals.cartCount) { %>
+                                        <span
+                                            class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-white">
+                                            <%= locals.cartCount %>
+                                        </span>
+                                        <% } %>
+                                </a>
+                </div>
             </div>
         </div>
     </header>
-</body>
-</html>
+    <main class="w-full flex-grow">

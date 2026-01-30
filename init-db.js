@@ -19,9 +19,10 @@ async function initializeDatabase() {
 
     // Add sample shops
     const shops = [
-      { name: 'Fresh Fruits Market', address: '123 Main St', contact: '123-456-7890', logo: 'https://images.unsplash.com/photo-1506617564039-2f3b650b7010?w=500' },
-      { name: 'Organic Store', address: '456 Elm St', contact: '234-567-8901', logo: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=500' },
-      { name: 'Super Grocery', address: '789 Oak St', contact: '345-678-9012', logo: 'https://images.unsplash.com/photo-1604719312566-8912e9c8a213?w=500' }
+      { name: 'AutoParts Zone', address: '123 Motor Way', contact: '123-456-7890', logo: 'https://images.unsplash.com/photo-1486262715619-01b80258e0a2?w=500' },
+      { name: 'Mechanic Shop Pro', address: '456 Gear St', contact: '234-567-8901', logo: 'https://images.unsplash.com/photo-1599256872237-5dcc0fbe9668?w=500' },
+      { name: 'Sparkle Car Wash', address: '789 Bubble Ave', contact: '345-678-9012', logo: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=500' },
+      { name: 'Detailing Experts', address: '101 Shine Rd', contact: '456-789-0123', logo: 'https://images.unsplash.com/photo-1619642751034-765451fb2d66?w=500' }
     ];
 
     for (const shop of shops) {
@@ -34,58 +35,35 @@ async function initializeDatabase() {
 
     // Add sample products with different prices across shops
     const products = [
-      // Same products at different prices across shops
-      { name: 'Organic Apples', description: 'Fresh organic apples', price: 350.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=500' },
-      { name: 'Organic Apples', description: 'Fresh organic apples', price: 320.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=500' },
-      { name: 'Organic Apples', description: 'Fresh organic apples', price: 380.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=500' },
-      
-      { name: 'Premium Mangoes', description: 'Delicious mangoes', price: 599.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=500' },
-      { name: 'Premium Mangoes', description: 'Delicious mangoes', price: 580.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=500' },
-      { name: 'Premium Mangoes', description: 'Delicious mangoes', price: 620.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=500' },
-      
-      { name: 'Whole Wheat Bread', description: 'Freshly baked bread', price: 45.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500' },
-      { name: 'Whole Wheat Bread', description: 'Freshly baked bread', price: 40.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500' },
-      { name: 'Whole Wheat Bread', description: 'Freshly baked bread', price: 50.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500' },
+      // Spare Parts
+      { name: 'Synthetic Engine Oil 5W-40', description: 'High performance synthetic oil for gasoline engines. Improves fuel economy.', price: 3500.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1599256872237-5dcc0fbe9668?w=500' },
+      { name: 'Oil Filter', description: 'Premium oil filter removing 99.9% of contaminants.', price: 450.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1626127027588-444b0f92b3a1?w=500' },
+      { name: 'Ceramic Brake Pads (Front)', description: 'Low noise and low dust ceramic brake pads for sedans.', price: 2800.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1562916124-672e850b7b05?w=500' },
+      { name: 'Brake Rotors (Pair)', description: 'High carbon steel brake rotors for better heat dissipation.', price: 4200.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1486262715619-01b80258e0a2?w=500' },
+      { name: 'Car Battery 12V 60Ah', description: 'Maintenance-free long life battery with 3 year warranty.', price: 5500.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500' },
+      { name: 'Spark Plug Set (4 pcs)', description: 'Iridium spark plugs for efficient combustion and longer life.', price: 1200.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1628557044797-f21a177c37ec?w=500' },
+      { name: 'Air Filter', description: 'High flow air filter to improve engine performance.', price: 350.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1486262715619-01b80258e0a2?w=500' },
+      { name: 'Cabin Air Filter', description: 'Activated carbon filter to keep car interior air fresh.', price: 600.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1486262715619-01b80258e0a2?w=500' },
+      { name: 'Wiper Blades (Pair)', description: 'All-weather silicone wiper blades 24 inch + 18 inch.', price: 800.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1553531384-cc64ac80f931?w=500' },
+      { name: 'Headlight Bulb LED H4', description: 'Bright white LED headlight bulbs 6000K.', price: 1500.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1554744512-d6c603f27c54?w=500' },
 
-      { name: 'Bananas', description: 'Fresh bananas', price: 150.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1574226516831-e1dff420e8f8?w=500' },
-      { name: 'Bananas', description: 'Fresh bananas', price: 140.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1574226516831-e1dff420e8f8?w=500' },
-      { name: 'Bananas', description: 'Fresh bananas', price: 160.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1574226516831-e1dff420e8f8?w=500' },
+      // Services
+      { name: 'Basic Car Wash', description: 'Exterior foam wash and tyre dressing for sedans and hatchbacks.', price: 499.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=500' },
+      { name: 'Premium Interior Detailing', description: 'Deep cleaning of seats, carpets, dashboard and roof.', price: 1499.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1507138451611-31ff74cfc470?w=500' },
+      { name: 'Full Car Spa Package', description: 'Exterior wash, interior detailing, and wax polishing.', price: 2499.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1520340356584-7e3f43e69007?w=500' },
+      { name: 'Ceramic Coating (1 Year)', description: 'Protective ceramic coating for paint gloss and hydrophobicity.', price: 9999.00, shop_id: 4, image_url: 'https://images.unsplash.com/photo-1619642751034-765451fb2d66?w=500' },
+      { name: 'Tyre Polish & Rim Cleaning', description: 'Special treatment for deep black tyres and shiny rims.', price: 299.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=500' },
+      { name: 'Windshield Water Repellent', description: 'Treatment to improve visibility during rain.', price: 399.00, shop_id: 4, image_url: 'https://images.unsplash.com/photo-1553531384-cc64ac80f931?w=500' },
+      { name: 'A/C Vent Cleaning', description: 'Steam cleaning of air conditioning vents to remove bacteria.', price: 699.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1554744512-d6c603f27c54?w=500' },
+      { name: 'Engine Bay Cleaning', description: 'Professional degreasing and dressing of engine bay.', price: 899.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1486262715619-01b80258e0a2?w=500' },
+      { name: 'Coolant Top-up (1L)', description: 'Premixed coolant refill to prevent overheating.', price: 300.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1599256872237-5dcc0fbe9668?w=500' },
+      { name: 'Brake Fluid (500ml)', description: 'DOT 4 brake fluid for reliable braking performance.', price: 250.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1562916124-672e850b7b05?w=500' },
 
-      { name: 'Carrots', description: 'Organic carrots', price: 200.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=500' },
-      { name: 'Carrots', description: 'Organic carrots', price: 190.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=500' },
-      { name: 'Carrots', description: 'Organic carrots', price: 210.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=500' },
-
-      { name: 'Tomatoes', description: 'Fresh tomatoes', price: 180.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Tomatoes', description: 'Fresh tomatoes', price: 170.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Tomatoes', description: 'Fresh tomatoes', price: 190.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-
-      { name: 'Spinach', description: 'Fresh spinach leaves', price: 120.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Spinach', description: 'Fresh spinach leaves', price: 110.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Spinach', description: 'Fresh spinach leaves', price: 130.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-
-      { name: 'Potatoes', description: 'Organic potatoes', price: 90.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Potatoes', description: 'Organic potatoes', price: 85.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Potatoes', description: 'Organic potatoes', price: 95.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-
-      { name: 'Oranges', description: 'Juicy oranges', price: 250.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Oranges', description: 'Juicy oranges', price: 240.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Oranges', description: 'Juicy oranges', price: 260.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-
-      { name: 'Shampoo', description: 'A bottle of shampoo', price: 300.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Shampoo', description: 'A bottle of shampoo', price: 290.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Shampoo', description: 'A bottle of shampoo', price: 310.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-
-      { name: 'Juice', description: 'A pack of fruit juice', price: 150.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Juice', description: 'A pack of fruit juice', price: 140.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Juice', description: 'A pack of fruit juice', price: 160.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-
-      { name: 'Lays', description: 'A packet of Lays chips', price: 50.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Lays', description: 'A packet of Lays chips', price: 45.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Lays', description: 'A packet of Lays chips', price: 55.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-
-      { name: 'Rice', description: 'A bag of rice', price: 500.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Rice', description: 'A bag of rice', price: 480.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
-      { name: 'Rice', description: 'A bag of rice', price: 520.00, shop_id: 3, image_url: 'https://images.unsplash.com/photo-1582515073490-dc7b1e7e8f9e?w=500' },
+      // Comparison Products (Same items, different shops & prices)
+      { name: 'Synthetic Engine Oil 5W-40', description: 'High performance synthetic oil for gasoline engines. Improves fuel economy.', price: 3200.00, shop_id: 2, image_url: 'https://images.unsplash.com/photo-1599256872237-5dcc0fbe9668?w=500' },
+      { name: 'Synthetic Engine Oil 5W-40', description: 'High performance synthetic oil for gasoline engines. Improves fuel economy.', price: 3800.00, shop_id: 4, image_url: 'https://images.unsplash.com/photo-1599256872237-5dcc0fbe9668?w=500' },
+      { name: 'Basic Car Wash', description: 'Exterior foam wash and tyre dressing for sedans and hatchbacks.', price: 550.00, shop_id: 4, image_url: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=500' },
+      { name: 'Car Battery 12V 60Ah', description: 'Maintenance-free long life battery with 3 year warranty.', price: 5200.00, shop_id: 1, image_url: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500' }
     ];
 
     for (const product of products) {

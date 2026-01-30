@@ -19,7 +19,7 @@ dotenv.config();
 
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 9000;
 
 // Configure middleware
 app.use(express.json());
@@ -80,34 +80,33 @@ app.get('/', async (req, res) => {
     const Shop = require('./models/shop');
     const Product = require('./models/product');
     const mlService = require('./utils/mlService');
-    
+
     // Get featured shops (limit 8)
     const featuredShops = await Shop.findAll(8, 0);
-    
+
     // Get featured products (limit 8) - fallback
     const featuredProducts = await Product.findAll(8, 0);
-    
-    // Get ML recommendations for logged-in users
+
+    // Get ML recommendations (keep logic but not currently displayed in new design)
     let mlRecommendations = [];
     if (req.session.userId) {
       try {
         mlRecommendations = await mlService.getHomeRecommendations(req.session.userId, 8);
       } catch (error) {
         console.error('Error fetching ML recommendations:', error);
-        // Continue with featured products if ML fails
       }
     }
-    
-    res.render('home', { 
-      title: 'FreshKart - Shop Fresh Groceries Online',
+
+    res.render('home', {
+      title: 'AutoPro Parts & Service | Home',
       featuredShops,
       featuredProducts,
       mlRecommendations: mlRecommendations.length > 0 ? mlRecommendations : null
     });
   } catch (error) {
     console.error('Error loading home page:', error);
-    res.render('home', { 
-      title: 'FreshKart - Shop Fresh Groceries Online',
+    res.render('home', {
+      title: 'AutoPro Parts & Service | Home',
       featuredShops: [],
       featuredProducts: [],
       mlRecommendations: null
@@ -123,7 +122,7 @@ app.use((req, res) => {
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).render('error', { 
+  res.status(500).render('error', {
     title: 'Error',
     message: process.env.NODE_ENV === 'production' ? 'Something went wrong!' : err.message
   });

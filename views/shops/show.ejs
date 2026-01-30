@@ -1,339 +1,372 @@
 <%- include('../partials/header') %>
 
-<div class="container max-w-screen-xl mx-auto px-4 py-8">
-    <!-- Shop Header -->
-    <div class="bg-white border border-gray-200 overflow-hidden mb-8">
-        <!-- Shop banner/header -->
-        <div class="relative h-56 bg-gray-100">
-            <% if (shop.logo) { %>
-                <div class="absolute inset-0">
-                    <img src="<%= shop.logo %>" alt="<%= shop.name %>" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/10"></div>
-                </div>
-            <% } %>
-            <div class="absolute bottom-0 left-0 p-6 w-full">
-                <div class="flex items-center flex-wrap gap-2 mb-3">
-                    <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-1 rounded-full">
-                        <i class="fas fa-shopping-basket mr-1"></i> Grocery
-                    </span>
-                    <span class="bg-blue-600 text-white text-xs font-medium px-2.5 py-1 rounded-full">
-                        20% OFF up to ₹100
-                    </span>
-                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full">
-                        <i class="fas fa-clock mr-1"></i> 10-20 min
-                    </span>
-                </div>
-                <h1 class="text-3xl font-bold text-white mb-2"><%= shop.name %></h1>
-                <div class="flex flex-wrap items-center gap-4 text-white/90 text-sm">
+    <div class="container max-w-[1280px] mx-auto px-4 md:px-10 py-8 min-h-screen">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-6 text-sm text-gray-500" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="/" class="inline-flex items-center hover:text-primary">
+                        <span class="material-symbols-outlined text-lg mr-2">home</span>
+                        Home
+                    </a>
+                </li>
+                <li>
                     <div class="flex items-center">
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-500 text-white mr-2">
-                            4.2
-                            <i class="fas fa-star ml-1 text-xs"></i>
+                        <span class="material-symbols-outlined text-gray-400 mx-1">chevron_right</span>
+                        <a href="/shops" class="hover:text-primary">Shops</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <span class="material-symbols-outlined text-gray-400 mx-1">chevron_right</span>
+                        <span class="text-gray-900 font-medium">
+                            <%= shop.name %>
                         </span>
-                        <span>500+ ratings</span>
                     </div>
-                    <div class="flex items-center">
-                        <i class="fas fa-map-marker-alt mr-2"></i>
-                        <%= shop.address %>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Shop Header -->
+        <div
+            class="bg-white dark:bg-gray-800 rounded-xl border border-[#dbdfe6] dark:border-gray-700 overflow-hidden mb-8 shadow-sm">
+            <!-- Shop banner/header -->
+            <div class="relative h-64 bg-gray-900">
+                <% if (shop.logo) { %>
+                    <div class="absolute inset-0">
+                        <img src="<%= shop.logo %>" alt="<%= shop.name %>"
+                            class="w-full h-full object-cover opacity-60">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#111318] to-transparent"></div>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Shop details bar -->
-        <div class="px-6 py-4 flex flex-wrap justify-between items-center">
-            <div class="flex flex-wrap items-center gap-6 mb-2 md:mb-0">
-                <div class="flex items-center text-gray-700">
-                    <i class="fas fa-clock mr-2 text-purple-500"></i>
-                    <span>Open: 8:00 AM - 10:00 PM</span>
-                </div>
-                <% if (shop.contact) { %>
-                    <div class="flex items-center text-gray-700">
-                        <i class="fas fa-phone-alt mr-2 text-purple-500"></i>
-                        <span><%= shop.contact %></span>
-                    </div>
-                <% } %>
-                <div class="flex items-center text-gray-700">
-                    <i class="fas fa-truck mr-2 text-purple-500"></i>
-                    <span>Free delivery above ₹200</span>
-                </div>
-            </div>
-            <div class="flex space-x-4">
-                <button class="flex items-center text-gray-700 hover:text-purple-600 transition-colors px-3 py-1.5 rounded-full hover:bg-gray-100">
-                    <i class="far fa-bookmark mr-1"></i>
-                    <span>Save</span>
-                </button>
-                <button class="flex items-center text-gray-700 hover:text-purple-600 transition-colors px-3 py-1.5 rounded-full hover:bg-gray-100">
-                    <i class="fas fa-share-alt mr-1"></i>
-                    <span>Share</span>
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Main content -->
-        <div class="lg:w-8/12">
-            <!-- Search & Filters -->
-            <div class="bg-white border border-gray-200 p-4 mb-6">
-                <div class="relative">
-                    <input type="text" placeholder="Search for products..." class="w-full bg-gray-100 border-none rounded-full px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none">
-                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-                <div class="mt-4 flex flex-wrap gap-2">
-                    <button class="bg-purple-600 text-white px-4 py-2 text-sm font-semibold">All</button>
-                    <button class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Fruits</button>
-                    <button class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Vegetables</button>
-                    <button class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Dairy</button>
-                    <button class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Bakery</button>
-                    <button class="bg-gray-100 text-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-200 transition-colors">Beverages</button>
-                </div>
-            </div>
-            
-            <!-- Products count -->
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-gray-800">Products (<%= pagination.totalProducts %>)</h2>
-                <div class="relative">
-                    <select class="appearance-none border border-gray-200 rounded-lg py-2 px-4 pr-8 bg-white text-gray-700 text-sm cursor-pointer">
-                        <option>Sort: Recommended</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
-                        <option>Popularity</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <i class="fas fa-chevron-down text-xs"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Products list -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <% products.forEach(product => { %>
-                    <div class="udemy-card group">
-                        <a href="/products/<%= product.id %>" class="block">
-                            <div class="relative h-40 md:h-48 overflow-hidden">
-                                <% if (product.image_url) { %>
-                                    <img src="<%= product.image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                <% } else { %>
-                                    <div class="w-full h-full bg-gray-100 flex items-center justify-center">
-                                        <i class="fas fa-shopping-basket text-3xl text-gray-300"></i>
-                                    </div>
-                                <% } %>
-                                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-xs rounded-md px-2 py-1 font-medium shadow-sm">
-                                    <span class="flex items-center text-amber-500">
-                                        <i class="fas fa-star mr-1 text-xs"></i>
-                                        <span>4.1</span>
+                    <% } else { %>
+                        <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-gray-800"></div>
+                        <% } %>
+
+                            <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+                                <div class="flex items-center flex-wrap gap-2 mb-4">
+                                    <span
+                                        class="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide flex items-center">
+                                        <span class="material-symbols-outlined text-sm mr-1">verified</span> Verified
+                                        Partner
+                                    </span>
+                                    <span
+                                        class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center">
+                                        <span class="material-symbols-outlined text-sm mr-1">schedule</span> Open Now
                                     </span>
                                 </div>
-                                <div class="absolute top-3 left-3 bg-green-500 text-white text-xs px-2 py-1 rounded-md font-medium">
-                                    <span>10% OFF</span>
+                                <h1 class="text-3xl md:text-5xl font-black text-white mb-2">
+                                    <%= shop.name %>
+                                </h1>
+                                <div class="flex flex-wrap items-center gap-6 text-gray-300 text-sm">
+                                    <div class="flex items-center">
+                                        <span class="text-yellow-400 material-symbols-outlined text-lg mr-1">star</span>
+                                        <span class="font-bold text-white mr-1">4.5</span>
+                                        <span>(120+ reviews)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="material-symbols-outlined text-lg mr-1">location_on</span>
+                                        <%= shop.address %>
+                                    </div>
                                 </div>
-                                <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 to-transparent"></div>
                             </div>
-                        </a>
-                        <div class="p-4">
-                            <div class="flex justify-between items-start mb-1">
-                                <a href="/products/<%= product.id %>" class="block">
-                                    <h3 class="font-medium text-base line-clamp-1 hover:text-purple-600 transition-colors"><%= product.name %></h3>
-                                </a>
-                            </div>
-                            <div class="text-xs text-gray-500 mb-2">Sold by <%= shop.name %></div>
-                            <div class="flex justify-between items-center mb-3">
-                                <div class="flex items-baseline">
-                                    <span class="text-gray-900 font-bold text-lg">₹<%= 
-                                    (function() {
-                                        try {
-                                            return typeof product.price === 'number' 
-                                                ? parseFloat(product.price).toFixed(2) 
-                                                : parseFloat(product.price).toFixed(2);
-                                        } catch (e) {
-                                            return product.price;
-                                        }
-                                    })()
-                                    %></span>
-                                    <span class="ml-2 text-xs text-gray-500 line-through">₹<%= 
-                                    (function() {
-                                        try {
-                                            const price = typeof product.price === 'number' 
-                                                ? product.price
-                                                : parseFloat(product.price);
-                                            return (price * 1.1).toFixed(2);
-                                        } catch (e) {
-                                            return product.price;
-                                        }
-                                    })()
-                                    %></span>
-                                </div>
-                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">per unit</span>
-                            </div>
-                            <div class="flex items-center text-xs text-gray-500 mb-3">
-                                <i class="fas fa-clock mr-1"></i>
-                                <span>Delivery in 10-20 mins</span>
-                            </div>
-                            <% if (locals.user) { %>
-                                <form action="/cart/add" method="POST" class="cart-add-form mt-2">
-                                    <input type="hidden" name="product_id" value="<%= product.id %>">
-                                    <input type="hidden" name="shop_id" value="<%= shop.id %>">
-                                    <input type="hidden" name="quantity" value="1">
-                                    <button type="submit" class="w-full udemy-btn text-sm py-2.5 flex items-center justify-center">
-                                        <i class="fas fa-shopping-cart mr-2"></i>
-                                        <span>Add to Cart</span>
-                                    </button>
-                                </form>
-                            <% } else { %>
-                                <a href="/login" class="w-full udemy-btn text-sm py-2.5 flex items-center justify-center mt-2">
-                                    <i class="fas fa-sign-in-alt mr-2"></i>
-                                    <span>Login to Add</span>
-                                </a>
-                            <% } %>
-                        </div>
-                    </div>
-                <% }) %>
             </div>
-            
-            <% if (products.length === 0) { %>
-                <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200 mt-8 text-center">
-                    <img src="https://b.zmtcdn.com/web/assets/276b62881039c7b0f671ccc42f3efcd51620103037.png" alt="No products found" class="w-48 h-auto mx-auto mb-4">
-                    <h2 class="text-xl font-semibold mb-2 text-gray-800">No products found</h2>
-                    <p class="text-gray-600 mb-4">We couldn't find any products for this shop.</p>
-                </div>
-            <% } %>
-            
-            <% if (pagination.totalPages > 1) { %>
-                <div class="mt-8 flex justify-center">
-                    <nav class="inline-flex rounded-md shadow-sm">
-                        <% if (pagination.page > 1) { %>
-                            <a href="/shops/<%= shop.id %>?page=<%= pagination.page - 1 %>" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-l-md">
-                                <i class="fas fa-chevron-left mr-1"></i> Previous
-                            </a>
-                        <% } else { %>
-                            <span class="px-4 py-2 border border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed rounded-l-md">
-                                <i class="fas fa-chevron-left mr-1"></i> Previous
-                            </span>
-                        <% } %>
-                        
-                        <% for (let i = 1; i <= pagination.totalPages; i++) { %>
-                            <% if (i === pagination.page) { %>
-                                <span class="px-4 py-2 border border-red-500 bg-red-500 text-white font-medium">
-                                    <%= i %>
-                                </span>
-                            <% } else if (i === 1 || i === pagination.totalPages || (i >= pagination.page - 1 && i <= pagination.page + 1)) { %>
-                                <a href="/shops/<%= shop.id %>?page=<%= i %>" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
-                                    <%= i %>
-                                </a>
-                            <% } else if (i === pagination.page - 2 || i === pagination.page + 2) { %>
-                                <span class="px-4 py-2 border border-gray-300 bg-white text-gray-700">
-                                    ...
-                                </span>
-                            <% } %>
-                        <% } %>
-                        
-                        <% if (pagination.page < pagination.totalPages) { %>
-                            <a href="/shops/<%= shop.id %>?page=<%= pagination.page + 1 %>" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-r-md">
-                                Next <i class="fas fa-chevron-right ml-1"></i>
-                            </a>
-                        <% } else { %>
-                            <span class="px-4 py-2 border border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed rounded-r-md">
-                                Next <i class="fas fa-chevron-right ml-1"></i>
-                            </span>
-                        <% } %>
-                    </nav>
-                </div>
-            <% } %>
-        </div>
-        
-        <!-- Sidebar -->
-        <div class="lg:w-4/12">
-            <!-- Shop info card -->
-            <div class="bg-white border border-gray-200 p-5 mb-6">
-                <h3 class="text-lg font-bold mb-4 text-gray-800">Shop Information</h3>
-                <div class="space-y-4">
-                    <div class="flex">
-                        <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="ml-3">
-                            <p class="font-medium text-gray-800 mb-1">Address</p>
-                            <p class="text-gray-600 text-sm"><%= shop.address %></p>
-                        </div>
+
+            <!-- Shop details bar -->
+            <div
+                class="px-6 py-4 border-t border-[#dbdfe6] dark:border-gray-700 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex flex-wrap items-center gap-6 md:gap-8">
+                    <div class="flex items-center text-gray-700 dark:text-gray-300 text-sm font-medium">
+                        <span class="material-symbols-outlined text-primary mr-2">schedule</span>
+                        <span>Mon-Sat: 8:00 AM - 7:00 PM</span>
                     </div>
                     <% if (shop.contact) { %>
-                        <div class="flex">
-                            <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
-                                <i class="fas fa-phone-alt"></i>
+                        <div class="flex items-center text-gray-700 dark:text-gray-300 text-sm font-medium">
+                            <span class="material-symbols-outlined text-primary mr-2">call</span>
+                            <span>
+                                <%= shop.contact %>
+                            </span>
+                        </div>
+                        <% } %>
+                            <div class="flex items-center text-gray-700 dark:text-gray-300 text-sm font-medium">
+                                <span class="material-symbols-outlined text-primary mr-2">local_shipping</span>
+                                <span>Shipping from ₹50</span>
                             </div>
-                            <div class="ml-3">
-                                <p class="font-medium text-gray-800 mb-1">Phone</p>
-                                <p class="text-gray-600 text-sm"><%= shop.contact %></p>
+                </div>
+                <div class="flex gap-3">
+                    <button
+                        class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-bold">
+                        <span class="material-symbols-outlined text-lg">favorite_border</span>
+                        <span>Save</span>
+                    </button>
+                    <button
+                        class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-bold">
+                        <span class="material-symbols-outlined text-lg">share</span>
+                        <span>Share</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Main content -->
+            <div class="lg:w-8/12">
+                <!-- Search & Filters -->
+                <div
+                    class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 rounded-xl p-4 mb-6 shadow-sm">
+                    <div class="relative mb-4">
+                        <input type="text" placeholder="Search for parts or services..."
+                            class="w-full bg-gray-50 dark:bg-gray-900 border border-[#dbdfe6] dark:border-gray-700 rounded-lg pl-10 pr-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none text-sm transition-all">
+                        <span
+                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 material-symbols-outlined text-lg">
+                            search
+                        </span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="bg-primary text-white px-4 py-2 text-sm font-bold rounded-lg shadow-sm">All
+                            Items</button>
+                        <button
+                            class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Services</button>
+                        <button
+                            class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Parts</button>
+                        <button
+                            class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Fluids</button>
+                        <button
+                            class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Accessories</button>
+                    </div>
+                </div>
+
+                <!-- Products count -->
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-[#111318] dark:text-white">Products & Services (<%=
+                            pagination.totalProducts %>)</h2>
+                    <div class="relative">
+                        <select
+                            class="appearance-none border border-[#dbdfe6] dark:border-gray-700 rounded-lg py-2 px-4 pr-10 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium cursor-pointer shadow-sm focus:ring-primary focus:border-primary">
+                            <option>Sort: Best Match</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                        </select>
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                            <span class="material-symbols-outlined text-sm">expand_more</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products list -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <% products.forEach(product=> { %>
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#dbdfe6] dark:border-gray-700 hover:shadow-xl transition-all duration-300 flex flex-col group">
+                            <a href="/products/<%= product.id %>"
+                                class="block relative aspect-square bg-gray-50 dark:bg-gray-900 border-b border-[#dbdfe6] dark:border-gray-700 overflow-hidden">
+                                <% if (product.image_url) { %>
+                                    <img src="<%= product.image_url %>" alt="<%= product.name %>"
+                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                    <% } else { %>
+                                        <div class="w-full h-full flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-5xl text-gray-300">image</span>
+                                        </div>
+                                        <% } %>
+                                            <div class="absolute top-2 right-2">
+                                                <button
+                                                    class="bg-white/80 hover:bg-white text-gray-400 hover:text-red-500 p-1.5 rounded-full backdrop-blur-sm transition-colors shadow-sm">
+                                                    <span
+                                                        class="material-symbols-outlined text-sm block">favorite</span>
+                                                </button>
+                                            </div>
+                            </a>
+                            <div class="p-4 flex-1 flex flex-col">
+                                <h3
+                                    class="font-bold text-[#111318] dark:text-white text-sm md:text-base leading-tight mb-1 line-clamp-2 group-hover:text-primary transition-colors">
+                                    <a href="/products/<%= product.id %>">
+                                        <%= product.name %>
+                                    </a>
+                                </h3>
+                                <div class="text-xs text-gray-500 mb-3">
+                                    <%= shop.name %>
+                                </div>
+
+                                <div class="mt-auto">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <span class="font-black text-lg text-primary">₹<%= typeof
+                                                product.price==='number' ? product.price.toFixed(2) :
+                                                parseFloat(product.price).toFixed(2) %></span>
+                                        <% if (Math.random()> 0.7) { %>
+                                            <span
+                                                class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full uppercase tracking-wide">Best
+                                                Price</span>
+                                            <% } %>
+                                    </div>
+
+                                    <% if (locals.user) { %>
+                                        <form action="/cart/add" method="POST" class="w-full">
+                                            <input type="hidden" name="product_id" value="<%= product.id %>">
+                                            <input type="hidden" name="shop_id" value="<%= shop.id %>">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit"
+                                                class="w-full bg-[#f0f2f4] dark:bg-gray-700 hover:bg-primary hover:text-white text-[#111318] dark:text-white font-bold py-2.5 rounded-lg text-sm transition-all flex items-center justify-center gap-2">
+                                                <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                                Add
+                                            </button>
+                                        </form>
+                                        <% } else { %>
+                                            <a href="/login"
+                                                class="w-full bg-[#f0f2f4] dark:bg-gray-700 hover:bg-primary hover:text-white text-[#111318] dark:text-white font-bold py-2.5 rounded-lg text-sm transition-all flex items-center justify-center gap-2">
+                                                <span class="material-symbols-outlined text-sm">login</span>
+                                                Log In
+                                            </a>
+                                            <% } %>
+                                </div>
                             </div>
                         </div>
+                        <% }) %>
+                </div>
+
+                <% if (products.length===0) { %>
+                    <div
+                        class="bg-gray-50 dark:bg-gray-800/50 p-12 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 text-center mt-6">
+                        <span class="material-symbols-outlined text-6xl text-gray-300 mb-4">inventory_2</span>
+                        <h2 class="text-xl font-bold mb-2 text-[#111318] dark:text-white">No products found</h2>
+                        <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">This shop hasn't listed any
+                            products in this category yet.</p>
+                    </div>
                     <% } %>
-                    <div class="flex">
-                        <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
-                            <i class="fas fa-clock"></i>
+
+                        <% if (pagination.totalPages> 1) { %>
+                            <div class="mt-12 flex justify-center">
+                                <nav class="inline-flex rounded-lg shadow-sm">
+                                    <!-- Pagination Logic (Same as index) -->
+                                    <% if (pagination.page> 1) { %>
+                                        <a href="/shops/<%= shop.id %>?page=<%= pagination.page - 1 %>"
+                                            class="px-4 py-2 border border-[#dbdfe6] dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-l-lg flex items-center gap-1 font-medium transition-colors">
+                                            <span class="material-symbols-outlined text-base">chevron_left</span> Prev
+                                        </a>
+                                        <% } else { %>
+                                            <span
+                                                class="px-4 py-2 border border-[#dbdfe6] dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-400 cursor-not-allowed rounded-l-lg flex items-center gap-1 font-medium">
+                                                <span class="material-symbols-outlined text-base">chevron_left</span>
+                                                Prev
+                                            </span>
+                                            <% } %>
+                                                <!-- ... Page numbers similar to previous ... -->
+                                                <% for (let i=1; i <=pagination.totalPages; i++) { %>
+                                                    <% if (i===pagination.page) { %>
+                                                        <span
+                                                            class="px-4 py-2 border border-primary bg-primary text-white font-bold">
+                                                            <%= i %>
+                                                        </span>
+                                                        <% } else if (i===1 || i===pagination.totalPages || (i>=
+                                                            pagination.page - 1 && i <= pagination.page + 1)) { %>
+                                                                <a href="/shops/<%= shop.id %>?page=<%= i %>"
+                                                                    class="px-4 py-2 border border-[#dbdfe6] dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium">
+                                                                    <%= i %>
+                                                                </a>
+                                                                <% } %>
+                                                                    <% } %>
+
+                                                                        <% if (pagination.page < pagination.totalPages)
+                                                                            { %>
+                                                                            <a href="/shops/<%= shop.id %>?page=<%= pagination.page + 1 %>"
+                                                                                class="px-4 py-2 border border-[#dbdfe6] dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-r-lg flex items-center gap-1 font-medium transition-colors">
+                                                                                Next <span
+                                                                                    class="material-symbols-outlined text-base">chevron_right</span>
+                                                                            </a>
+                                                                            <% } else { %>
+                                                                                <span
+                                                                                    class="px-4 py-2 border border-[#dbdfe6] dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-400 cursor-not-allowed rounded-r-lg flex items-center gap-1 font-medium">
+                                                                                    Next <span
+                                                                                        class="material-symbols-outlined text-base">chevron_right</span>
+                                                                                </span>
+                                                                                <% } %>
+                                </nav>
+                            </div>
+                            <% } %>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lg:w-4/12">
+                <!-- Shop info card -->
+                <div
+                    class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 rounded-xl p-6 mb-6 shadow-sm">
+                    <h3 class="text-lg font-bold mb-5 text-[#111318] dark:text-white flex items-center">
+                        <span class="material-symbols-outlined mr-2 text-primary">info</span> About this Workshop
+                    </h3>
+                    <div class="space-y-5">
+                        <div class="flex">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                <span class="material-symbols-outlined text-lg">map</span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="font-bold text-gray-900 dark:text-white text-sm mb-0.5">Address</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                                    <%= shop.address %>
+                                </p>
+                            </div>
                         </div>
-                        <div class="ml-3">
-                            <p class="font-medium text-gray-800 mb-1">Hours</p>
-                            <p class="text-gray-600 text-sm">8:00 AM - 10:00 PM</p>
-                        </div>
+                        <% if (shop.contact) { %>
+                            <div class="flex">
+                                <div
+                                    class="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                    <span class="material-symbols-outlined text-lg">call</span>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="font-bold text-gray-900 dark:text-white text-sm mb-0.5">Contact</p>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm">
+                                        <%= shop.contact %>
+                                    </p>
+                                </div>
+                            </div>
+                            <% } %>
+                                <div class="flex">
+                                    <div
+                                        class="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                        <span class="material-symbols-outlined text-lg">local_shipping</span>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="font-bold text-gray-900 dark:text-white text-sm mb-0.5">Delivery &
+                                            Returns</p>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Free returns within 7 days.
+                                            Shipping calculated at checkout.</p>
+                                    </div>
+                                </div>
                     </div>
-                    <div class="flex">
-                        <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
-                            <i class="fas fa-truck"></i>
+                </div>
+
+                <!-- Service Guarantees (Replaces grocery offers) -->
+                <div
+                    class="bg-gradient-to-br from-[#101622] to-[#1e2a40] rounded-xl p-6 mb-6 text-white shadow-lg border border-gray-800">
+                    <h3 class="text-lg font-bold mb-5 flex items-center">
+                        <span class="material-symbols-outlined mr-2 text-yellow-400">verified_user</span> Service
+                        Guarantee
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/5">
+                            <span class="material-symbols-outlined text-green-400 mr-3 mt-0.5">check_circle</span>
+                            <div>
+                                <p class="font-bold text-sm mb-0.5 text-white">Genuine Parts</p>
+                                <p class="text-xs text-gray-300">100% authentic OEM or certified aftermarket parts.</p>
+                            </div>
                         </div>
-                        <div class="ml-3">
-                            <p class="font-medium text-gray-800 mb-1">Delivery</p>
-                            <p class="text-gray-600 text-sm">Free on orders above ₹200</p>
+                        <div class="flex items-start bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/5">
+                            <span class="material-symbols-outlined text-blue-400 mr-3 mt-0.5">build</span>
+                            <div>
+                                <p class="font-bold text-sm mb-0.5 text-white">Expert Installation</p>
+                                <p class="text-xs text-gray-300">Certified technicians for all service bookings.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/5">
+                            <span class="material-symbols-outlined text-purple-400 mr-3 mt-0.5">receipt_long</span>
+                            <div>
+                                <p class="font-bold text-sm mb-0.5 text-white">Transparent Pricing</p>
+                                <p class="text-xs text-gray-300">No hidden fees on service or parts.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Shop offers -->
-            <div class="bg-white border border-gray-200 p-5 mb-6">
-                <h3 class="text-lg font-bold mb-4 text-gray-800">Available Offers</h3>
-                <div class="space-y-4">
-                    <div class="bg-purple-50 rounded-lg p-4 flex items-start border border-purple-100">
-                        <div class="mr-3 text-purple-600">
-                            <i class="fas fa-tag"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium text-gray-800">20% OFF up to ₹100</p>
-                            <p class="text-gray-600 text-sm">Use code WELCOME20</p>
-                        </div>
-                    </div>
-                    <div class="bg-blue-50 rounded-lg p-4 flex items-start border border-blue-100">
-                        <div class="mr-3 text-blue-600">
-                            <i class="fas fa-percent"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium text-gray-800">Free delivery on orders above ₹200</p>
-                            <p class="text-gray-600 text-sm">Automatic at checkout</p>
-                        </div>
-                    </div>
-                    <div class="bg-green-50 rounded-lg p-4 flex items-start border border-green-100">
-                        <div class="mr-3 text-green-600">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium text-gray-800">10% cashback up to ₹50</p>
-                            <p class="text-gray-600 text-sm">On all orders with UPI payments</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Back to shops -->
-            <div class="mt-4">
-                <a href="/shops" class="inline-flex items-center udemy-text-primary hover:underline font-semibold">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    <span>Back to All Shops</span>
-                </a>
             </div>
         </div>
     </div>
-</div>
 
-<%- include('../partials/footer') %> 
+    <%- include('../partials/footer') %>

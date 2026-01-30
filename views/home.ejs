@@ -1,615 +1,502 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/output.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Grocery Hero Styles */
-        .grocery-hero {
-            min-height: 85vh;
-            position: relative;
-            background: linear-gradient(135deg, #2d3748 0%, #1a202c 50%, #2d5016 100%);
-        }
-        
-        .hero-left {
-            padding: 3rem 4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: 85vh;
-        }
-        
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            color: white;
-            font-size: 0.875rem;
-            margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
-        }
-        
-        .hero-headline {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: white;
-            line-height: 1.1;
-            margin-bottom: 2rem;
-        }
-        
-        .hero-headline .highlight {
-            color: #fbbf24;
-        }
-        
-        .hero-search-container {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .hero-search-input {
-            flex: 1;
-            padding: 1rem 1.5rem;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 0.75rem;
-            color: white;
-            font-size: 1rem;
-            backdrop-filter: blur(10px);
-        }
-        
-        .hero-search-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .hero-search-input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-        
-        .shop-now-btn {
-            background: #fbbf24;
-            color: #1a202c;
-            border: none;
-            padding: 1rem 2.5rem;
-            border-radius: 0.75rem;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-        
-        .shop-now-btn:hover {
-            background: #f59e0b;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
-        }
-        
-        .signup-prompt {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.875rem;
-            margin-bottom: 2rem;
-        }
-        
-        .signup-prompt a {
-            color: #fbbf24;
-            text-decoration: underline;
-            font-weight: 600;
-        }
-        
-        .customer-reviews {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .customer-avatars {
-            display: flex;
-            margin-left: -0.5rem;
-        }
-        
-        .customer-avatar {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            margin-left: -0.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-        }
-        
-        .review-text {
-            color: white;
-            font-size: 0.875rem;
-        }
-        
-        .review-rating {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            color: #fbbf24;
-            font-weight: 700;
-        }
-        
-        .app-download {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        
-        .app-download-text {
-            color: white;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .app-badges {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .app-badge {
-            height: 2.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .app-badge:hover {
-            transform: scale(1.05);
-        }
-        
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-        
-        @media (max-width: 1024px) {
-            .hero-left {
-                padding: 2rem;
-            }
-            
-            .hero-headline {
-                font-size: 2.5rem;
-            }
-        }
-        
-        .udemy-section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: #1c1d1f;
-        }
-        
-        .udemy-category-card {
-            background: white;
-            border: 1px solid #d1d7dc;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.2s;
-            text-decoration: none;
-            color: #1c1d1f;
-            display: block;
-        }
-        
-        .udemy-category-card:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
-        }
-        
-        .udemy-shop-card {
-            background: white;
-            border: 1px solid #d1d7dc;
-            overflow: hidden;
-            transition: all 0.2s;
-        }
-        
-        .udemy-shop-card:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
-        }
-        
-        .udemy-shop-image {
-            width: 100%;
-            height: 8rem;
-            object-fit: cover;
-            background: #f7f9fa;
-        }
-        
-        .udemy-product-card {
-            background: white;
-            border: 1px solid #d1d7dc;
-            overflow: hidden;
-            transition: all 0.2s;
-        }
-        
-        .udemy-product-card:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
-        }
-        
-        .udemy-product-image {
-            width: 100%;
-            height: 8rem;
-            object-fit: cover;
-            background: #f7f9fa;
-        }
-        
-        .udemy-instructor-badge {
-            font-size: 0.75rem;
-            color: #6a6f73;
-            margin-top: 0.25rem;
-        }
-        
-        .udemy-rating {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            margin-top: 0.25rem;
-        }
-        
-        .udemy-rating-number {
-            font-weight: 700;
-            color: #b4690e;
-            font-size: 0.875rem;
-        }
-        
-        .udemy-price {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #1c1d1f;
-        }
-        
-        .udemy-categories-scroll {
-            display: flex;
-            gap: 1rem;
-            overflow-x: auto;
-            padding-bottom: 0.5rem;
-            scrollbar-width: thin;
-        }
-        
-        .udemy-categories-scroll::-webkit-scrollbar {
-            height: 8px;
-        }
-        
-        .udemy-categories-scroll::-webkit-scrollbar-track {
-            background: #f7f9fa;
-        }
-        
-        .udemy-categories-scroll::-webkit-scrollbar-thumb {
-            background: #d1d7dc;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body class="bg-white min-h-screen">
-    <%- include('partials/header') %>
+<%- include('partials/header') %>
 
-    <main class="flex-1">
-        <!-- Hero Section - Split Screen Design -->
-        <section class="grocery-hero">
-            <!-- Left Panel -->
-            <div class="hero-left">
-                <div>
-                    <!-- Badge -->
-                    <div class="hero-badge">
-                        <i class="fas fa-truck"></i>
-                        <span>Food Delivery Service & Restaurant</span>
+    <!-- Vehicle Selector Bar -->
+    <section
+        class="bg-white dark:bg-background-dark border-b border-[#dbdfe6] dark:border-gray-800 shadow-sm relative z-40">
+        <div class="max-w-[1280px] mx-auto px-4 md:px-10 py-6">
+            <div class="flex flex-col md:flex-row items-end gap-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1 w-full">
+                    <div class="flex flex-col">
+                        <label for="vehicle-year"
+                            class="text-[#111318] dark:text-gray-300 text-xs font-bold uppercase tracking-wider pb-2">
+                            Year</label>
+                        <select id="vehicle-year"
+                            class="form-input w-full rounded-lg text-[#111318] dark:text-white border border-[#dbdfe6] dark:border-gray-700 bg-white dark:bg-gray-800 h-12 text-sm focus:ring-primary focus:border-primary cursor-pointer">
+                            <option value="">Select Year</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                        </select>
                     </div>
-                    
-                    <!-- Headline -->
-                    <h1 class="hero-headline">
-                        Get fresh <span class="highlight">Grocery</span><br>
-                        Enjoy healthy life.
-                    </h1>
-                    
-                    <!-- Search and Shop Now -->
-                    <form action="/shops" method="GET" class="hero-search-container">
-                        <input 
-                            type="text" 
-                            name="search" 
-                            placeholder="Select Category" 
-                            class="hero-search-input"
-                            autocomplete="off"
-                        >
-                        <button type="submit" class="shop-now-btn">
-                            Shop Now
-                        </button>
-                    </form>
-                    
-                    <!-- Sign Up Prompt -->
-                    <% if (!locals.user) { %>
-                    <p class="signup-prompt">
-                        Not yet Member? <a href="/signup">Sign Up Now</a>
-                    </p>
-                    <% } %>
-                    
-                    <!-- Customer Reviews -->
-                    <div class="customer-reviews">
-                        <div class="customer-avatars">
-                            <div class="customer-avatar">A</div>
-                            <div class="customer-avatar">B</div>
-                            <div class="customer-avatar">C</div>
-                        </div>
-                        <div>
-                            <div class="review-text">Our Happy Customer</div>
-                            <div class="review-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.5</span>
-                                <span class="text-white text-sm ml-1">(12.5k reviews)</span>
-                            </div>
-                        </div>
+                    <div class="flex flex-col">
+                        <label for="vehicle-make"
+                            class="text-[#111318] dark:text-gray-300 text-xs font-bold uppercase tracking-wider pb-2">
+                            Make</label>
+                        <select id="vehicle-make" disabled
+                            class="form-input w-full rounded-lg text-[#111318] dark:text-white border border-[#dbdfe6] dark:border-gray-700 bg-white dark:bg-gray-800 h-12 text-sm focus:ring-primary focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+                            <option value="">Select Make</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Honda">Honda</option>
+                            <option value="Ford">Ford</option>
+                            <option value="Chevrolet">Chevrolet</option>
+                            <option value="BMW">BMW</option>
+                        </select>
                     </div>
-                </div>
-                
-                <!-- App Download -->
-                <div class="app-download">
-                    <div class="app-download-text">Download App</div>
-                    <div class="app-badges">
-                        <a href="#" class="app-badge">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" style="height: 2.5rem;" onerror="this.style.display='none'">
-                        </a>
-                        <a href="#" class="app-badge">
-                            <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=1288329600" alt="Download on App Store" style="height: 2.5rem;" onerror="this.style.display='none'">
-                        </a>
+                    <div class="flex flex-col">
+                        <label for="vehicle-model"
+                            class="text-[#111318] dark:text-gray-300 text-xs font-bold uppercase tracking-wider pb-2">
+                            Model</label>
+                        <select id="vehicle-model" disabled
+                            class="form-input w-full rounded-lg text-[#111318] dark:text-white border border-[#dbdfe6] dark:border-gray-700 bg-white dark:bg-gray-800 h-12 text-sm focus:ring-primary focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+                            <option value="">Select Model</option>
+                            <option value="Camry">Camry</option>
+                            <option value="Civic">Civic</option>
+                            <option value="F-150">F-150</option>
+                            <option value="Silverado">Silverado</option>
+                            <option value="3 Series">3 Series</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="vehicle-engine"
+                            class="text-[#111318] dark:text-gray-300 text-xs font-bold uppercase tracking-wider pb-2">
+                            Engine</label>
+                        <select id="vehicle-engine" disabled
+                            class="form-input w-full rounded-lg text-[#111318] dark:text-white border border-[#dbdfe6] dark:border-gray-700 bg-white dark:bg-gray-800 h-12 text-sm focus:ring-primary focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+                            <option value="">Select Engine</option>
+                            <option value="2.5L I4">2.5L I4</option>
+                            <option value="3.5L V6">3.5L V6</option>
+                            <option value="2.0L Turbo">2.0L Turbo</option>
+                            <option value="5.0L V8">5.0L V8</option>
+                        </select>
                     </div>
                 </div>
+                <button id="vehicle-save-btn" disabled
+                    class="bg-primary hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold h-12 px-8 rounded-lg transition-all w-full md:w-auto flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">directions_car</span>
+                    <span>Save Vehicle</span>
+                </button>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Categories Section (Udemy Style) -->
-        <section class="py-8 bg-white border-b border-gray-200">
-            <div class="container max-w-screen-xl mx-auto px-4">
-                <h2 class="udemy-section-title">Shop by Category</h2>
-                <div class="udemy-categories-scroll">
-                    <a href="/shops?category=fruits" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
-                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-apple-alt text-3xl text-orange-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-sm">Fruits</h3>
-                    </a>
-                    <a href="/shops?category=vegetables" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
-                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-carrot text-3xl text-green-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-sm">Vegetables</h3>
-                    </a>
-                    <a href="/shops?category=dairy" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
-                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-cheese text-3xl text-blue-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-sm">Dairy</h3>
-                    </a>
-                    <a href="/shops?category=bakery" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
-                        <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-bread-slice text-3xl text-amber-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-sm">Bakery</h3>
-                    </a>
-                    <a href="/shops?category=beverages" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
-                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-wine-bottle text-3xl text-red-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-sm">Beverages</h3>
-                    </a>
-                    <a href="/shops?category=snacks" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
-                        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-cookie text-3xl text-yellow-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-sm">Snacks</h3>
-                    </a>
-                    <a href="/shops?category=meat" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
-                        <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-drumstick-bite text-3xl text-pink-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-sm">Meat & Seafood</h3>
-                    </a>
-                    <a href="/shops?category=frozen" class="udemy-category-card flex-shrink-0" style="min-width: 140px;">
-                        <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-snowflake text-3xl text-cyan-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-sm">Frozen Foods</h3>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const yearSelect = document.getElementById('vehicle-year');
+            const makeSelect = document.getElementById('vehicle-make');
+            const modelSelect = document.getElementById('vehicle-model');
+            const engineSelect = document.getElementById('vehicle-engine');
+            const saveBtn = document.getElementById('vehicle-save-btn');
+
+            // Load saved vehicle if exists
+            const savedVehicle = localStorage.getItem('userVehicle');
+            if (savedVehicle) {
+                const vehicle = JSON.parse(savedVehicle);
+                if (vehicle) {
+                    yearSelect.value = vehicle.year;
+                    makeSelect.value = vehicle.make;
+                    modelSelect.value = vehicle.model;
+                    engineSelect.value = vehicle.engine;
+
+                    makeSelect.disabled = false;
+                    modelSelect.disabled = false;
+                    engineSelect.disabled = false;
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span><span>Saved</span>';
+                    saveBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                    saveBtn.classList.remove('bg-primary', 'hover:bg-blue-700');
+                }
+            }
+
+            yearSelect.addEventListener('change', function () {
+                if (this.value) {
+                    makeSelect.disabled = false;
+                    makeSelect.focus();
+                } else {
+                    makeSelect.disabled = true;
+                    modelSelect.disabled = true;
+                    engineSelect.disabled = true;
+                    saveBtn.disabled = true;
+                    makeSelect.value = '';
+                    modelSelect.value = '';
+                    engineSelect.value = '';
+                }
+            });
+
+            makeSelect.addEventListener('change', function () {
+                if (this.value) {
+                    modelSelect.disabled = false;
+                    modelSelect.focus();
+                } else {
+                    modelSelect.disabled = true;
+                    engineSelect.disabled = true;
+                    saveBtn.disabled = true;
+                    modelSelect.value = '';
+                    engineSelect.value = '';
+                }
+            });
+
+            modelSelect.addEventListener('change', function () {
+                if (this.value) {
+                    engineSelect.disabled = false;
+                    engineSelect.focus();
+                } else {
+                    engineSelect.disabled = true;
+                    saveBtn.disabled = true;
+                    engineSelect.value = '';
+                }
+            });
+
+            engineSelect.addEventListener('change', function () {
+                if (this.value) {
+                    saveBtn.disabled = false;
+                } else {
+                    saveBtn.disabled = true;
+                }
+            });
+
+            saveBtn.addEventListener('click', function () {
+                const vehicle = {
+                    year: yearSelect.value,
+                    make: makeSelect.value,
+                    model: modelSelect.value,
+                    engine: engineSelect.value
+                };
+
+                localStorage.setItem('userVehicle', JSON.stringify(vehicle));
+
+                // Visual feedback
+                const originalContent = this.innerHTML;
+                this.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">refresh</span><span>Saving...</span>';
+
+                setTimeout(() => {
+                    this.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span><span>Saved</span>';
+                    this.classList.remove('bg-primary', 'hover:bg-blue-700');
+                    this.classList.add('bg-green-600', 'hover:bg-green-700');
+
+                    // Optional: Reset after a few seconds or keep as "Saved"
+                    // setTimeout(() => {
+                    //    this.innerHTML = originalContent;
+                    //    this.classList.add('bg-primary', 'hover:bg-blue-700');
+                    //    this.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    // }, 3000);
+                }, 800);
+            });
+        });
+    </script>
+
+    <!-- Dual-Action Hero Section -->
+    <section class="max-w-[1280px] mx-auto px-4 md:px-10 py-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Shop Parts Side -->
+            <div
+                class="group relative overflow-hidden rounded-xl bg-[#111318] text-white aspect-[16/9] lg:aspect-auto min-h-[400px] flex items-center">
+                <div class="absolute inset-0 opacity-60 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                    data-alt="Modern high performance car engine parts layout"
+                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsSFPemHeEjQK58c9pvsFQCo1MIkZFOBQHLbhbyMB69pY4vv2mySXPNh7pXVL-9Po1QW5XJGecSHNf9cHpXoZqVm17bvJvyBWHsHHOihRHBU3U8PoCW_YOPLQyuFdSYHEX3WTUsOEe_teOLl4ulu_NMJkFtoJwrbH6A1-p5IxswPV6wuyRPr-1zN9YOrWSZPTqAAlfJFLzAiX0Dm3cdet9StLt2ZtN57gWwlHKx4DM-U9EJh2EVFh56ZO3v5LyOyLsxdUoGVt-lElZ');">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
+                <div class="relative p-8 md:p-12 max-w-[480px]">
+                    <span
+                        class="inline-block px-3 py-1 bg-primary text-xs font-bold rounded mb-4 tracking-widest uppercase">E-Commerce</span>
+                    <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tight mb-4">Find the Right Part,
+                        Every Time.</h1>
+                    <p class="text-gray-300 mb-8 text-lg">Shop over 1 million genuine OEM and premium aftermarket car
+                        parts for any make or model.</p>
+                    <a href="/shops"
+                        class="inline-flex bg-primary hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg items-center gap-2 transition-all">
+                        <span>Browse Catalog</span>
+                        <span class="material-symbols-outlined">arrow_forward</span>
                     </a>
                 </div>
             </div>
-        </section>
+            <!-- Book Service Side -->
+            <div
+                class="group relative overflow-hidden rounded-xl bg-[#135bec] text-white aspect-[16/9] lg:aspect-auto min-h-[400px] flex items-center">
+                <div class="absolute inset-0 opacity-60 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                    data-alt="Professional mechanic working in a clean modern garage"
+                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDYn6DwHIE0bJHr5rlMfehOVebkIXU31G5H1SsalqxeDtxhRbqKC17PLa4DSlcd92u7FYOtSHcfc6Lw26k0-1SO-9OlckImUEZvRNgclEehEv97Z8ZXua4ARDViqh79Pe5lS6_SUjTtU5cli22rAdpPR3Uf95pznlHI3Vd41DzVQ_vUHei2ebBBKuMjcdfRR9UYL7x0bW21tK-9M1rD9PuyJuucbh7wGj0nPBCA8O4eN0YnCAv8atfBIY8rjNUnWhkQlhItyKuCvarB');">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-transparent"></div>
+                <div class="relative p-8 md:p-12 max-w-[480px]">
+                    <span
+                        class="inline-block px-3 py-1 bg-white text-primary text-xs font-bold rounded mb-4 tracking-widest uppercase">Service
+                        & Repair</span>
+                    <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tight mb-4">Expert Care for Your
+                        Vehicle.</h1>
+                    <p class="text-gray-100 mb-8 text-lg">Book professional maintenance with certified mechanics at any
+                        of our 500+ service centers.</p>
+                    <a href="/shops?category=services"
+                        class="inline-flex bg-white text-[#135bec] hover:bg-gray-100 font-bold py-4 px-8 rounded-lg items-center gap-2 transition-all">
+                        <span>Schedule Service</span>
+                        <span class="material-symbols-outlined">calendar_today</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Featured Shops Section (Like Udemy's Featured Courses) -->
-        <% if (featuredShops && featuredShops.length > 0) { %>
-        <section class="py-8 bg-white">
-            <div class="container max-w-screen-xl mx-auto px-4">
-                <h2 class="udemy-section-title">Featured Shops</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <% featuredShops.forEach(shop => { %>
-                        <a href="/shops/<%= shop.id %>" class="udemy-shop-card">
-                            <div class="relative">
-                                <% if (shop.logo) { %>
-                                    <img src="<%= shop.logo %>" alt="<%= shop.name %>" class="udemy-shop-image">
+    <!-- Trust Bar -->
+    <section class="bg-white dark:bg-background-dark py-10 border-y border-[#dbdfe6] dark:border-gray-800 mb-10">
+        <div class="max-w-[1280px] mx-auto px-4 md:px-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="flex items-center gap-4 group">
+                    <div
+                        class="rounded-full bg-primary/10 p-4 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                        <span class="material-symbols-outlined text-3xl">local_shipping</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Fast Shipping</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Free 2-day delivery on orders over ₹999</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 group">
+                    <div
+                        class="rounded-full bg-primary/10 p-4 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                        <span class="material-symbols-outlined text-3xl">verified_user</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Expert Mechanics</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">ASE-certified professionals at every
+                            location</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 group">
+                    <div
+                        class="rounded-full bg-primary/10 p-4 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                        <span class="material-symbols-outlined text-3xl">settings</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Genuine Parts</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">100% authentic OEM or certified premium
+                            brands</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Categories -->
+    <section class="max-w-[1280px] mx-auto px-4 md:px-10 py-10">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-black tracking-tight">Trending Categories</h2>
+            <a class="text-primary font-bold flex items-center gap-1 hover:underline" href="/shops">
+                View All <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+            </a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <!-- Category Cards -->
+            <a href="/shops?category=tires"
+                class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-[#dbdfe6] dark:border-gray-700 hover:shadow-lg transition-shadow text-center group cursor-pointer block">
+                <div
+                    class="bg-gray-50 dark:bg-gray-900 w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+                    <span class="material-symbols-outlined text-4xl text-primary">tire_repair</span>
+                </div>
+                <h3 class="font-bold text-sm">Tires & Wheels</h3>
+            </a>
+            <a href="/shops?category=oils"
+                class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-[#dbdfe6] dark:border-gray-700 hover:shadow-lg transition-shadow text-center group cursor-pointer block">
+                <div
+                    class="bg-gray-50 dark:bg-gray-900 w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+                    <span class="material-symbols-outlined text-4xl text-primary">oil_barrel</span>
+                </div>
+                <h3 class="font-bold text-sm">Oil & Filters</h3>
+            </a>
+            <a href="/shops?category=brakes"
+                class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-[#dbdfe6] dark:border-gray-700 hover:shadow-lg transition-shadow text-center group cursor-pointer block">
+                <div
+                    class="bg-gray-50 dark:bg-gray-900 w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+                    <span class="material-symbols-outlined text-4xl text-primary">car_repair</span>
+                </div>
+                <h3 class="font-bold text-sm">Brake Systems</h3>
+            </a>
+            <a href="/shops?category=batteries"
+                class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-[#dbdfe6] dark:border-gray-700 hover:shadow-lg transition-shadow text-center group cursor-pointer block">
+                <div
+                    class="bg-gray-50 dark:bg-gray-900 w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+                    <span class="material-symbols-outlined text-4xl text-primary">battery_charging_full</span>
+                </div>
+                <h3 class="font-bold text-sm">Batteries</h3>
+            </a>
+            <a href="/shops?category=lighting"
+                class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-[#dbdfe6] dark:border-gray-700 hover:shadow-lg transition-shadow text-center group cursor-pointer block">
+                <div
+                    class="bg-gray-50 dark:bg-gray-900 w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+                    <span class="material-symbols-outlined text-4xl text-primary">lightbulb</span>
+                </div>
+                <h3 class="font-bold text-sm">Lighting</h3>
+            </a>
+            <a href="/shops?category=suspension"
+                class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-[#dbdfe6] dark:border-gray-700 hover:shadow-lg transition-shadow text-center group cursor-pointer block">
+                <div
+                    class="bg-gray-50 dark:bg-gray-900 w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+                    <span class="material-symbols-outlined text-4xl text-primary">construction</span>
+                </div>
+                <h3 class="font-bold text-sm">Suspension</h3>
+            </a>
+        </div>
+    </section>
+
+    <!-- Popular Services (Static for visual match, could be dynamic) -->
+    <section class="max-w-[1280px] mx-auto px-4 md:px-10 py-10 mb-20">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div>
+                <h2 class="text-3xl font-black tracking-tight">Popular Services</h2>
+                <p class="text-gray-500 dark:text-gray-400 mt-2">Professional care by certified experts to keep you on
+                    the road.</p>
+            </div>
+            <a href="/shops?category=services"
+                class="flex items-center gap-2 border border-primary text-primary hover:bg-primary hover:text-white px-6 py-2.5 font-bold rounded-lg transition-all">
+                <span>View Service Menu</span>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Service Card 1 -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#dbdfe6] dark:border-gray-700 flex flex-col">
+                <div class="h-48 overflow-hidden">
+                    <div class="w-full h-full bg-cover bg-center hover:scale-110 transition-transform duration-500"
+                        data-alt="Oil change being performed on a car"
+                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCER0lBc7L9wRUmxWIrsPN8SuM6HKkuvsf8z8o2Luo-EK7qHxHcQjS_i6AbNpjPEjH0jdwNH43IKnoj84FhdK6ySBwAny74nmGKvWH6macnhrTCWImL6lygwJSzuFxh6Y-YlI1gCOXMkV8jn0fS1IWDMCMsFwQcW-KHk_aVQWkM1tzBtE5Yj1lJkzXAAyzi08JuLUG1c9-usqdlbguRBbQXnQzegS-ERdJv-7C2dePCZIsvrBvzjuQfO6wEZLyv2KLEEcySkKDDw4f_');">
+                    </div>
+                </div>
+                <div class="p-6 flex flex-1 flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-lg leading-tight">Full Synthetic Oil Change</h3>
+                        <span class="text-primary font-bold">₹649</span>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 flex-1">Premium synthetic oil, new
+                        high-performance filter, and 15-point inspection.</p>
+                    <button
+                        class="w-full bg-[#f0f2f4] dark:bg-gray-700 hover:bg-primary hover:text-white font-bold py-3 rounded-lg transition-all">Book
+                        Appointment</button>
+                </div>
+            </div>
+            <!-- Service Card 2 -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#dbdfe6] dark:border-gray-700 flex flex-col">
+                <div class="h-48 overflow-hidden">
+                    <div class="w-full h-full bg-cover bg-center hover:scale-110 transition-transform duration-500"
+                        data-alt="Brake disc and pad replacement"
+                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYfbyyqEBIN-xowBEP6gD7f9K0OVQr4Kn-Wtcd4Viso_lsiS83MqUsxH8gC7mA_EcelCLyGwoGSlEMvngBzYQlC89UDX8bna1z-oLkBfb36u4G4wTQDz7GxlxBt7hfN9byAlcp2PKPayANKusBflRZOI-g3g6VIPjiLXizQIFXWVXdExas4ruSJ9naXOu1tKK_EP-4k0A_rl0qYdvVtEKIbu_E-XpUSvTa30V4ylDDDicZNqDfsUukgVfBLGGBCbbTCGKNZwadQw9L');">
+                    </div>
+                </div>
+                <div class="p-6 flex flex-1 flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-lg leading-tight">Brake Pad Replacement</h3>
+                        <span class="text-primary font-bold">From ₹1299</span>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 flex-1">Front or rear brake pad replacement
+                        using ceramic or semi-metallic pads.</p>
+                    <button
+                        class="w-full bg-[#f0f2f4] dark:bg-gray-700 hover:bg-primary hover:text-white font-bold py-3 rounded-lg transition-all">Book
+                        Appointment</button>
+                </div>
+            </div>
+            <!-- Service Card 3 -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#dbdfe6] dark:border-gray-700 flex flex-col">
+                <div class="h-48 overflow-hidden">
+                    <div class="w-full h-full bg-cover bg-center hover:scale-110 transition-transform duration-500"
+                        data-alt="Car inspection diagnostic computer"
+                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCH_ATmwFSy7o7J8Li0gcx81YMK8yzJ0lZigubk_PY3GKUXVpQsOU7vZqdd1NJJhPvvxZD4PsEx-WcT5MKA4InjLdY7nfvz5oRdvGBmcs_dkmfRcDfPYCBddyeCXpwiP9rx0gYwI6USswoLrxdP2BmafvhOsIgxZkzI0Ttf1c3EC-1xEFeRfBAXFgrRURMGdLzWiF8bHWFPdET7konydqOqMOyiKpZZSmFKiHKGPsemktKuYhh8XwWwxhF4YfJaBQTAigUOU5icafjU');">
+                    </div>
+                </div>
+                <div class="p-6 flex flex-1 flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-lg leading-tight">Comprehensive Inspection</h3>
+                        <span class="text-green-600 font-bold uppercase text-xs">Recommended</span>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 flex-1">Full bumper-to-bumper 100-point
+                        safety and performance diagnostic.</p>
+                    <button
+                        class="w-full bg-[#f0f2f4] dark:bg-gray-700 hover:bg-primary hover:text-white font-bold py-3 rounded-lg transition-all">Book
+                        Appointment</button>
+                </div>
+            </div>
+            <!-- Service Card 4 -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#dbdfe6] dark:border-gray-700 flex flex-col">
+                <div class="h-48 overflow-hidden">
+                    <div class="w-full h-full bg-cover bg-center hover:scale-110 transition-transform duration-500"
+                        data-alt="Car battery and electronics test"
+                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDaY7H_fWABjT_W6l7xJgthJeQLYVmJrD82GUueK_jn83YVv78NIJ6wUzh7JhfYJwPi_-nRjJC81qMa8cw9nLUSdddMvd4rsbPSXbIoGUvYX9GUuxn5ciQ0oF4m3F38npwsi0HsAsYOFp1Y5T3s064r6w4fLqY37LALM148Mlt16jtqR6P7GodauC_fzNzsbfAZbBq-v8mxmGR3dmiSXomRMYHJ6OXWwF8E0i4iwt6lLMNH25Dh_rGIVo8Q-Rvb66c3B8Uq27rZ2mtT');">
+                    </div>
+                </div>
+                <div class="p-6 flex flex-1 flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-lg leading-tight">Battery Test & Replacement</h3>
+                        <span class="text-primary font-bold">Free Test</span>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 flex-1">Voltage testing and professional
+                        installation of high-capacity batteries.</p>
+                    <button
+                        class="w-full bg-[#f0f2f4] dark:bg-gray-700 hover:bg-primary hover:text-white font-bold py-3 rounded-lg transition-all">Book
+                        Appointment</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seasonal Promo Banner -->
+    <section class="max-w-[1280px] mx-auto px-4 md:px-10 pb-20">
+        <div
+            class="relative rounded-2xl overflow-hidden bg-primary p-12 flex flex-col md:flex-row items-center justify-between gap-8 text-white">
+            <div class="absolute inset-0 opacity-20 pointer-events-none" data-alt="Abstract geometric technical pattern"
+                style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;">
+            </div>
+            <div class="relative z-10 text-center md:text-left">
+                <h2 class="text-4xl font-black mb-4">Winter Prep Sale: Up to 25% Off</h2>
+                <p class="text-xl opacity-90">Get ready for the cold with deals on batteries, wipers, and antifreeze.
+                </p>
+            </div>
+            <div class="relative z-10">
+                <a href="/shops?category=winter"
+                    class="inline-block bg-white text-primary font-bold px-10 py-4 rounded-xl text-lg hover:bg-gray-100 transition-all shadow-xl">
+                    Shop the Sale
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Loop (Preserved from original) -->
+    <% if (featuredProducts && featuredProducts.length> 0) { %>
+        <section class="max-w-[1280px] mx-auto px-4 md:px-10 pb-20">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-black tracking-tight">Our Top Picks</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <% featuredProducts.forEach(product=> { %>
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#dbdfe6] dark:border-gray-700 flex flex-col hover:shadow-lg transition-shadow">
+                        <a href="/products/<%= product.id %>"
+                            class="block relative h-48 bg-gray-100 flex items-center justify-center">
+                            <% if (product.image_url) { %>
+                                <img src="<%= product.image_url %>" alt="<%= product.name %>"
+                                    class="h-full w-full object-cover">
                                 <% } else { %>
-                                    <div class="udemy-shop-image bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
-                                        <span class="text-4xl text-white font-bold"><%= shop.name.charAt(0) %></span>
-                                    </div>
-                                <% } %>
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-bold text-sm line-clamp-2 mb-1"><%= shop.name %></h3>
-                                <p class="udemy-instructor-badge line-clamp-1"><%= shop.address %></p>
-                                <div class="udemy-rating">
-                                    <span class="udemy-rating-number">4.2</span>
-                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                    <span class="text-xs text-gray-600 ml-1">(500+)</span>
-                                </div>
-                                <div class="mt-2">
-                                    <span class="text-xs text-green-600 font-semibold">Free Delivery</span>
-                                </div>
-                            </div>
-                        </a>
-                    <% }) %>
-                </div>
-            </div>
-        </section>
-        <% } %>
-
-        <!-- Featured Products Section -->
-        <% if (featuredProducts && featuredProducts.length > 0) { %>
-        <section class="py-8 bg-gray-50">
-            <div class="container max-w-screen-xl mx-auto px-4">
-                <h2 class="udemy-section-title">Popular Products</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <% featuredProducts.forEach(product => { %>
-                        <a href="/products/<%= product.id %>" class="udemy-product-card">
-                            <div class="relative">
-                                <% if (product.image_url) { %>
-                                    <img src="<%= product.image_url %>" alt="<%= product.name %>" class="udemy-product-image">
-                                <% } else { %>
-                                    <div class="udemy-product-image bg-gray-100 flex items-center justify-center">
-                                        <i class="fas fa-shopping-basket text-4xl text-gray-400"></i>
-                                    </div>
-                                <% } %>
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-bold text-sm line-clamp-2 mb-1"><%= product.name %></h3>
-                                <p class="udemy-instructor-badge line-clamp-1"><%= product.shop_name %></p>
-                                <div class="udemy-rating mt-1">
-                                    <span class="udemy-rating-number">4.1</span>
-                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                    <span class="text-xs text-gray-600 ml-1">(120)</span>
-                                </div>
-                                <div class="mt-2 flex items-center justify-between">
-                                    <span class="udemy-price">₹<%= typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price).toFixed(2) %></span>
-                                    <% if (locals.user) { %>
-                                        <form action="/cart/add" method="POST" class="inline-block" onclick="event.stopPropagation();">
-                                            <input type="hidden" name="product_id" value="<%= product.id %>">
-                                            <input type="hidden" name="shop_id" value="<%= product.shop_id %>">
-                                            <input type="hidden" name="quantity" value="1">
-                                            <button type="submit" class="udemy-btn text-xs py-1 px-3">
-                                                <i class="fas fa-shopping-cart"></i>
-                                            </button>
-                                        </form>
+                                    <span class="material-symbols-outlined text-4xl text-gray-300">image</span>
                                     <% } %>
-                                </div>
-                            </div>
                         </a>
-                    <% }) %>
-                </div>
-            </div>
-        </section>
-        <% } %>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <p class="text-xs text-gray-500 mb-1">
+                                <%= product.shop_name %>
+                            </p>
+                            <h3 class="font-bold text-lg mb-2 truncate">
+                                <%= product.name %>
+                            </h3>
 
-        <!-- ML Recommendations Section -->
-        <% if (mlRecommendations && mlRecommendations.length > 0) { %>
-        <section class="py-8 bg-white border-t border-gray-200">
-            <div class="container max-w-screen-xl mx-auto px-4">
-                <h2 class="udemy-section-title">
-                    <i class="fas fa-magic mr-2 text-purple-600"></i>
-                    Recommended for You
-                </h2>
-                <p class="text-gray-600 text-sm mb-4">Based on your purchase history</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <% mlRecommendations.forEach(product => { %>
-                        <a href="/products/<%= product.id %>" class="udemy-product-card">
-                            <div class="relative">
-                                <% if (product.image_url) { %>
-                                    <img src="<%= product.image_url %>" alt="<%= product.name %>" class="udemy-product-image">
-                                <% } else { %>
-                                    <div class="udemy-product-image bg-gray-100 flex items-center justify-center">
-                                        <i class="fas fa-shopping-basket text-4xl text-gray-400"></i>
-                                    </div>
-                                <% } %>
-                                <div class="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-1 rounded">
-                                    <i class="fas fa-star"></i> Recommended
-                                </div>
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-bold text-sm line-clamp-2 mb-1"><%= product.name %></h3>
-                                <p class="udemy-instructor-badge line-clamp-1"><%= product.shop_name %></p>
-                                <div class="mt-2 flex items-center justify-between">
-                                    <span class="udemy-price">₹<%= typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price).toFixed(2) %></span>
-                                    <% if (locals.user) { %>
-                                        <form action="/cart/add" method="POST" class="inline-block" onclick="event.stopPropagation();">
-                                            <input type="hidden" name="product_id" value="<%= product.id %>">
-                                            <input type="hidden" name="shop_id" value="<%= product.shop_id %>">
-                                            <input type="hidden" name="quantity" value="1">
-                                            <button type="submit" class="udemy-btn text-xs py-1 px-3">
-                                                <i class="fas fa-shopping-cart"></i>
-                                            </button>
-                                        </form>
+                            <div class="mt-auto flex items-center justify-between">
+                                <span class="font-bold text-primary text-xl">₹<%= typeof product.price==='number' ?
+                                        product.price.toFixed(2) : parseFloat(product.price).toFixed(2) %></span>
+                                <% if (locals.user) { %>
+                                    <form action="/cart/add" method="POST">
+                                        <input type="hidden" name="product_id" value="<%= product.id %>">
+                                        <input type="hidden" name="shop_id" value="<%= product.shop_id %>">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit"
+                                            class="flex items-center justify-center bg-primary text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                        </button>
+                                    </form>
                                     <% } %>
-                                </div>
                             </div>
-                        </a>
+                        </div>
+                    </div>
                     <% }) %>
-                </div>
             </div>
         </section>
         <% } %>
 
-        <!-- Top Categories Section -->
-        <section class="py-8 bg-white border-t border-gray-200">
-            <div class="container max-w-screen-xl mx-auto px-4">
-                <h2 class="udemy-section-title">Top Categories</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    <a href="/shops?category=fruits" class="udemy-category-card">
-                        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <i class="fas fa-apple-alt text-2xl text-orange-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-xs">Fresh Fruits</h3>
-                    </a>
-                    <a href="/shops?category=vegetables" class="udemy-category-card">
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <i class="fas fa-carrot text-2xl text-green-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-xs">Vegetables</h3>
-                    </a>
-                    <a href="/shops?category=dairy" class="udemy-category-card">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <i class="fas fa-cheese text-2xl text-blue-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-xs">Dairy Products</h3>
-                    </a>
-                    <a href="/shops?category=bakery" class="udemy-category-card">
-                        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <i class="fas fa-bread-slice text-2xl text-amber-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-xs">Bakery Items</h3>
-                    </a>
-                    <a href="/shops?category=beverages" class="udemy-category-card">
-                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <i class="fas fa-wine-bottle text-2xl text-red-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-xs">Beverages</h3>
-                    </a>
-                    <a href="/shops?category=snacks" class="udemy-category-card">
-                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <i class="fas fa-cookie text-2xl text-yellow-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-xs">Snacks</h3>
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <%- include('partials/footer') %>
-</body>
-</html>
+            <%- include('partials/footer') %>

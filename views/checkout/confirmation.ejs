@@ -1,248 +1,286 @@
 <%- include('../partials/header') %>
 
-<div class="container max-w-screen-xl mx-auto px-4 py-6">
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold mb-2">Order Confirmation</h1>
-        <div class="flex items-center text-sm text-gray-500">
-            <a href="/" class="hover:text-gray-700">Home</a>
-            <span class="mx-2">›</span>
-            <a href="/cart" class="hover:text-gray-700">Cart</a>
-            <span class="mx-2">›</span>
-            <span>Order #<%= order.id %></span>
+    <div class="container max-w-[1024px] mx-auto px-4 md:px-10 py-8 min-h-screen">
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold mb-2 text-[#111318] dark:text-white">Order Confirmation</h1>
+            <div class="flex items-center justify-center text-sm text-gray-500">
+                <a href="/" class="hover:text-primary">Home</a>
+                <span class="mx-2">›</span>
+                <span class="text-gray-900 font-medium">Order #<%= order.id %></span>
+            </div>
         </div>
-    </div>
-    
-    <!-- Success Animation -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6 text-center">
-        <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
-            <i class="fas fa-check text-3xl text-green-500"></i>
+
+        <!-- Success Animation -->
+        <div
+            class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 p-8 mb-8 text-center">
+            <div
+                class="w-20 h-20 mx-auto bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6 animate-bounce-short">
+                <span class="material-symbols-outlined text-4xl text-green-600 dark:text-green-400">check_circle</span>
+            </div>
+            <h2 class="text-2xl font-black mb-2 text-[#111318] dark:text-white">Order Placed Successfully!</h2>
+            <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">Thank you for choosing AutoMasters. Your
+                order has been confirmed and parts are being prepared.</p>
+
+            <div
+                class="inline-block bg-gray-50 dark:bg-gray-700/50 px-6 py-4 rounded-xl border border-[#dbdfe6] dark:border-gray-600 mb-8">
+                <h3 class="text-lg font-bold text-[#111318] dark:text-white uppercase tracking-wider mb-1">Order #<%=
+                        order.id %>
+                </h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">event</span>
+                    <%= new Date(order.created_at).toLocaleDateString('en-US', { year: 'numeric' , month: 'long' ,
+                        day: 'numeric' , hour: '2-digit' , minute: '2-digit' }) %>
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="/shops"
+                    class="flex items-center justify-center py-3 px-6 bg-white dark:bg-gray-700 border border-[#dbdfe6] dark:border-gray-600 text-gray-700 dark:text-white font-bold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors gap-2">
+                    <span class="material-symbols-outlined">shopping_bag</span>
+                    <span>Continue Shopping</span>
+                </a>
+                <% if (locals.user) { %>
+                    <a href="/profile"
+                        class="flex items-center justify-center py-3 px-6 bg-primary text-white font-bold rounded-lg hover:bg-blue-700 transition-colors gap-2 shadow-lg shadow-blue-500/30">
+                        <span class="material-symbols-outlined">inventory_2</span>
+                        <span>Track Order</span>
+                    </a>
+                    <% } %>
+            </div>
         </div>
-        <h2 class="text-2xl font-bold mb-2 text-gray-800">Order Placed Successfully!</h2>
-        <p class="text-gray-600 mb-6">Thank you for your order. Your order has been placed and is being processed.</p>
-        <div class="inline-block bg-gray-100 px-4 py-2 rounded-lg border border-gray-200 mb-4">
-            <h3 class="text-lg font-semibold">Order #<%= order.id %></h3>
-            <p class="text-sm text-gray-500">Placed on <%= new Date(order.created_at).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            }) %></p>
-        </div>
-        <div class="flex justify-center space-x-4 mt-4">
-            <a href="/shops" class="flex items-center justify-center py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
-                <i class="fas fa-shopping-bag mr-2"></i>
-                <span>Continue Shopping</span>
-            </a>
-            <a href="/orders" class="zepto-btn flex items-center justify-center py-2 px-4">
-                <i class="fas fa-box mr-2"></i>
-                <span>View My Orders</span>
-            </a>
-        </div>
-    </div>
-    
-    <div class="flex flex-col lg:flex-row gap-6">
-        <!-- Order Details -->
-        <div class="lg:w-8/12">
-            <!-- Order Items -->
-            <div class="bg-white rounded-lg shadow-md mb-6">
-                <div class="border-b border-gray-200 p-4">
-                    <h2 class="text-lg font-semibold">Order Items</h2>
-                </div>
-                <div class="p-4">
-                    <% order.items.forEach(item => { %>
-                        <div class="flex items-center py-4 border-b border-gray-100 last:border-0">
-                            <div class="w-16 h-16 flex-shrink-0 mr-4">
-                                <% if (item.image_url) { %>
-                                    <img src="<%= item.image_url %>" alt="<%= item.product_name %>" class="w-full h-full object-cover rounded">
-                                <% } else { %>
-                                    <div class="w-full h-full bg-gray-200 rounded flex items-center justify-center">
-                                        <i class="fas fa-shopping-basket text-gray-400"></i>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Order Details -->
+            <div class="lg:w-7/12">
+                <!-- Order Tracking -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 mb-6 overflow-hidden">
+                    <div class="bg-gray-50 dark:bg-gray-900 border-b border-[#dbdfe6] dark:border-gray-700 p-6">
+                        <h2 class="text-lg font-bold text-[#111318] dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">local_shipping</span>
+                            Order Status
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="relative pb-2 pl-2">
+                            <div class="absolute top-2 bottom-4 left-[19px] w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+
+                            <% // Define all possible statuses in order const statuses=['pending', 'confirmed'
+                                , 'preparing' , 'out_for_delivery' , 'delivered' ]; // Find the current status (safely
+                                handle if tracking is undefined) const currentStatus=(order.tracking &&
+                                order.tracking.length> 0) ? order.tracking[0].status : 'pending';
+                                const currentStatusIndex = statuses.indexOf(currentStatus);
+
+                                statuses.forEach((status, index) => {
+                                const isCompleted = index <= currentStatusIndex; const
+                                    isActive=index===currentStatusIndex; let statusLabel='' ; let statusDesc='' ; let
+                                    statusIcon='' ; switch(status) { case 'pending' : statusLabel='Order Placed' ;
+                                    statusDesc='We\' ve received your order'; statusIcon='assignment' ; break;
+                                    case 'confirmed' : statusLabel='Order Confirmed' ;
+                                    statusDesc='Your payment has been verified' ; statusIcon='check_circle' ; break;
+                                    case 'preparing' : statusLabel='Preparing Parts' ;
+                                    statusDesc='Your order is being packed/prepared' ; statusIcon='handyman' ; break;
+                                    case 'out_for_delivery' : statusLabel='Out for Delivery' ;
+                                    statusDesc='Your parts are on the way' ; statusIcon='local_shipping' ; break;
+                                    case 'delivered' : statusLabel='Delivered' ;
+                                    statusDesc='Package delivered successfully' ; statusIcon='package_2' ; // or
+                                    inventory break; } %>
+                                    <div class="relative flex items-start mb-8 last:mb-0 group">
+                                        <div
+                                            class="relative z-10 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-4 border-4 border-white dark:border-gray-800 <%= isCompleted ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-400' %> transition-colors">
+                                            <span class="material-symbols-outlined text-sm">
+                                                <%= statusIcon %>
+                                            </span>
+                                        </div>
+                                        <div class="flex-1 pt-1">
+                                            <h3
+                                                class="font-bold text-sm <%= isActive ? 'text-primary' : 'text-gray-900 dark:text-white' %>">
+                                                <%= statusLabel %>
+                                            </h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                                <%= statusDesc %>
+                                            </p>
+                                            <% if (isActive && order.tracking && order.tracking.length> 0) { %>
+                                                <p class="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-xs">schedule</span>
+                                                    <%= new
+                                                        Date(order.tracking[0].updated_at).toLocaleDateString('en-US', {
+                                                        year: 'numeric' , month: 'short' , day: 'numeric' ,
+                                                        hour: '2-digit' , minute: '2-digit' }) %>
+                                                </p>
+                                                <% } %>
+                                        </div>
                                     </div>
-                                <% } %>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex flex-col md:flex-row md:justify-between md:items-start">
-                                    <div>
-                                        <h3 class="font-medium"><%= item.product_name %></h3>
-                                        <p class="text-sm text-gray-500">From <%= item.shop_name %></p>
-                                        <p class="text-sm">Qty: <%= item.quantity %></p>
-                                    </div>
-                                    <div class="mt-2 md:mt-0 text-right">
-                                        <p class="font-medium">₹<%= (parseFloat(item.price) * item.quantity).toFixed(2) %></p>
-                                        <p class="text-sm text-gray-500">₹<%= parseFloat(item.price).toFixed(2) %> each</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <% }) %>
-                    
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <div class="flex justify-between mb-2">
-                            <span class="font-medium">Subtotal</span>
-                            <span>₹<%= parseFloat(order.total_amount).toFixed(2) %></span>
-                        </div>
-                        <div class="flex justify-between mb-2">
-                            <span class="font-medium">Delivery</span>
-                            <span class="text-green-600">Free</span>
-                        </div>
-                        <div class="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
-                            <span>Total</span>
-                            <span>₹<%= parseFloat(order.total_amount).toFixed(2) %></span>
+                                    <% }) %>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Order Tracking -->
-            <div class="bg-white rounded-lg shadow-md mb-6">
-                <div class="border-b border-gray-200 p-4">
-                    <h2 class="text-lg font-semibold">Order Status</h2>
-                </div>
-                <div class="p-4">
-                    <div class="relative pb-6">
-                        <div class="absolute top-0 bottom-0 left-4 w-px bg-green-500"></div>
-                        
-                        <% 
-                        // Define all possible statuses in order
-                        const statuses = ['pending', 'confirmed', 'preparing', 'out_for_delivery', 'delivered'];
-                        
-                        // Find the current status
-                        const currentStatus = order.tracking[0].status;
-                        const currentStatusIndex = statuses.indexOf(currentStatus);
-                        
-                        statuses.forEach((status, index) => {
-                            const isCompleted = index <= currentStatusIndex;
-                            const isActive = index === currentStatusIndex;
-                        %>
-                            <div class="relative flex items-start mb-6 last:mb-0">
-                                <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mr-3 <%= isCompleted ? 'bg-green-500' : 'bg-gray-200' %>">
-                                    <% if (isCompleted) { %>
-                                        <i class="fas fa-check text-white"></i>
-                                    <% } else { %>
-                                        <i class="fas fa-circle text-gray-300 text-xs"></i>
-                                    <% } %>
+
+                <!-- Order Items -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 mb-6 overflow-hidden">
+                    <div class="bg-gray-50 dark:bg-gray-900 border-b border-[#dbdfe6] dark:border-gray-700 p-6">
+                        <h2 class="text-lg font-bold text-[#111318] dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">list_alt</span>
+                            Order Items
+                        </h2>
+                    </div>
+                    <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                        <% order.items.forEach(item=> { %>
+                            <div
+                                class="p-4 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                <div
+                                    class="w-16 h-16 flex-shrink-0 bg-gray-100 dark:bg-gray-700 rounded-lg p-1 border border-gray-200 dark:border-gray-600">
+                                    <% if (item.image_url) { %>
+                                        <img src="<%= item.image_url %>" alt="<%= item.product_name %>"
+                                            class="w-full h-full object-contain mix-blend-multiply">
+                                        <% } else { %>
+                                            <div class="w-full h-full flex items-center justify-center">
+                                                <span class="material-symbols-outlined text-gray-400">image</span>
+                                            </div>
+                                            <% } %>
                                 </div>
-                                <div class="flex-1">
-                                    <h3 class="font-medium <%= isActive ? 'text-green-600' : '' %>">
-                                        <% if (status === 'pending') { %>
-                                            Order Placed
-                                        <% } else if (status === 'confirmed') { %>
-                                            Order Confirmed
-                                        <% } else if (status === 'preparing') { %>
-                                            Preparing
-                                        <% } else if (status === 'out_for_delivery') { %>
-                                            Out for Delivery
-                                        <% } else if (status === 'delivered') { %>
-                                            Delivered
-                                        <% } %>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-bold text-[#111318] dark:text-white text-sm truncate">
+                                        <%= item.product_name %>
                                     </h3>
-                                    <p class="text-sm text-gray-500">
-                                        <% if (status === 'pending') { %>
-                                            We've received your order
-                                        <% } else if (status === 'confirmed') { %>
-                                            Your payment has been confirmed
-                                        <% } else if (status === 'preparing') { %>
-                                            Your order is being prepared by the shop
-                                        <% } else if (status === 'out_for_delivery') { %>
-                                            Your order is on the way
-                                        <% } else if (status === 'delivered') { %>
-                                            Your order has been delivered
-                                        <% } %>
-                                    </p>
-                                    <% if (isActive) { %>
-                                        <p class="text-xs text-gray-400 mt-1">
-                                            <%= new Date(order.tracking[0].updated_at).toLocaleDateString('en-US', { 
-                                                year: 'numeric', 
-                                                month: 'short', 
-                                                day: 'numeric',
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            }) %>
-                                        </p>
-                                    <% } %>
+                                    <div class="flex items-center gap-2 text-xs text-gray-500 mb-1">
+                                        <span class="material-symbols-outlined text-xs">store</span>
+                                        <%= item.shop_name %>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-500">Qty: <span
+                                                class="font-medium text-gray-900 dark:text-gray-300">
+                                                <%= item.quantity %>
+                                            </span></span>
+                                        <span class="font-bold text-[#111318] dark:text-white">₹<%=
+                                                (parseFloat(item.price) * item.quantity).toFixed(2) %></span>
+                                    </div>
                                 </div>
                             </div>
-                        <% }) %>
+                            <% }) %>
+
+                                <div class="p-6 bg-gray-50 dark:bg-gray-900/50">
+                                    <div class="flex justify-between text-sm mb-2">
+                                        <span class="text-gray-500 dark:text-gray-400">Subtotal</span>
+                                        <span class="font-medium text-[#111318] dark:text-white">₹<%=
+                                                parseFloat(order.total_amount).toFixed(2) %></span>
+                                    </div>
+                                    <div class="flex justify-between text-sm mb-2">
+                                        <span class="text-gray-500 dark:text-gray-400">Delivery</span>
+                                        <span class="text-green-600 font-bold flex items-center gap-1"><span
+                                                class="material-symbols-outlined text-sm">check</span> Free</span>
+                                    </div>
+                                    <div
+                                        class="flex justify-between text-lg font-black pt-3 border-t border-[#dbdfe6] dark:border-gray-700 mt-2">
+                                        <span class="text-[#111318] dark:text-white">Total</span>
+                                        <span class="text-primary">₹<%= parseFloat(order.total_amount).toFixed(2) %>
+                                                </span>
+                                    </div>
+                                </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Order Summary -->
-        <div class="lg:w-4/12">
-            <div class="bg-white rounded-lg shadow-md mb-6">
-                <div class="border-b border-gray-200 p-4">
-                    <h2 class="text-lg font-semibold">Order Summary</h2>
+
+            <!-- Order Summary & Help -->
+            <div class="lg:w-5/12 space-y-6">
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 overflow-hidden">
+                    <div class="bg-gray-50 dark:bg-gray-900 border-b border-[#dbdfe6] dark:border-gray-700 p-6">
+                        <h2 class="text-lg font-bold text-[#111318] dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">receipt_long</span>
+                            Details
+                        </h2>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <h3 class="font-bold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                                Delivery Information</h3>
+                            <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg space-y-2">
+                                <div class="flex items-center gap-2 text-sm font-bold text-[#111318] dark:text-white">
+                                    <span class="material-symbols-outlined text-gray-400">person</span>
+                                    <%= order.user_name %>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                    <span class="material-symbols-outlined text-gray-400">call</span>
+                                    <%= order.phone %>
+                                </div>
+                                <div class="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                    <span class="material-symbols-outlined text-gray-400 mt-0.5">location_on</span>
+                                    <span class="leading-snug">
+                                        <%= order.shipping_address %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                                Payment</h3>
+                            <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg space-y-2">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600 dark:text-gray-400">Method</span>
+                                    <span class="font-medium text-[#111318] dark:text-white flex items-center gap-1">
+                                        <% if (order.payment_status==='pending' ) { %>
+                                            <span class="material-symbols-outlined text-sm">money</span> COD
+                                            <% } else { %>
+                                                <span class="material-symbols-outlined text-sm">credit_card</span>
+                                                Online
+                                                <% } %>
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600 dark:text-gray-400">Status</span>
+                                    <span
+                                        class="<%= order.payment_status === 'paid' ? 'text-green-600 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800' : 'text-yellow-600 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800' %> px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide">
+                                        <%= order.payment_status==='paid' ? 'Paid' : 'Pending' %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                                Expected Delivery</h3>
+                            <div
+                                class="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg text-primary">
+                                <span class="material-symbols-outlined">calendar_clock</span>
+                                <span class="font-bold text-sm">
+                                    <%= new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
+                                        weekday: 'long' , month: 'long' , day: 'numeric' }) %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="p-4">
-                    <div class="mb-4">
-                        <h3 class="font-medium mb-2">Delivery Information</h3>
-                        <div class="text-sm">
-                            <p class="font-medium"><%= order.user_name %></p>
-                            <p class="text-gray-600 mb-1"><%= order.phone %></p>
-                            <p class="text-gray-600"><%= order.shipping_address %></p>
-                        </div>
-                    </div>
-                    <div class="mb-4 pt-4 border-t border-gray-200">
-                        <h3 class="font-medium mb-2">Payment Information</h3>
-                        <div class="text-sm">
-                            <div class="flex justify-between mb-1">
-                                <span class="text-gray-600">Payment Method</span>
-                                <span><%= order.payment_status === 'pending' ? 'Cash on Delivery' : 'Razorpay' %></span>
+
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[#dbdfe6] dark:border-gray-700 p-6">
+                    <h3 class="font-bold text-[#111318] dark:text-white mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">support_agent</span>
+                        Need Help?
+                    </h3>
+                    <div class="space-y-3">
+                        <a href="#"
+                            class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group">
+                            <div
+                                class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 text-primary flex items-center justify-center mr-3 group-hover:bg-primary group-hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm">chat</span>
                             </div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-gray-600">Payment Status</span>
-                                <span class="<%= order.payment_status === 'paid' ? 'text-green-600' : 'text-yellow-600' %>">
-                                    <%= order.payment_status === 'paid' ? 'Paid' : 'Pending' %>
-                                </span>
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Live Chat Support</span>
+                        </a>
+                        <a href="#"
+                            class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group">
+                            <div
+                                class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 text-primary flex items-center justify-center mr-3 group-hover:bg-primary group-hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm">call</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="mb-4 pt-4 border-t border-gray-200">
-                        <h3 class="font-medium mb-2">Expected Delivery</h3>
-                        <div class="text-sm">
-                            <div class="flex items-center">
-                                <i class="fas fa-clock text-gray-400 mr-2"></i>
-                                <span>
-                                    <%= new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { 
-                                        weekday: 'short',
-                                        month: 'short', 
-                                        day: 'numeric',
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    }) %>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-4 border-t border-gray-200">
-                        <a href="/orders" class="w-full zepto-btn py-2 text-center block">
-                            View All Orders
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Call Customer Care</span>
                         </a>
                     </div>
                 </div>
             </div>
-            
-            <div class="bg-white rounded-lg shadow-md p-4">
-                <h3 class="font-medium mb-3">Need Help?</h3>
-                <div class="space-y-3">
-                    <a href="#" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-comment-alt mr-2 text-gray-400"></i>
-                        <span>Send us a message</span>
-                    </a>
-                    <a href="#" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-phone-alt mr-2 text-gray-400"></i>
-                        <span>Call support</span>
-                    </a>
-                    <a href="#" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-question-circle mr-2 text-gray-400"></i>
-                        <span>FAQs & Help</span>
-                    </a>
-                </div>
-            </div>
         </div>
     </div>
-</div>
 
-<%- include('../partials/footer') %> 
+    <%- include('../partials/footer') %>
