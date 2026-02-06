@@ -34,8 +34,8 @@
             <div class="relative h-64 bg-gray-900">
                 <% if (shop.logo) { %>
                     <div class="absolute inset-0">
-                        <img src="<%= shop.logo %>" alt="<%= shop.name %>"
-                            class="w-full h-full object-cover opacity-60">
+                        <img src="<%= shop.logo %>" alt="<%= shop.name %>" class="w-full h-full object-cover opacity-60"
+                            onerror="this.onerror=null; this.parentElement.parentElement.innerHTML='<div class=\'absolute inset-0 bg-gradient-to-r from-gray-900 to-gray-800\'></div>';">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#111318] to-transparent"></div>
                     </div>
                     <% } else { %>
@@ -93,16 +93,29 @@
                             </div>
                 </div>
                 <div class="flex gap-3">
-                    <button
-                        class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-bold">
-                        <span class="material-symbols-outlined text-lg">favorite_border</span>
-                        <span>Save</span>
-                    </button>
-                    <button
-                        class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-bold">
-                        <span class="material-symbols-outlined text-lg">share</span>
-                        <span>Share</span>
-                    </button>
+                    <% if (locals.user) { %>
+                        <a href="/booking/shop/<%= shop.id %>"
+                            class="flex items-center gap-2 bg-primary text-white hover:bg-blue-700 transition-colors px-4 py-2 rounded-lg text-sm font-bold">
+                            <span class="material-symbols-outlined text-lg">calendar_today</span>
+                            <span>Book Service</span>
+                        </a>
+                        <% } else { %>
+                            <a href="/login"
+                                class="flex items-center gap-2 bg-primary text-white hover:bg-blue-700 transition-colors px-4 py-2 rounded-lg text-sm font-bold">
+                                <span class="material-symbols-outlined text-lg">login</span>
+                                <span>Login to Book</span>
+                            </a>
+                            <% } %>
+                                <button
+                                    class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-bold">
+                                    <span class="material-symbols-outlined text-lg">favorite_border</span>
+                                    <span>Save</span>
+                                </button>
+                                <button
+                                    class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-bold">
+                                    <span class="material-symbols-outlined text-lg">share</span>
+                                    <span>Share</span>
+                                </button>
                 </div>
             </div>
         </div>
@@ -113,26 +126,42 @@
                 <!-- Search & Filters -->
                 <div
                     class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 rounded-xl p-4 mb-6 shadow-sm">
-                    <div class="relative mb-4">
-                        <input type="text" placeholder="Search for parts or services..."
-                            class="w-full bg-gray-50 dark:bg-gray-900 border border-[#dbdfe6] dark:border-gray-700 rounded-lg pl-10 pr-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none text-sm transition-all">
-                        <span
-                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 material-symbols-outlined text-lg">
-                            search
-                        </span>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <button class="bg-primary text-white px-4 py-2 text-sm font-bold rounded-lg shadow-sm">All
-                            Items</button>
-                        <button
-                            class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Services</button>
-                        <button
-                            class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Parts</button>
-                        <button
-                            class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Fluids</button>
-                        <button
-                            class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Accessories</button>
-                    </div>
+                    <form id="filterForm" method="GET" action="/shops/<%= shop.id %>">
+                        <div class="relative mb-4">
+                            <input type="text" name="search" id="searchInput"
+                                placeholder="Search for parts or services..." value="<%= filters.search || '' %>"
+                                class="w-full bg-gray-50 dark:bg-gray-900 border border-[#dbdfe6] dark:border-gray-700 rounded-lg pl-10 pr-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none text-sm transition-all">
+                            <span
+                                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 material-symbols-outlined text-lg">
+                                search
+                            </span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" data-category="all"
+                                class="filter-btn px-4 py-2 text-sm font-bold rounded-lg shadow-sm <%= (filters.category === 'all' || !filters.category) ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' %> transition-colors">
+                                All Items
+                            </button>
+                            <button type="button" data-category="services"
+                                class="filter-btn px-4 py-2 text-sm font-medium rounded-lg <%= filters.category === 'services' ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' %> transition-colors">
+                                Services
+                            </button>
+                            <button type="button" data-category="parts"
+                                class="filter-btn px-4 py-2 text-sm font-medium rounded-lg <%= filters.category === 'parts' ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' %> transition-colors">
+                                Parts
+                            </button>
+                            <button type="button" data-category="fluids"
+                                class="filter-btn px-4 py-2 text-sm font-medium rounded-lg <%= filters.category === 'fluids' ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' %> transition-colors">
+                                Fluids
+                            </button>
+                            <button type="button" data-category="accessories"
+                                class="filter-btn px-4 py-2 text-sm font-medium rounded-lg <%= filters.category === 'accessories' ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' %> transition-colors">
+                                Accessories
+                            </button>
+                        </div>
+                        <input type="hidden" name="category" id="categoryInput"
+                            value="<%= filters.category || 'all' %>">
+                        <input type="hidden" name="sort" id="sortInput" value="<%= filters.sort || 'name' %>">
+                    </form>
                 </div>
 
                 <!-- Products count -->
@@ -140,11 +169,13 @@
                     <h2 class="text-xl font-bold text-[#111318] dark:text-white">Products & Services (<%=
                             pagination.totalProducts %>)</h2>
                     <div class="relative">
-                        <select
+                        <select id="sortSelect"
                             class="appearance-none border border-[#dbdfe6] dark:border-gray-700 rounded-lg py-2 px-4 pr-10 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium cursor-pointer shadow-sm focus:ring-primary focus:border-primary">
-                            <option>Sort: Best Match</option>
-                            <option>Price: Low to High</option>
-                            <option>Price: High to Low</option>
+                            <option value="name" <%=filters.sort==='name' ? 'selected' : '' %>>Sort: Name</option>
+                            <option value="price_low" <%=filters.sort==='price_low' ? 'selected' : '' %>>Price: Low to
+                                High</option>
+                            <option value="price_high" <%=filters.sort==='price_high' ? 'selected' : '' %>>Price: High
+                                to Low</option>
                         </select>
                         <div
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
@@ -162,7 +193,8 @@
                                 class="block relative aspect-square bg-gray-50 dark:bg-gray-900 border-b border-[#dbdfe6] dark:border-gray-700 overflow-hidden">
                                 <% if (product.image_url) { %>
                                     <img src="<%= product.image_url %>" alt="<%= product.name %>"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                        onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center\'><span class=\'material-symbols-outlined text-5xl text-gray-300\'>image</span></div>';">
                                     <% } else { %>
                                         <div class="w-full h-full flex items-center justify-center">
                                             <span class="material-symbols-outlined text-5xl text-gray-300">image</span>
@@ -368,5 +400,43 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Filter functionality
+        const filterForm = document.getElementById('filterForm');
+        if (filterForm) {
+            const categoryInput = document.getElementById('categoryInput');
+            const sortInput = document.getElementById('sortInput');
+            const sortSelect = document.getElementById('sortSelect');
+            const searchInput = document.getElementById('searchInput');
+
+            // Category filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    categoryInput.value = this.dataset.category;
+                    filterForm.submit();
+                });
+            });
+
+            // Sort select
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function () {
+                    sortInput.value = this.value;
+                    filterForm.submit();
+                });
+            }
+
+            // Search with debounce
+            if (searchInput) {
+                let searchTimeout;
+                searchInput.addEventListener('input', function () {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        filterForm.submit();
+                    }, 500);
+                });
+            }
+        }
+    </script>
 
     <%- include('../partials/footer') %>

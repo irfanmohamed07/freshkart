@@ -87,15 +87,25 @@ const shopController = {
       const limit = 20;
       const offset = (page - 1) * limit;
 
-      // Get products for this shop with pagination
-      const products = await Product.findByShopId(shopId, limit, offset);
-      const totalProducts = await Product.getCountByShopId(shopId);
+      // Get filters from query
+      const filters = {
+        category: req.query.category || req.query.filter || 'all',
+        search: req.query.search || '',
+        sort: req.query.sort || 'name',
+        minPrice: req.query.min_price ? parseFloat(req.query.min_price) : null,
+        maxPrice: req.query.max_price ? parseFloat(req.query.max_price) : null
+      };
+
+      // Get products for this shop with pagination and filters
+      const products = await Product.findByShopId(shopId, limit, offset, filters);
+      const totalProducts = await Product.getCountByShopId(shopId, filters);
       const totalPages = Math.ceil(totalProducts / limit);
 
       res.render('shops/show', {
         title: shop.name,
         shop,
         products,
+        filters,
         pagination: {
           page,
           limit,

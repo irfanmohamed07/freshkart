@@ -1,0 +1,111 @@
+<%- include('../partials/header') %>
+
+<div class="container max-w-[1280px] mx-auto px-4 md:px-10 py-8 min-h-screen">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold mb-2 text-[#111318] dark:text-white">My Appointments</h1>
+        <p class="text-gray-500 dark:text-gray-400">View and manage your service appointments</p>
+    </div>
+
+    <% if (appointments && appointments.length > 0) { %>
+    <div class="space-y-4">
+        <% appointments.forEach(appointment => { %>
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-[#dbdfe6] dark:border-gray-700 overflow-hidden shadow-sm">
+            <div class="p-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <h3 class="text-xl font-bold text-[#111318] dark:text-white"><%= appointment.shop_name %></h3>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold
+                                <%= appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' : '' %>
+                                <%= appointment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' %>
+                                <%= appointment.status === 'completed' ? 'bg-blue-100 text-blue-800' : '' %>
+                                <%= appointment.status === 'cancelled' ? 'bg-red-100 text-red-800' : '' %>">
+                                <%= appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1) %>
+                            </span>
+                        </div>
+                        <div class="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">build</span>
+                                <span><%= appointment.service_type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) %></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">calendar_today</span>
+                                <span><%= new Date(appointment.appointment_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">schedule</span>
+                                <span><%= appointment.appointment_time.substring(0, 5) %></span>
+                            </div>
+                            <% if (appointment.vehicle_info) { %>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">directions_car</span>
+                                <span><%= appointment.vehicle_info %></span>
+                            </div>
+                            <% } %>
+                            <% if (appointment.notes) { %>
+                            <div class="flex items-start gap-2 mt-2">
+                                <span class="material-symbols-outlined text-base">note</span>
+                                <span><%= appointment.notes %></span>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <% if (appointment.status === 'pending' || appointment.status === 'confirmed') { %>
+                        <button onclick="cancelAppointment(<%= appointment.id %>)" 
+                            class="px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm font-bold">
+                            Cancel
+                        </button>
+                        <% } %>
+                        <a href="/shops/<%= appointment.shop_id %>" 
+                            class="px-4 py-2 border border-[#dbdfe6] dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-bold text-center">
+                            View Shop
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+    <% } else { %>
+    <div class="bg-gray-50 dark:bg-gray-800/50 p-12 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 text-center">
+        <span class="material-symbols-outlined text-6xl text-gray-300 mb-4">event_busy</span>
+        <h2 class="text-xl font-bold mb-2 text-[#111318] dark:text-white">No appointments yet</h2>
+        <p class="text-gray-500 dark:text-gray-400 mb-6">You haven't booked any service appointments.</p>
+        <a href="/shops" class="inline-block bg-primary text-white font-bold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+            Browse Shops
+        </a>
+    </div>
+    <% } %>
+</div>
+
+<script>
+    async function cancelAppointment(appointmentId) {
+        if (!confirm('Are you sure you want to cancel this appointment?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/booking/cancel/${appointmentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert('Appointment cancelled successfully');
+                location.reload();
+            } else {
+                alert(data.message || 'Failed to cancel appointment');
+            }
+        } catch (error) {
+            console.error('Error cancelling appointment:', error);
+            alert('An error occurred. Please try again.');
+        }
+    }
+</script>
+
+<%- include('../partials/footer') %>

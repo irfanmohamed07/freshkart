@@ -10,6 +10,7 @@ const shopRoutes = require('./routes/shop');
 const cartRoutes = require('./routes/cart');
 const productRoutes = require('./routes/products');
 const checkoutRoutes = require('./routes/checkout');
+const bookingRoutes = require('./routes/booking');
 
 // Import models
 const Cart = require('./models/cart');
@@ -73,6 +74,7 @@ app.use('/shops', shopRoutes);
 app.use('/products', productRoutes);
 app.use('/cart', cartRoutes);
 app.use('/checkout', checkoutRoutes);
+app.use('/booking', bookingRoutes);
 
 // Root route
 app.get('/', async (req, res) => {

@@ -10,22 +10,22 @@
             </div>
             <div class="mt-4 md:mt-0 flex flex-wrap gap-2 text-sm">
                 <div class="relative">
-                    <select
+                    <select id="sortSelect"
                         class="appearance-none border border-[#dbdfe6] dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 py-2.5 px-4 pr-8 rounded-lg focus:ring-primary focus:border-primary cursor-pointer shadow-sm">
-                        <option>Sort By: Recommended</option>
-                        <option>Rating: High to Low</option>
-                        <option>Distance: Nearest</option>
+                        <option value="">Sort By: Recommended</option>
+                        <option value="rating">Rating: High to Low</option>
+                        <option value="distance">Distance: Nearest</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                         <span class="material-symbols-outlined text-sm">expand_more</span>
                     </div>
                 </div>
                 <div class="relative">
-                    <select
+                    <select id="filterSelect"
                         class="appearance-none border border-[#dbdfe6] dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 py-2.5 px-4 pr-8 rounded-lg focus:ring-primary focus:border-primary cursor-pointer shadow-sm">
-                        <option>Filter By: All</option>
-                        <option>Open Now</option>
-                        <option>Official Dealer</option>
+                        <option value="">Filter By: All</option>
+                        <option value="open">Open Now</option>
+                        <option value="dealer">Official Dealer</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                         <span class="material-symbols-outlined text-sm">expand_more</span>
@@ -36,17 +36,17 @@
 
         <!-- Shop categories chips -->
         <div class="flex flex-wrap gap-2 mb-8">
-            <a href="#"
+            <a href="/shops"
                 class="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md ring-2 ring-offset-2 ring-primary border border-transparent">All</a>
-            <a href="#"
+            <a href="/shops?category=mechanics"
                 class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Mechanics</a>
-            <a href="#"
+            <a href="/shops?category=parts"
                 class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Parts
                 Stores</a>
-            <a href="#"
+            <a href="/shops?category=carwash"
                 class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Car
                 Wash</a>
-            <a href="#"
+            <a href="/shops?category=detailing"
                 class="bg-white dark:bg-gray-800 border border-[#dbdfe6] dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Detailing</a>
         </div>
 
@@ -59,7 +59,8 @@
                         class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-900 border-b border-[#dbdfe6] dark:border-gray-700">
                         <% if (shop.logo) { %>
                             <img src="<%= shop.logo %>" alt="<%= shop.name %>"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center text-gray-300\'><span class=\'material-symbols-outlined text-6xl\'>storefront</span></div>';">
                             <% } else { %>
                                 <div class="w-full h-full flex items-center justify-center text-gray-300">
                                     <span class="material-symbols-outlined text-6xl">storefront</span>
@@ -175,5 +176,35 @@
                     </div>
                     <% } %>
     </div>
+
+    <script>
+        // Sort and filter functionality
+        const sortSelect = document.getElementById('sortSelect');
+        const filterSelect = document.getElementById('filterSelect');
+
+        if (sortSelect) {
+            sortSelect.addEventListener('change', function () {
+                const currentUrl = new URL(window.location.href);
+                if (this.value) {
+                    currentUrl.searchParams.set('sort', this.value);
+                } else {
+                    currentUrl.searchParams.delete('sort');
+                }
+                window.location.href = currentUrl.toString();
+            });
+        }
+
+        if (filterSelect) {
+            filterSelect.addEventListener('change', function () {
+                const currentUrl = new URL(window.location.href);
+                if (this.value) {
+                    currentUrl.searchParams.set('filter', this.value);
+                } else {
+                    currentUrl.searchParams.delete('filter');
+                }
+                window.location.href = currentUrl.toString();
+            });
+        }
+    </script>
 
     <%- include('../partials/footer') %>

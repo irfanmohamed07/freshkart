@@ -1,0 +1,214 @@
+<%- include('../partials/header') %>
+
+<div class="container max-w-[1280px] mx-auto px-4 md:px-10 py-8 min-h-screen">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-6 text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="/" class="inline-flex items-center hover:text-primary">
+                    <span class="material-symbols-outlined text-lg mr-2">home</span>
+                    Home
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <span class="material-symbols-outlined text-gray-400 mx-1">chevron_right</span>
+                    <a href="/shops" class="hover:text-primary">Shops</a>
+                </div>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <span class="material-symbols-outlined text-gray-400 mx-1">chevron_right</span>
+                    <a href="/shops/<%= shop.id %>" class="hover:text-primary"><%= shop.name %></a>
+                </div>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <span class="material-symbols-outlined text-gray-400 mx-1">chevron_right</span>
+                    <span class="text-gray-900 font-medium">Book Service</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-[#dbdfe6] dark:border-gray-700 overflow-hidden shadow-sm mb-8">
+            <div class="bg-gradient-to-r from-primary to-blue-600 p-6 text-white">
+                <h1 class="text-2xl font-bold mb-2">Book Service Appointment</h1>
+                <p class="text-blue-100"><%= shop.name %></p>
+            </div>
+
+            <% if (!user) { %>
+            <div class="p-6 bg-yellow-50 border-l-4 border-yellow-400">
+                <p class="text-yellow-800">Please <a href="/login" class="font-bold underline">login</a> to book an appointment.</p>
+            </div>
+            <% } else { %>
+
+            <form id="bookingForm" class="p-6 space-y-6">
+                <!-- Service Type -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                        Service Type <span class="text-red-500">*</span>
+                    </label>
+                    <select name="service_type" id="service_type" required
+                        class="w-full border border-[#dbdfe6] dark:border-gray-700 rounded-lg px-4 py-3 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="">Select a service</option>
+                        <option value="car_wash">Car Wash</option>
+                        <option value="detailing">Interior/Exterior Detailing</option>
+                        <option value="maintenance">Regular Maintenance</option>
+                        <option value="repair">Repair Service</option>
+                        <option value="inspection">Vehicle Inspection</option>
+                        <option value="oil_change">Oil Change</option>
+                        <option value="tire_service">Tire Service</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Appointment Date -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                        Appointment Date <span class="text-red-500">*</span>
+                    </label>
+                    <input type="date" name="appointment_date" id="appointment_date" required
+                        min="<%= new Date().toISOString().split('T')[0] %>"
+                        class="w-full border border-[#dbdfe6] dark:border-gray-700 rounded-lg px-4 py-3 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-primary focus:border-primary">
+                </div>
+
+                <!-- Appointment Time -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                        Appointment Time <span class="text-red-500">*</span>
+                    </label>
+                    <select name="appointment_time" id="appointment_time" required
+                        class="w-full border border-[#dbdfe6] dark:border-gray-700 rounded-lg px-4 py-3 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="">Select a time</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">Available time slots will appear after selecting a date</p>
+                </div>
+
+                <!-- Vehicle Information -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                        Vehicle Information (Optional)
+                    </label>
+                    <textarea name="vehicle_info" id="vehicle_info" rows="3" placeholder="e.g., Make, Model, Year, License Plate"
+                        class="w-full border border-[#dbdfe6] dark:border-gray-700 rounded-lg px-4 py-3 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
+                </div>
+
+                <!-- Notes -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                        Additional Notes (Optional)
+                    </label>
+                    <textarea name="notes" id="notes" rows="3" placeholder="Any special instructions or requirements"
+                        class="w-full border border-[#dbdfe6] dark:border-gray-700 rounded-lg px-4 py-3 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex gap-4">
+                    <button type="submit"
+                        class="flex-1 bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">calendar_today</span>
+                        Book Appointment
+                    </button>
+                    <a href="/shops/<%= shop.id %>"
+                        class="px-6 py-3 border border-[#dbdfe6] dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+    const shopId = <%= shop.id %>;
+    const appointmentDateInput = document.getElementById('appointment_date');
+    const appointmentTimeSelect = document.getElementById('appointment_time');
+    const bookingForm = document.getElementById('bookingForm');
+
+    // Load available time slots when date is selected
+    appointmentDateInput.addEventListener('change', async function() {
+        const date = this.value;
+        if (!date) {
+            appointmentTimeSelect.innerHTML = '<option value="">Select a time</option>';
+            return;
+        }
+
+        appointmentTimeSelect.innerHTML = '<option value="">Loading...</option>';
+        appointmentTimeSelect.disabled = true;
+
+        try {
+            const response = await fetch(`/booking/slots?shopId=${shopId}&date=${date}`);
+            const data = await response.json();
+
+            if (data.success && data.slots.length > 0) {
+                appointmentTimeSelect.innerHTML = '<option value="">Select a time</option>';
+                data.slots.forEach(slot => {
+                    const option = document.createElement('option');
+                    option.value = slot.time;
+                    option.textContent = slot.display;
+                    appointmentTimeSelect.appendChild(option);
+                });
+            } else {
+                appointmentTimeSelect.innerHTML = '<option value="">No slots available</option>';
+            }
+        } catch (error) {
+            console.error('Error loading time slots:', error);
+            appointmentTimeSelect.innerHTML = '<option value="">Error loading slots</option>';
+        } finally {
+            appointmentTimeSelect.disabled = false;
+        }
+    });
+
+    // Handle form submission
+    <% if (user) { %>
+    bookingForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Booking...';
+        submitBtn.disabled = true;
+
+        const formData = {
+            shop_id: shopId,
+            service_type: document.getElementById('service_type').value,
+            appointment_date: document.getElementById('appointment_date').value,
+            appointment_time: document.getElementById('appointment_time').value,
+            vehicle_info: document.getElementById('vehicle_info').value,
+            notes: document.getElementById('notes').value
+        };
+
+        try {
+            const response = await fetch('/booking/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert('Appointment booked successfully!');
+                window.location.href = '/booking/my-appointments';
+            } else {
+                alert(data.message || 'Failed to book appointment. Please try again.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        } catch (error) {
+            console.error('Error booking appointment:', error);
+            alert('An error occurred. Please try again.');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+    <% } %>
+</script>
+
+<%- include('../partials/footer') %>

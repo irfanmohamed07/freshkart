@@ -48,12 +48,53 @@ const Product = {
    * @param {number} offset - Optional offset for pagination
    * @returns {Promise<Array>} - Array of product objects
    */
-  findByShopId: async (shopId, limit = 20, offset = 0) => {
+  findByShopId: async (shopId, limit = 20, offset = 0, filters = {}) => {
     try {
-      const result = await db.query(
-        'SELECT * FROM products WHERE shop_id = $1 ORDER BY name LIMIT $2 OFFSET $3',
-        [shopId, limit, offset]
-      );
+      let query = 'SELECT * FROM products WHERE shop_id = $1';
+      const params = [shopId];
+      let paramIndex = 2;
+
+      // Apply category filter
+      if (filters.category && filters.category !== 'all') {
+        query += ` AND (category = $${paramIndex} OR name ILIKE $${paramIndex + 1} OR description ILIKE $${paramIndex + 2})`;
+        const categoryLower = filters.category.toLowerCase();
+        params.push(categoryLower, `%${categoryLower}%`, `%${categoryLower}%`);
+        paramIndex += 3;
+      }
+
+      // Apply search filter
+      if (filters.search) {
+        query += ` AND (name ILIKE $${paramIndex} OR description ILIKE $${paramIndex + 1})`;
+        params.push(`%${filters.search}%`, `%${filters.search}%`);
+        paramIndex += 2;
+      }
+
+      // Apply price filter
+      if (filters.minPrice) {
+        query += ` AND price >= $${paramIndex}`;
+        params.push(filters.minPrice);
+        paramIndex++;
+      }
+      if (filters.maxPrice) {
+        query += ` AND price <= $${paramIndex}`;
+        params.push(filters.maxPrice);
+        paramIndex++;
+      }
+
+      // Apply sorting
+      let orderBy = 'name';
+      if (filters.sort === 'price_low') {
+        orderBy = 'price ASC';
+      } else if (filters.sort === 'price_high') {
+        orderBy = 'price DESC';
+      } else if (filters.sort === 'name') {
+        orderBy = 'name ASC';
+      }
+
+      query += ` ORDER BY ${orderBy} LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+      params.push(limit, offset);
+
+      const result = await db.query(query, params);
       return result.rows;
     } catch (error) {
       console.error('Error in Product.findByShopId:', error);
@@ -97,14 +138,43 @@ const Product = {
   /**
    * Get count of products by shop ID
    * @param {number} shopId - Shop ID
+   * @param {Object} filters - Optional filters
    * @returns {Promise<number>} - Count of products
    */
-  getCountByShopId: async (shopId) => {
+  getCountByShopId: async (shopId, filters = {}) => {
     try {
-      const result = await db.query(
-        'SELECT COUNT(*) FROM products WHERE shop_id = $1',
-        [shopId]
-      );
+      let query = 'SELECT COUNT(*) FROM products WHERE shop_id = $1';
+      const params = [shopId];
+      let paramIndex = 2;
+
+      // Apply category filter
+      if (filters.category && filters.category !== 'all') {
+        query += ` AND (category = $${paramIndex} OR name ILIKE $${paramIndex + 1} OR description ILIKE $${paramIndex + 2})`;
+        const categoryLower = filters.category.toLowerCase();
+        params.push(categoryLower, `%${categoryLower}%`, `%${categoryLower}%`);
+        paramIndex += 3;
+      }
+
+      // Apply search filter
+      if (filters.search) {
+        query += ` AND (name ILIKE $${paramIndex} OR description ILIKE $${paramIndex + 1})`;
+        params.push(`%${filters.search}%`, `%${filters.search}%`);
+        paramIndex += 2;
+      }
+
+      // Apply price filter
+      if (filters.minPrice) {
+        query += ` AND price >= $${paramIndex}`;
+        params.push(filters.minPrice);
+        paramIndex++;
+      }
+      if (filters.maxPrice) {
+        query += ` AND price <= $${paramIndex}`;
+        params.push(filters.maxPrice);
+        paramIndex++;
+      }
+
+      const result = await db.query(query, params);
       return parseInt(result.rows[0].count, 10);
     } catch (error) {
       console.error('Error in Product.getCountByShopId:', error);
